@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import TopMenu from "./TopMenu";
 
 interface INavBar {
   children: React.ReactNode;
@@ -42,20 +43,7 @@ const NavBar = ({ children }: INavBar) => {
           <Image src="/icon.png" alt="로고" width={30} height={30} />
           <h1 className="text-xl font-bold">중개랜드</h1>
         </Link>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3.75 9h16.5m-16.5 6.75h16.5"
-          />
-        </svg>
+        <TopMenu />
       </div>
       <div className="mb-24">{children}</div>
       <nav className="border-t bottom-0 py-5 flex justify-around items-center w-full fixed z-20 bg-white xl:hidden">
@@ -108,7 +96,7 @@ const NavBar = ({ children }: INavBar) => {
               d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
             />
           </svg>
-          <span className={cn("text-xs", pathname === "/workMemo" ? "text-blue-500" : "")}>업무메모</span>
+          <span className={cn("text-xs", pathname === "/workMemo" ? "text-blue-500" : "")}>중개메모</span>
         </Link>
         <Link href="" className="flex flex-col items-center">
           <svg

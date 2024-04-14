@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { NextAuthProvider } from "@/lib/nextauthProvider";
 
 const notoSansKR = Noto_Sans_KR({ subsets: ["latin"], weight: "400" });
 
@@ -25,7 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={cn("min-h-screen text-gray-900", notoSansKR.className)}>{children}</body>
+      <body className={cn("min-h-screen text-gray-900", notoSansKR.className)}>
+        <NextAuthProvider>
+          {children}
+        </NextAuthProvider>
+      </body>
     </html>
   );
 }

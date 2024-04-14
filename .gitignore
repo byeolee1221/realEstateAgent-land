@@ -35,3 +35,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# firestore adminsdk
+realestateagent-land-firebase-adminsdk-vcf02-07c3999718.json
