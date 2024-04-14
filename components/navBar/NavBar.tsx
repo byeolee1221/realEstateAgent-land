@@ -64,7 +64,7 @@ const NavBar = ({ children }: INavBar) => {
           </svg>
           <span className={cn("text-xs", pathname === "/" ? "text-blue-500" : "")}>홈</span>
         </Link>
-        <Link href="" className="flex flex-col items-center">
+        <Link href="/consultingNote" className="flex flex-col items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

@@ -68,7 +68,7 @@ const DescriptionOne = () => {
         </div>
       </div>
       <div className="flex items-center space-x-2">
-        <Link href="" className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md text-center transition-colors">무료 사용해보기</Link>
+        <Link href="/consultingNote" className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md text-center transition-colors">무료 사용해보기</Link>
         <button className="border border-blue-500 rounded-md text-blue-500 hover:bg-blue-500 hover:text-white px-3 py-2 text-center transition-colors">더 알아보기</button>
       </div>
     </div>
