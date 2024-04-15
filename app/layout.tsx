@@ -4,6 +4,12 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { NextAuthProvider } from "@/lib/nextauthProvider";
 
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
 const notoSansKR = Noto_Sans_KR({ subsets: ["latin"], weight: "400" });
 
 export const metadata: Metadata = {

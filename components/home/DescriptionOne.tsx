@@ -2,6 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 const DescriptionOne = () => {
+  const descriptionArr = [
+    "상담한 고객정보 및 상담내용 업로드",
+    "최초상담 이후 추가되는 상담내역 저장 가능",
+    "상담내역 중개대상물의 지도정보 확인 가능",
+  ];
+
   return (
     <div className="flex flex-col space-y-5 rounded-xl shadow-sm bg-blue-100 pl-4 pr-10 pb-5">
       <div className="flex items-center space-x-2 pt-5">
@@ -15,61 +21,36 @@ const DescriptionOne = () => {
         보세요.
       </p>
       <div className="flex flex-col space-y-1">
-        <div className="flex items-center space-x-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 text-blue-500"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
-          </svg>
-          <p className="text-sm">상담한 고객정보 및 상담내용 업로드</p>
-        </div>
-        <div className="flex items-center space-x-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 text-blue-500"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
-          </svg>
-          <p className="text-sm">최초상담 이후 추가되는 상담내역 저장 가능</p>
-        </div>
-        <div className="flex items-center space-x-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 text-blue-500"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
-          </svg>
-          <p className="text-sm">상담내역 중개대상물의 지도정보 확인 가능</p>
-        </div>
+        {descriptionArr.map((item, i) => (
+          <div key={i} className="flex items-center space-x-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6 text-blue-500"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+            <p className="text-sm">{item}</p>
+          </div>
+        ))}
       </div>
       <div className="flex items-center space-x-2">
-        <Link href="/consultingNote" className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md text-center transition-colors">무료 사용해보기</Link>
-        <button className="border border-blue-500 rounded-md text-blue-500 hover:bg-blue-500 hover:text-white px-3 py-2 text-center transition-colors">더 알아보기</button>
+        <Link
+          href="/consultingNote"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md text-center transition-colors"
+        >
+          무료 사용해보기
+        </Link>
+        <button className="border border-blue-500 rounded-md text-blue-500 hover:bg-blue-500 hover:text-white px-3 py-2 text-center transition-colors">
+          더 알아보기
+        </button>
       </div>
     </div>
   );
