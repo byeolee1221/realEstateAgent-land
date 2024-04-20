@@ -11,6 +11,22 @@ const Write = () => {
   const [location, setLocation] = useState("");
   const [map, setMap] = useState<any>(null);
 
+  function displayMarker(place: any) {
+    const infoWindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
+    const marker = new window.kakao.maps.Marker({
+      map: map,
+      position: new window.kakao.maps.LatLng(place.y, place.x),
+    });
+    window.kakao.maps.event.addListener(marker, "click", function () {
+      infoWindow.setContent(
+        '<div style="padding:5px; font-size:12px;">' +
+          place.place_name +
+          "</div>"
+      );
+      infoWindow.open(map, marker);
+    });
+  }
+
   useEffect(() => {
     const kakaoMapScript = document.createElement("script");
     kakaoMapScript.async = true;
@@ -60,22 +76,6 @@ const Write = () => {
     kakaoMapScript.addEventListener("load", onKakaoApi);
   }, []);
 
-  function displayMarker(place: any) {
-    const infoWindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
-    const marker = new window.kakao.maps.Marker({
-      map: map,
-      position: new window.kakao.maps.LatLng(place.y, place.x),
-    });
-    window.kakao.maps.event.addListener(marker, "click", function () {
-      infoWindow.setContent(
-        '<div style="padding:5px; font-size:12px;">' +
-          place.place_name +
-          "</div>"
-      );
-      infoWindow.open(map, marker);
-    });
-  }
-
   const onSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -88,7 +88,6 @@ const Write = () => {
           const moveLatLng = new window.kakao.maps.LatLng(firstResult.y, firstResult.x);
           map.setCenter(moveLatLng);
           displayMarker(firstResult);
-
         } else {
           alert("검색 결과가 없습니다.");
         }
@@ -148,7 +147,7 @@ const Write = () => {
             <div className="flex flex-col space-y-1">
               <label htmlFor="locate" className="text-xs text-gray-500">상담 매물 위치정보</label>    
               <div className="flex items-center justify-between border-b pb-0.5">
-                <input id="locate" type="text" onChange={(e) => setLocation(e.target.value)} placeholder="장소 또는 주소 검색" className="focus:outline-none focus:border-blue-500 bg-transparent" />
+                <input id="locate" type="text" onChange={(e) => setLocation(e.target.value)} placeholder="장소 또는 주소 검색" className="focus:outline-none focus:border-blue-500 bg-transparent w-[80%]" />
                 <button onClick={onSearch} className="border p-1 shadow-sm rounded-sm">검색</button>
               </div>
               <div id="map" className="w-full h-72 border" />

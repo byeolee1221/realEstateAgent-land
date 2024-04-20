@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { useSession } from "next-auth/react";
 
 const NoteTable = () => {
   const alertArr = [
@@ -16,10 +17,12 @@ const NoteTable = () => {
     "노트는 본인외에는 확인할 수 없습니다.",
   ];
 
+  const { data: session } = useSession();
+
   return (
     <div className="flex flex-col space-y-4">
       <div className="border rounded-sm">
-        <Table>
+        {session ? <Table>
           <TableHeader>
             <TableRow className="text-sm tracking-tighter">
               <TableHead>번호</TableHead>
@@ -40,13 +43,18 @@ const NoteTable = () => {
               </TableRow>
             ))}
           </TableBody>
-        </Table>
+        </Table> : (
+            <div className="flex flex-col items-center justify-center text-center text-sm p-2">
+              <p>로그인이 필요한 서비스입니다.</p>
+              <p>상단의 메뉴바를 눌러 로그인해주세요.</p>
+            </div>
+        )}
       </div>
-      <div className="flex justify-end">
+      {session && <div className="flex justify-end">
         <Link href="/consultingNote/write" className="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-md text-white w-1/3 text-center">
           노트 만들기
         </Link>
-      </div>
+      </div>}
       <div className="flex flex-col space-y-2 bg-blue-100 px-4 py-5 rounded-lg">
         <div className="flex items-center space-x-2">
           <h1 className="text-lg font-semibold">사용 전 확인해주세요!</h1>
