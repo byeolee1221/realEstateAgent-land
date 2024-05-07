@@ -98,14 +98,14 @@ const NavBar = ({ children }: INavBar) => {
           </svg>
           <span className={cn("text-xs", pathname.includes("/consultingMemo") ? "text-blue-500" : "")}>중개메모</span>
         </Link>
-        <Link href="" className="flex flex-col items-center">
+        <Link href="/setting" className="flex flex-col items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className={cn("w-6 h-6", pathname === "/setting" ? "text-blue-500" : "")}
+            className={cn("w-6 h-6", pathname.includes("/setting") ? "text-blue-500" : "")}
           >
             <path
               strokeLinecap="round"
@@ -118,7 +118,7 @@ const NavBar = ({ children }: INavBar) => {
               d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
             />
           </svg>
-          <span className={cn("text-xs", pathname === "/setting" ? "text-blue-500" : "")}>설정</span>
+          <span className={cn("text-xs", pathname.includes("/setting") ? "text-blue-500" : "")}>설정</span>
         </Link>
       </nav>
     </div>
