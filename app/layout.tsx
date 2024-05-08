@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { NextAuthProvider } from "@/lib/nextauthProvider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 declare global {
   interface Window {
@@ -37,6 +38,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="class" enableSystem disableTransitionOnChange>
           <NextAuthProvider>
             {children}
+            <Toaster /> 
           </NextAuthProvider>
         </ThemeProvider>
       </body>
