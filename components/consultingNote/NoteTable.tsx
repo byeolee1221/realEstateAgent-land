@@ -8,6 +8,18 @@ import {
   TableRow,
 } from "../ui/table";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "sonner";
+
+interface INoteList {
+  customerName: string,
+  purposeUse: string,
+  kind: string,
+  transactionType: string,
+  date: string,
+  id: string
+}
 
 const NoteTable = () => {
   const alertArr = [
@@ -18,43 +30,69 @@ const NoteTable = () => {
   ];
 
   const { data: session } = useSession();
+  const [note, setNote] = useState<INoteList[]>([]);
+  // console.log(note);
+  useEffect(() => {
+    const getNoteList = async () => {
+      try {
+        const response = await axios.get("/api/consultingNote/noteList");
+
+        if (response.status === 200) {
+          setNote(response.data);
+        }
+      } catch (error: any) {
+        console.log("consultingNote noteTable GET에서 오류 발생", error);
+        return toast("오류 발생", {
+          description: error.response.data,
+        });
+      }
+    }
+    getNoteList();
+  }, []);
 
   return (
     <div className="flex flex-col space-y-4">
       <div className="border rounded-sm">
-        {session ? <Table>
-          <TableHeader>
-            <TableRow className="text-sm tracking-tighter">
-              <TableHead>번호</TableHead>
-              <TableHead>요약정보</TableHead>
-              <TableHead className="text-right">업데이트일</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {[1, 2, 3, 4, 5].map((data) => (
-              <TableRow key={data}>
-                <TableCell>{data}</TableCell>
-                <Link href="" legacyBehavior={true}>
-                  <TableCell className="tracking-tighter cursor-pointer">
-                    홍길동 / 31 / 오피스텔 전세
-                  </TableCell>
-                </Link>
-                <TableCell className="text-right">2024.04.14</TableCell>
+        {session ? (
+          <Table>
+            <TableHeader>
+              <TableRow className="text-sm tracking-tighter">
+                <TableHead>번호</TableHead>
+                <TableHead>요약정보</TableHead>
+                <TableHead className="text-right">업데이트일</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table> : (
-            <div className="flex flex-col items-center justify-center text-center text-sm p-2">
-              <p>로그인이 필요한 서비스입니다.</p>
-              <p>상단의 메뉴바를 눌러 로그인해주세요.</p>
-            </div>
+            </TableHeader>
+            <TableBody>
+              {note.map((data, i) => (
+                <TableRow key={data.id}>
+                  <TableCell>{i+1}</TableCell>
+                  <Link href={`/consultingNote/${data.id}`} legacyBehavior={true}>
+                    <TableCell className="tracking-tighter cursor-pointer">
+                      {data.customerName} / {data.purposeUse} / {data.kind} {data.transactionType}
+                    </TableCell>
+                  </Link>
+                  <TableCell className="text-right">{data.date}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <div className="flex flex-col items-center justify-center text-center text-sm p-2">
+            <p>로그인이 필요한 서비스입니다.</p>
+            <p>상단의 메뉴바를 눌러 로그인해주세요.</p>
+          </div>
         )}
       </div>
-      {session && <div className="flex justify-end">
-        <Link href="/consultingNote/write" className="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-md text-white w-1/3 text-center">
-          노트 만들기
-        </Link>
-      </div>}
+      {session && (
+        <div className="flex justify-end">
+          <Link
+            href="/consultingNote/write"
+            className="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-md text-white w-1/3 text-center"
+          >
+            노트 만들기
+          </Link>
+        </div>
+      )}
       <div className="flex flex-col space-y-2 bg-blue-100 px-4 py-5 rounded-lg">
         <div className="flex items-center space-x-2">
           <h1 className="text-lg font-semibold">사용 전 확인해주세요!</h1>

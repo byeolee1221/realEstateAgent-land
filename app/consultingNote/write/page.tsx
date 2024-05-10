@@ -133,6 +133,7 @@ const Write = () => {
 
       if (response.status === 200) {
         form.reset();
+        router.push(`/consultingNote/${response.data}`);
       }
     } catch (error: any) {
       console.log("consultingNote write POST에서 오류 발생", error);
