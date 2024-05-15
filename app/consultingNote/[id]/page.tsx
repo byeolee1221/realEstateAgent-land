@@ -80,18 +80,20 @@ const NoteDetail = () => {
   }, []);
 
   useEffect(() => {
-    const ps = new window.kakao.maps.services.Places();
-    ps.keywordSearch(note?.location, (result: any, status: any) => {
-      if (status === window.kakao.maps.services.Status.OK) {
-        const firstResult = result[0];
-        const moveLatLng = new window.kakao.maps.LatLng(
-          firstResult.y,
-          firstResult.x
-        );
-        map.setCenter(moveLatLng);
-        displayMarker(firstResult);
-      }
-    });
+    if (map) {
+      const ps = new window.kakao.maps.services.Places();
+      ps.keywordSearch(note?.location, (result: any, status: any) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const firstResult = result[0];
+          const moveLatLng = new window.kakao.maps.LatLng(
+            firstResult.y,
+            firstResult.x
+          );
+          map.setCenter(moveLatLng);
+          displayMarker(firstResult);
+        }
+      });
+    }
   }, [note?.location]);
 
   useEffect(() => {
@@ -154,7 +156,7 @@ const NoteDetail = () => {
               </button>
             </div>
             <button
-              onClick={() => router.back()}
+              onClick={() => router.push("/consultingNote")}
               className="border border-blue-500 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md transition-colors"
             >
               목록

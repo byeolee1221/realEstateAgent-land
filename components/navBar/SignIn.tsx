@@ -37,7 +37,7 @@ const SignIn = () => {
           <DialogDescription>아래 방법으로 로그인할 수 있습니다.</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col items-center space-y-4">
-          <button onClick={onSignIn} className="flex items-center space-x-10 rounded-md border-2 px-3 py-2 w-full">
+          <button onClick={onSignIn} className="flex items-center justify-center space-x-2 rounded-md border-2 px-3 py-2 w-full">
             <Image src="/g-logo.png" alt="구글" width={30} height={30} className="rounded-full" />
             <span>구글로 로그인하기</span>
           </button>
