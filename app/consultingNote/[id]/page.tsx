@@ -1,5 +1,6 @@
 "use client";
 
+import NoteDelete from "@/components/consultingNote/NoteDelete";
 import NavBar from "@/components/navBar/NavBar";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
@@ -151,9 +152,7 @@ const NoteDetail = () => {
               <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors">
                 수정
               </button>
-              <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors">
-                삭제
-              </button>
+              <NoteDelete postPath={pathname} />
             </div>
             <button
               onClick={() => router.push("/consultingNote")}
