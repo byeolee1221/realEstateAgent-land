@@ -3,11 +3,12 @@
 import NoteDelete from "@/components/consultingNote/NoteDelete";
 import NavBar from "@/components/navBar/NavBar";
 import axios from "axios";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-interface INote {
+export interface INote {
   customerName: string;
   customerNumber: string;
   purposeUse: string;
@@ -21,6 +22,8 @@ interface INote {
 
 const NoteDetail = () => {
   const pathname = usePathname();
+  const postUrl = pathname.split("/consultingNote/");
+  const postId = postUrl[1];
   const router = useRouter();
   const [note, setNote] = useState<INote>();
   const [map, setMap] = useState<any>(null);
@@ -149,9 +152,9 @@ const NoteDetail = () => {
           </div>
           <div className="flex items-center justify-between space-x-2">
             <div className="flex items-center space-x-2">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors">
+              <Link href={`/consultingNote/${postId}/edit`} className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors">
                 수정
-              </button>
+              </Link>
               <NoteDelete postPath={pathname} />
             </div>
             <button

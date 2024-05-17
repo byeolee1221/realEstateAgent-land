@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     }
 
     if (!customerName || !customerNumber || !purposeUse || !kind || !transactionType || !date || !content || !location) {
-      return new NextResponse("입력하신 내용을 다시 확인해주세요.", { status: 404 });
+      return new NextResponse("입력하신 내용을 다시 확인해주세요.", { status: 400 });
     }
 
     const addNote = await addDoc(collection(db, "consultingNote"), {
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(addNote.id, { status: 200 });
   } catch (error) {
-    console.log("consultiongNote POST API에서 오류 발생", error);
+    console.error("consultiongNote POST API에서 오류 발생", error);
     return new NextResponse("오류가 발생하여 잠시 후 다시 업로드해주세요.", { status: 500 });
   }
 }
@@ -59,7 +59,7 @@ export async function GET(req: Request) {
       return new NextResponse("게시글이 존재하지 않습니다.", { status: 404 });
     }
   } catch (error) {
-    console.log("consultiongNote GET API에서 오류 발생", error);
+    console.error("consultiongNote GET API에서 오류 발생", error);
     return new NextResponse("오류가 발생하였으니 새로고침해주세요.", { status: 500 });
   }
 }
@@ -83,7 +83,7 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json({ status: 200 });
   } catch (error) {
-    console.log("consultiongNote DELETE API에서 오류 발생", error);
+    console.error("consultiongNote DELETE API에서 오류 발생", error);
     return new NextResponse("오류가 발생하였으니 잠시 후 다시 시도해주세요.", { status: 500 });
   }
 }

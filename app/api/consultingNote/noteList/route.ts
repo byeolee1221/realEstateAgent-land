@@ -31,7 +31,7 @@ export async function GET(req: Request) {
     // console.log(matchData);
     return NextResponse.json(matchData, { status: 200 });
   } catch (error) {
-    console.log("consultiongNote noteList GET API에서 오류 발생", error);
+    console.error("consultiongNote noteList GET API에서 오류 발생", error);
     return new NextResponse("오류가 발생하였으니 새로고침해주세요.", { status: 500 });
   }
 }
