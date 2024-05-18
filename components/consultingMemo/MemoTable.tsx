@@ -8,6 +8,16 @@ import {
   TableRow,
 } from "../ui/table";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "sonner";
+
+interface IMemoList {
+  title: string,
+  content: string,
+  id: string,
+  createdAt: string
+}
 
 const MemoTable = () => {
   const alertArr = [
@@ -18,6 +28,26 @@ const MemoTable = () => {
   ];
 
   const { data: session } = useSession();
+  const [memo, setMemo] = useState<IMemoList[]>([]);
+
+  useEffect(() => {
+    const getMemoList = async () => {
+      try {
+        const response = await axios.get("/api/consultingMemo/memoList");
+
+        if (response.status === 200) {
+          setMemo(response.data);
+        }
+      } catch (error: any) {
+        console.log("consultingMemo memoTable GET에서 오류 발생", error);
+        return toast("오류 발생", {
+          description: error.response.data,
+        });
+      }
+    }
+
+    getMemoList();
+  }, [])
 
   return (
     <div className="flex flex-col space-y-4">
@@ -32,15 +62,15 @@ const MemoTable = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {[1, 2, 3, 4, 5].map((data) => (
-                <TableRow key={data}>
-                  <TableCell>{data}</TableCell>
-                  <Link href="" legacyBehavior={true}>
+              {memo.map((data, i) => (
+                <TableRow key={data.id}>
+                  <TableCell>{i+1}</TableCell>
+                  <Link href={`/consultingMemo/${data.id}`} legacyBehavior={true}>
                     <TableCell className="tracking-tighter cursor-pointer">
-                      홍길동: 청년 전세대출 연계
+                      {data.title}
                     </TableCell>
                   </Link>
-                  <TableCell className="text-right">2024.04.19</TableCell>
+                  <TableCell className="text-right">{data.createdAt}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

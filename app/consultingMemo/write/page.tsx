@@ -4,6 +4,12 @@ import NavBar from "@/components/navBar/NavBar";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { MemoSchema } from "./constants";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { toast } from "sonner";
 
 const MemoWrite = () => {
   const router = useRouter();
@@ -76,6 +82,16 @@ const MemoWrite = () => {
     kakaoMapScript.addEventListener("load", onKakaoApi);
   }, []);
 
+  const form = useForm<z.infer<typeof MemoSchema>>({
+    resolver: zodResolver(MemoSchema),
+    defaultValues: {
+      title: "",
+      content: ""
+    }
+  });
+
+  const isLoading = form.formState.isSubmitting;
+
   const onSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -97,6 +113,26 @@ const MemoWrite = () => {
     }
   }
 
+  const onSubmit = async (values: z.infer<typeof MemoSchema>) => {
+    try {
+      const response = await axios.post("/api/consultingMemo", {
+        title: values.title,
+        content: values.content,
+        location
+      })
+
+      if (response.status === 200) {
+        form.reset();
+        router.push(`/consultingMemo/${response.data}`);
+      }
+    } catch (error: any) {
+      console.log("consultingMemo write POST에서 오류 발생", error);
+      return toast("오류 발생", {
+        description: error.response.data
+      })
+    }
+  }
+
   const onCancel = () => {
     router.back();
   }
@@ -115,14 +151,14 @@ const MemoWrite = () => {
             <Image src="/write.png" alt="게시" width={30} height={30} />
             <h2 className="text-lg font-semibold">메모 작성하기</h2>
           </div>
-          <form className="flex flex-col space-y-3 text-sm">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-3 text-sm">
             <div className="flex flex-col space-y-1">
               <label htmlFor="title" className="text-xs text-gray-500">제목</label>
-              <input id="title" type="text" className="border-b pb-1 focus:outline-none focus:border-green-500 bg-transparent" />
+              <input {...form.register("title")} id="title" type="text" className="border-b pb-1 focus:outline-none focus:border-green-500 bg-transparent" />
             </div>
             <div className="flex flex-col space-y-1">
               <label htmlFor="content" className="text-xs text-gray-500">내용</label>
-              <textarea id="content" rows={10} className="border p-1 focus:outline-none focus:border-green-500 bg-transparent resize-none" />
+              <textarea {...form.register("content")} id="content" rows={10} className="border p-1 focus:outline-none focus:border-green-500 bg-transparent resize-none" />
             </div>
             <div className="flex flex-col space-y-1">
               <label htmlFor="locate" className="text-xs text-gray-500">참고 위치정보</label>    
@@ -133,7 +169,7 @@ const MemoWrite = () => {
               <div id="map" className="w-full h-72 border" />
             </div>
             <div className="flex items-center justify-end space-x-2">
-              <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors">게시하기</button>
+              <button type="submit" className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors">게시하기</button>
               <button onClick={onCancel} className="border border-green-500 hover:bg-green-500 hover:text-white px-3 py-2 rounded-md transition-colors">취소</button>
             </div>
           </form>
