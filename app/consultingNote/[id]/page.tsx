@@ -142,7 +142,7 @@ const NoteDetail = () => {
           {noteArr.map((data, i) => (
             <div key={i} className="flex flex-col space-y-3 text-sm">
               <h2 className="text-xs text-gray-500">{data.title}</h2>
-              <span className="border-b pb-1">{data.contents}</span>
+              <span className="border-b pb-1 whitespace-pre-wrap">{data.contents}</span>
             </div>
           ))}
           <div className="flex flex-col space-y-3 text-sm">

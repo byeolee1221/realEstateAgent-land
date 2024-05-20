@@ -188,7 +188,7 @@ const Write = () => {
             </div>
             <div className="flex flex-col space-y-1">
               <label htmlFor="content" className="text-xs text-gray-500">상담내용</label>
-              <textarea {...form.register("content")} id="content" rows={10} className="border p-1 focus:outline-none focus:border-blue-500 bg-transparent resize-none" />
+              <textarea {...form.register("content")} id="content" rows={10} className="border p-1 focus:outline-none focus:border-blue-500 bg-transparent resize-none whitespace-pre-wrap" />
             </div>
             <div className="flex flex-col space-y-1">
               <label htmlFor="locate" className="text-xs text-gray-500">상담 매물 위치정보</label>    

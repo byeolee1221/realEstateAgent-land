@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import NavBar from "@/components/navBar/NavBar";
 import Image from "next/image";
@@ -15,6 +15,7 @@ const MemoWrite = () => {
   const router = useRouter();
 
   const [location, setLocation] = useState("");
+  
   const [map, setMap] = useState<any>(null);
 
   function displayMarker(place: any) {
@@ -58,7 +59,10 @@ const MemoWrite = () => {
         );
 
         const zoomControl = new window.kakao.maps.ZoomControl();
-        createdMap.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
+        createdMap.addControl(
+          zoomControl,
+          window.kakao.maps.ControlPosition.RIGHT
+        );
 
         function setDraggable(draggable: any) {
           createdMap.setDraggable(draggable);
@@ -68,10 +72,10 @@ const MemoWrite = () => {
           navigator.geolocation.getCurrentPosition(function (position) {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
-  
+
             const place = new window.kakao.maps.LatLng(lat, lon);
             displayMarker(place);
-          })
+          });
         } else {
           const place = new window.kakao.maps.LatLng(33.450701, 126.570667);
           displayMarker(place);
@@ -86,8 +90,8 @@ const MemoWrite = () => {
     resolver: zodResolver(MemoSchema),
     defaultValues: {
       title: "",
-      content: ""
-    }
+      content: "",
+    },
   });
 
   const isLoading = form.formState.isSubmitting;
@@ -97,29 +101,32 @@ const MemoWrite = () => {
 
     if (map) {
       const ps = new window.kakao.maps.services.Places();
-  
+
       ps.keywordSearch(location, (result: any, status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const firstResult = result[0];
-          const moveLatLng = new window.kakao.maps.LatLng(firstResult.y, firstResult.x);
+          const moveLatLng = new window.kakao.maps.LatLng(
+            firstResult.y,
+            firstResult.x
+          );
           map.setCenter(moveLatLng);
           displayMarker(firstResult);
         } else {
           alert("검색 결과가 없습니다.");
         }
-      })
+      });
     } else {
       console.error("지도가 초기화되지 않았습니다.");
     }
-  }
+  };
 
   const onSubmit = async (values: z.infer<typeof MemoSchema>) => {
     try {
       const response = await axios.post("/api/consultingMemo", {
         title: values.title,
         content: values.content,
-        location
-      })
+        location,
+      });
 
       if (response.status === 200) {
         form.reset();
@@ -128,14 +135,14 @@ const MemoWrite = () => {
     } catch (error: any) {
       console.log("consultingMemo write POST에서 오류 발생", error);
       return toast("오류 발생", {
-        description: error.response.data
-      })
+        description: error.response.data,
+      });
     }
-  }
+  };
 
   const onCancel = () => {
     router.back();
-  }
+  };
 
   return (
     <NavBar>
@@ -151,26 +158,66 @@ const MemoWrite = () => {
             <Image src="/write.png" alt="게시" width={30} height={30} />
             <h2 className="text-lg font-semibold">메모 작성하기</h2>
           </div>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-3 text-sm">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col space-y-3 text-sm"
+          >
             <div className="flex flex-col space-y-1">
-              <label htmlFor="title" className="text-xs text-gray-500">제목</label>
-              <input {...form.register("title")} id="title" type="text" className="border-b pb-1 focus:outline-none focus:border-green-500 bg-transparent" />
+              <label htmlFor="title" className="text-xs text-gray-500">
+                제목
+              </label>
+              <input
+                {...form.register("title")}
+                id="title"
+                type="text"
+                className="border-b pb-1 focus:outline-none focus:border-green-500 bg-transparent"
+              />
             </div>
             <div className="flex flex-col space-y-1">
-              <label htmlFor="content" className="text-xs text-gray-500">내용</label>
-              <textarea {...form.register("content")} id="content" rows={10} className="border p-1 focus:outline-none focus:border-green-500 bg-transparent resize-none" />
+              <label htmlFor="content" className="text-xs text-gray-500">
+                내용
+              </label>
+              <textarea
+                {...form.register("content")}
+                id="content"
+                rows={10}
+                className="border p-1 focus:outline-none focus:border-green-500 bg-transparent resize-none whitespace-pre-wrap"
+              />
             </div>
             <div className="flex flex-col space-y-1">
-              <label htmlFor="locate" className="text-xs text-gray-500">참고 위치정보</label>    
+              <label htmlFor="locate" className="text-xs text-gray-500">
+                참고 위치정보
+              </label>
               <div className="flex items-center justify-between border-b pb-0.5">
-                <input id="locate" type="text" onChange={(e) => setLocation(e.target.value)}  placeholder="장소 또는 주소 검색" className="focus:outline-none focus:border-green-500 bg-transparent w-[80%]" />
-                <button onClick={onSearch} className="border p-1 shadow-sm rounded-sm">검색</button>
+                <input
+                  id="locate"
+                  type="text"
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="장소 또는 주소 검색"
+                  className="focus:outline-none focus:border-green-500 bg-transparent w-[80%]"
+                />
+                <button
+                  onClick={onSearch}
+                  className="border p-1 shadow-sm rounded-sm"
+                >
+                  검색
+                </button>
               </div>
               <div id="map" className="w-full h-72 border" />
             </div>
             <div className="flex items-center justify-end space-x-2">
-              <button type="submit" className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors">게시하기</button>
-              <button onClick={onCancel} className="border border-green-500 hover:bg-green-500 hover:text-white px-3 py-2 rounded-md transition-colors">취소</button>
+              <button
+                type="submit"
+                className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors"
+              >
+                게시하기
+              </button>
+              <button
+                onClick={onCancel}
+                className="border border-green-500 hover:bg-green-500 hover:text-white px-3 py-2 rounded-md transition-colors"
+              >
+                취소
+              </button>
             </div>
           </form>
         </div>

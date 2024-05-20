@@ -12,10 +12,13 @@ export async function GET(req: Request) {
       return new NextResponse("로그인이 필요한 서비스입니다.", { status: 401 });
     }
 
-    const q = query(collection(db, "consultingMemo"), where("userEmail", "==", session?.user?.email));
+    const q = query(
+      collection(db, "consultingMemo"),
+      where("userEmail", "==", session?.user?.email)
+    );
 
     const querySnapshot = await getDocs(q);
-    let matchData: any = [];
+    let matchData: any[] = [];
     let memoData;
 
     querySnapshot.forEach((doc) => {
@@ -24,14 +27,19 @@ export async function GET(req: Request) {
         memoData.id = doc.id;
         matchData.push(memoData);
       } else {
-        return new NextResponse("아직 등록한 메모가 없습니다.", { status: 404 });
+        return new NextResponse("아직 등록한 메모가 없습니다.", {
+          status: 404,
+        });
       }
     });
 
     // console.log(matchData);
+
     return NextResponse.json(matchData, { status: 200 });
   } catch (error) {
     console.error("consultiongMemo memoList GET API에서 오류 발생", error);
-    return new NextResponse("오류가 발생하였으니 새로고침해주세요.", { status: 500 });
+    return new NextResponse("오류가 발생하였으니 새로고침해주세요.", {
+      status: 500,
+    });
   }
 }

@@ -25,8 +25,8 @@ const NoteDelete = (props: IProps) => {
     try {
       const response = await axios.delete("/api/consultingNote", {
         data: {
-          postPath: postId[1]
-        }
+          postPath: postId[1],
+        },
       });
 
       if (response.status === 200) {
@@ -35,12 +35,12 @@ const NoteDelete = (props: IProps) => {
       }
     } catch (error: any) {
       console.log("consultingNote noteDelete DELETE에서 오류 발생", error);
-        return toast("오류 발생", {
-          description: error.response.data,
-        });
+      return toast("오류 발생", {
+        description: error.response.data,
+      });
     }
-  }
-  
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>

@@ -69,7 +69,7 @@ export async function DELETE(req: Request) {
     const session = await getServerSession(authOptions);
     const body = await req.json();
     const { postPath } = body;
-    console.log(postPath);
+    // console.log(postPath);
 
     if (!session) {
       return new NextResponse("로그인이 필요한 서비스입니다.", { status: 401 });

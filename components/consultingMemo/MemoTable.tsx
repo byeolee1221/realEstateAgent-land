@@ -16,7 +16,7 @@ interface IMemoList {
   title: string,
   content: string,
   id: string,
-  createdAt: string
+  createdAt: number
 }
 
 const MemoTable = () => {
@@ -29,6 +29,19 @@ const MemoTable = () => {
 
   const { data: session } = useSession();
   const [memo, setMemo] = useState<IMemoList[]>([]);
+
+  // if (memo) {
+  //   formattedDate = memo.map((data) => {
+  //     const memoDate = new Date(data?.createdAt);
+  //     const year = memoDate.getFullYear();
+  //     const month = (memoDate.getMonth() + 1).toString().padStart(2, "0");
+  //     const day = memoDate.getDate().toString().padStart(2, "0");
+
+  //   return `${year}-${month}-${day}`;
+  //   })
+  // }
+  
+  // console.log(formattedDate);
 
   useEffect(() => {
     const getMemoList = async () => {
@@ -57,7 +70,7 @@ const MemoTable = () => {
             <TableHeader>
               <TableRow className="text-sm tracking-tighter">
                 <TableHead>번호</TableHead>
-                <TableHead>요약정보</TableHead>
+                <TableHead>제목</TableHead>
                 <TableHead className="text-right">업데이트일</TableHead>
               </TableRow>
             </TableHeader>

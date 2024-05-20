@@ -1,5 +1,6 @@
 "use client";
 
+import MemoDelete from "@/components/consultingMemo/MemoDelete";
 import NavBar from "@/components/navBar/NavBar";
 import axios from "axios";
 import Link from "next/link";
@@ -131,7 +132,7 @@ const MemoDetail = () => {
           {memoArr.map((data, i) => (
             <div key={i} className="flex flex-col space-y-3 text-sm">
               <h2 className="text-xs text-gray-500">{data.title}</h2>
-              <span className="border-b pb-1">{data.content}</span>
+              <span className="border-b pb-1 whitespace-pre-wrap">{data.content}</span>
             </div>
           ))}
           <div className="flex flex-col space-y-3 text-sm">
@@ -147,6 +148,7 @@ const MemoDetail = () => {
               >
                 수정
               </Link>
+              <MemoDelete memoPath={pathname} />
             </div>
             <button
               onClick={() => router.push("/consultingMemo")}
