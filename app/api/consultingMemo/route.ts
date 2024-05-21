@@ -25,7 +25,7 @@ export async function POST(req: Request) {
       title,
       content,
       location,
-      createdAt: new Date(Date.now())
+      createdAt: Date.now()
     })
 
     return NextResponse.json(addMemo.id, { status: 200 });
