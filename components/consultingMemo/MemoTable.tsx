@@ -30,19 +30,6 @@ const MemoTable = () => {
   const { data: session } = useSession();
   const [memo, setMemo] = useState<IMemoList[]>([]);
 
-  // if (memo) {
-  //   formattedDate = memo.map((data) => {
-  //     const memoDate = new Date(data?.createdAt);
-  //     const year = memoDate.getFullYear();
-  //     const month = (memoDate.getMonth() + 1).toString().padStart(2, "0");
-  //     const day = memoDate.getDate().toString().padStart(2, "0");
-
-  //   return `${year}-${month}-${day}`;
-  //   })
-  // }
-  
-  // console.log(formattedDate);
-
   useEffect(() => {
     const getMemoList = async () => {
       try {

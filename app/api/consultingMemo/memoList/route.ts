@@ -19,18 +19,27 @@ export async function GET(req: Request) {
 
     const querySnapshot = await getDocs(q);
     let matchData: any[] = [];
-    let memoData;
+
+    if (querySnapshot.empty) {
+      return new NextResponse("아직 등록한 메모가 없습니다.", {
+        status: 404,
+      });
+    }
 
     querySnapshot.forEach((doc) => {
-      if (doc !== undefined) {
-        memoData = doc.data();
-        memoData.id = doc.id;
-        matchData.push(memoData);
-      } else {
-        return new NextResponse("아직 등록한 메모가 없습니다.", {
-          status: 404,
-        });
+      let memoData = doc.data();
+      memoData.id = doc.id;
+
+      const createdAt = new Date(memoData.createdAt);
+      const formatDate = (date: Date) => {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const day = date.getDate().toString().padStart(2, "0");
+        return `${year}-${month}-${day}`;
       }
+
+      memoData.createdAt = formatDate(createdAt);
+      matchData.push(memoData);
     });
 
     // console.log(matchData);
