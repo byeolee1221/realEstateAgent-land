@@ -8,7 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-interface IMemo {
+export interface IMemo {
   title: string;
   content: string;
   location: string;
@@ -126,7 +126,7 @@ const MemoDetail = () => {
           <h1 className="text-2xl font-semibold tracking-wider pb-1 border-b border-gray-800">
             중개메모
           </h1>
-          <p>Consulting Memo</p>
+          <p>My Consulting Memo</p>
         </div>
         <div className="px-4 flex flex-col space-y-6">
           {memoArr.map((data, i) => (

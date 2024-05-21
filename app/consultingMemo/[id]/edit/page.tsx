@@ -1,27 +1,26 @@
-"use client";
+"use client"
 
 import NavBar from "@/components/navBar/NavBar";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { usePathname, useRouter } from "next/navigation";
-import { INote } from "../page";
+import { useEffect, useState } from "react";
+import { IMemo } from "../page";
 import axios from "axios";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
-import { NoteEditSchema } from "./constants";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { MemoEditSchema } from "./constants";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const NoteEdit = () => {
+const MemoEdit = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
 
   const [location, setLocation] = useState("");
   const [map, setMap] = useState<any>(null);
-  const [note, setNote] = useState<INote>();
-  // console.log(note);
+  const [memo, setMemo] = useState<IMemo>();
 
   function displayMarker(place: any) {
     const infoWindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
@@ -81,7 +80,7 @@ const NoteEdit = () => {
   useEffect(() => {
     if (map) {
       const ps = new window.kakao.maps.services.Places();
-      ps.keywordSearch(note?.location, (result: any, status: any) => {
+      ps.keywordSearch(memo?.location, (result: any, status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const firstResult = result[0];
           const moveLatLng = new window.kakao.maps.LatLng(
@@ -93,17 +92,17 @@ const NoteEdit = () => {
         }
       });
     }
-  }, [note?.location]);
+  }, [memo?.location]);
 
   useEffect(() => {
-    const getNote = async () => {
+    const getMemo = async () => {
       try {
         const response = await axios.get(
-          `/api/consultingNote/noteEdit?url=${pathname}`
+          `/api/consultingMemo/memoEdit?url=${pathname}`
         );
 
         if (response.status === 200) {
-          setNote(response.data);
+          setMemo(response.data);
         }
       } catch (error: any) {
         console.log("consultingNote noteEdit GET에서 오류 발생", error);
@@ -113,7 +112,7 @@ const NoteEdit = () => {
       }
     };
 
-    getNote();
+    getMemo();
   }, []);
 
   const onSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -140,60 +139,45 @@ const NoteEdit = () => {
     }
   };
 
-  const form = useForm<z.infer<typeof NoteEditSchema>>({
-    resolver: zodResolver(NoteEditSchema),
+  const form = useForm<z.infer<typeof MemoEditSchema>>({
+    resolver: zodResolver(MemoEditSchema),
     defaultValues: {
-      customerName: note?.customerName,
-      customerNumber: note?.customerNumber,
-      purposeUse: note?.purposeUse,
-      kind: note?.kind,
-      transactionType: note?.transactionType,
-      date: note?.date,
-      content: note?.content,
-      location: note?.location
-    },
+      title: memo?.title,
+      content: memo?.content,
+      location: memo?.location
+    }
   });
 
   useEffect(() => {
     form.reset({
-      customerName: note?.customerName,
-      customerNumber: note?.customerNumber,
-      purposeUse: note?.purposeUse,
-      kind: note?.kind,
-      transactionType: note?.transactionType,
-      date: note?.date,
-      content: note?.content,
-      location: note?.location
+      title: memo?.title,
+      content: memo?.content,
+      location: memo?.location
     })
-  }, [note, form.reset])
+  }, [memo, form.reset]);
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = async (values: z.infer<typeof NoteEditSchema>) => {
+  const onSubmit = async (values: z.infer<typeof MemoEditSchema>) => {
     try {
-      const response = await axios.post(`/api/consultingNote/noteEdit?url=${pathname}`, {
+      const response = await axios.post(`/api/consultingMemo/memoEdit?url=${pathname}`, {
         currentUser: session?.user?.email,
-        customerName: values.customerName,
-        customerNumber: values.customerNumber,
-        purposeUse: values.purposeUse,
-        kind: values.kind,
-        transactionType: values.transactionType,
-        date: values.date,
+        title: values.title,
         content: values.content,
-        location,
+        location
       });
 
       if (response.status === 200) {
         form.reset();
-        router.push(`/consultingNote/${response.data}`);
+        router.push(`/consultingMemo/${response.data}`);
       }
     } catch (error: any) {
-      console.log("consultingNote noteEdit POST에서 오류 발생", error);
+      console.log("consultingMemo memoEdit POST에서 오류 발생", error);
       return toast("오류 발생", {
         description: error.response.data,
       });
     }
-  };
+  }
 
   const onCancel = () => {
     router.back();
@@ -202,107 +186,43 @@ const NoteEdit = () => {
   return (
     <NavBar>
       <div className="flex flex-col space-y-6">
-        <div className="flex flex-col items-center justify-center bg-[url('/contract.jpg')] h-60 bg-center bg-cover">
+        <div className="flex flex-col items-center justify-center bg-[url('/consultingMemo.jpg')] h-60 bg-center bg-cover">
           <h1 className="text-2xl font-semibold tracking-wider pb-1 border-b border-gray-800">
-            상담노트 수정
+            중개메모 수정
           </h1>
-          <p>My consulting note</p>
+          <p>My Consulting Memo</p>
         </div>
         <div className="flex flex-col space-y-6 px-4">
           <div className="flex items-center space-x-2 bg-slate-100 w-1/2 p-2 rounded-md shadow-sm">
             <Image src="/write.png" alt="게시" width={30} height={30} />
-            <h2 className="text-lg font-semibold">노트 수정하기</h2>
+            <h2 className="text-lg font-semibold">메모 수정하기</h2>
           </div>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col space-y-3 text-sm"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-3 text-sm">
             <div className="flex flex-col space-y-1">
-              <label htmlFor="customerName" className="text-xs text-gray-500">
-                고객명
+              <label htmlFor="title" className="text-xs text-gray-500">
+                제목
               </label>
               <input
-                {...form.register("customerName")}
-                id="customerName"
+                {...form.register("title")}
+                id="title"
                 type="text"
-                className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-              />
-            </div>
-            <div className="flex flex-col space-y-1">
-              <label htmlFor="customerNumber" className="text-xs text-gray-500">
-                고객연락처
-              </label>
-              <input
-                {...form.register("customerNumber")}
-                id="customerNumber"
-                type="tel"
-                className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-              />
-            </div>
-            <div className="flex flex-col space-y-1">
-              <label htmlFor="purposeUse" className="text-xs text-gray-500">
-                사용목적
-              </label>
-              <input
-                {...form.register("purposeUse")}
-                id="purposeUse"
-                type="text"
-                className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-              />
-            </div>
-            <div className="flex flex-col space-y-1">
-              <label htmlFor="kind" className="text-xs text-gray-500">
-                중개대상물 종류
-              </label>
-              <input
-                {...form.register("kind")}
-                id="kind"
-                type="text"
-                placeholder="예) 원룸 / 아파트 / 상가 등"
-                className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-              />
-            </div>
-            <div className="flex flex-col space-y-1">
-              <label
-                htmlFor="transactionType"
-                className="text-xs text-gray-500"
-              >
-                거래유형
-              </label>
-              <input
-                {...form.register("transactionType")}
-                id="transactionType"
-                type="text"
-                placeholder="예) 월세 / 전세 / 매매 등"
-                className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-              />
-            </div>
-            <div className="flex flex-col space-y-1">
-              <label htmlFor="date" className="text-xs text-gray-500">
-                상담일자
-              </label>
-              <input
-                {...form.register("date")}
-                id="date"
-                type="text"
-                placeholder="예) 2024-04-15"
-                className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
+                className="border-b pb-1 focus:outline-none focus:border-green-500 bg-transparent"
               />
             </div>
             <div className="flex flex-col space-y-1">
               <label htmlFor="content" className="text-xs text-gray-500">
-                상담내용
+                내용
               </label>
               <textarea
                 {...form.register("content")}
                 id="content"
                 rows={10}
-                className="border p-1 focus:outline-none focus:border-blue-500 bg-transparent resize-none"
+                className="border p-1 focus:outline-none focus:border-green-500 bg-transparent resize-none whitespace-pre-wrap"
               />
             </div>
             <div className="flex flex-col space-y-1">
               <label htmlFor="locate" className="text-xs text-gray-500">
-                상담 매물 위치정보
+                참고 위치정보
               </label>
               <div className="flex items-center justify-between border-b pb-0.5">
                 <input
@@ -311,7 +231,7 @@ const NoteEdit = () => {
                   type="text"
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="장소 또는 주소 검색"
-                  className="focus:outline-none focus:border-blue-500 bg-transparent w-[80%]"
+                  className="focus:outline-none focus:border-green-500 bg-transparent w-[80%]"
                 />
                 <button
                   onClick={onSearch}
@@ -325,14 +245,14 @@ const NoteEdit = () => {
             <div className="flex items-center justify-end space-x-2">
               <button
                 type="submit"
-                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors"
+                className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors"
               >
                 {isLoading ? "수정중" : "수정하기"}
               </button>
               <button
                 type="button"
                 onClick={onCancel}
-                className="border border-blue-500 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md transition-colors"
+                className="border border-green-500 hover:bg-green-500 hover:text-white px-3 py-2 rounded-md transition-colors"
               >
                 취소
               </button>
@@ -344,4 +264,4 @@ const NoteEdit = () => {
   );
 };
 
-export default NoteEdit;
+export default MemoEdit;
