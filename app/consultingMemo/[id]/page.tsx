@@ -3,18 +3,21 @@
 import MemoDelete from "@/components/consultingMemo/MemoDelete";
 import NavBar from "@/components/navBar/NavBar";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export interface IMemo {
+  userEmail: string;
   title: string;
   content: string;
   location: string;
 }
 
 const MemoDetail = () => {
+  const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
   const memoUrl = pathname.split("/consultingMemo/");
@@ -132,7 +135,9 @@ const MemoDetail = () => {
           {memoArr.map((data, i) => (
             <div key={i} className="flex flex-col space-y-3 text-sm">
               <h2 className="text-xs text-gray-500">{data.title}</h2>
-              <span className="border-b pb-1 whitespace-pre-wrap">{data.content}</span>
+              <span className="border-b pb-1 whitespace-pre-wrap">
+                {data.content}
+              </span>
             </div>
           ))}
           <div className="flex flex-col space-y-3 text-sm">
@@ -141,15 +146,17 @@ const MemoDetail = () => {
             <div id="map" className="w-full h-72 border" />
           </div>
           <div className="flex items-center justify-between space-x-2">
-            <div className="flex items-center space-x-2">
-              <Link
-                href={`/consultingMemo/${memoId}/edit`}
-                className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors"
-              >
-                수정
-              </Link>
-              <MemoDelete memoPath={pathname} />
-            </div>
+            {memo?.userEmail === session?.user?.email ? (
+              <div className="flex items-center space-x-2">
+                <Link
+                  href={`/consultingMemo/${memoId}/edit`}
+                  className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors"
+                >
+                  수정
+                </Link>
+                <MemoDelete memoPath={pathname} />
+              </div>
+            ) : null}
             <button
               onClick={() => router.push("/consultingMemo")}
               className="border border-green-500 hover:bg-green-500 hover:text-white px-3 py-2 rounded-md transition-colors"

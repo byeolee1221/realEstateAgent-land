@@ -3,12 +3,14 @@
 import NoteDelete from "@/components/consultingNote/NoteDelete";
 import NavBar from "@/components/navBar/NavBar";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export interface INote {
+  userEmail: string;
   customerName: string;
   customerNumber: string;
   purposeUse: string;
@@ -21,6 +23,7 @@ export interface INote {
 }
 
 const NoteDetail = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const postUrl = pathname.split("/consultingNote/");
   const postId = postUrl[1];
@@ -142,7 +145,9 @@ const NoteDetail = () => {
           {noteArr.map((data, i) => (
             <div key={i} className="flex flex-col space-y-3 text-sm">
               <h2 className="text-xs text-gray-500">{data.title}</h2>
-              <span className="border-b pb-1 whitespace-pre-wrap">{data.contents}</span>
+              <span className="border-b pb-1 whitespace-pre-wrap">
+                {data.contents}
+              </span>
             </div>
           ))}
           <div className="flex flex-col space-y-3 text-sm">
@@ -151,12 +156,17 @@ const NoteDetail = () => {
             <div id="map" className="w-full h-72 border" />
           </div>
           <div className="flex items-center justify-between space-x-2">
-            <div className="flex items-center space-x-2">
-              <Link href={`/consultingNote/${postId}/edit`} className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors">
-                수정
-              </Link>
-              <NoteDelete postPath={pathname} />
-            </div>
+            {note?.userEmail === session?.user?.email ? (
+              <div className="flex items-center space-x-2">
+                <Link
+                  href={`/consultingNote/${postId}/edit`}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors"
+                >
+                  수정
+                </Link>
+                <NoteDelete postPath={pathname} />
+              </div>
+            ) : null}
             <button
               onClick={() => router.push("/consultingNote")}
               className="border border-blue-500 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md transition-colors"
