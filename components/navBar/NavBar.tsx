@@ -19,9 +19,11 @@ const NavBar = ({ children }: INavBar) => {
       const navbar = document.getElementById("navbar");
       if (window.scrollY > 0) {
         navbar?.classList.remove("bg-transparent");
+        navbar?.classList.remove("text-white");
         navbar?.classList.add("bg-white");
       } else {
         navbar?.classList.add("bg-transparent");
+        navbar?.classList.add("text-white");
         navbar?.classList.remove("bg-white");
       }
     };

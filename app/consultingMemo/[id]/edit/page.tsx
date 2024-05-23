@@ -18,7 +18,6 @@ const MemoEdit = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [location, setLocation] = useState("");
   const [map, setMap] = useState<any>(null);
   const [memo, setMemo] = useState<IMemo>();
 
@@ -121,7 +120,7 @@ const MemoEdit = () => {
     if (map) {
       const ps = new window.kakao.maps.services.Places();
 
-      ps.keywordSearch(location, (result: any, status: any) => {
+      ps.keywordSearch(form.watch("location"), (result: any, status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const firstResult = result[0];
           const moveLatLng = new window.kakao.maps.LatLng(
@@ -164,7 +163,7 @@ const MemoEdit = () => {
         currentUser: session?.user?.email,
         title: values.title,
         content: values.content,
-        location
+        location: values.location
       });
 
       if (response.status === 200) {
@@ -204,6 +203,7 @@ const MemoEdit = () => {
               </label>
               <input
                 {...form.register("title")}
+                autoComplete="off"
                 id="title"
                 type="text"
                 className="border-b pb-1 focus:outline-none focus:border-green-500 bg-transparent"
@@ -229,7 +229,6 @@ const MemoEdit = () => {
                   {...form.register("location")}
                   id="locate"
                   type="text"
-                  onChange={(e) => setLocation(e.target.value)}
                   placeholder="장소 또는 주소 검색"
                   className="focus:outline-none focus:border-green-500 bg-transparent w-[80%]"
                 />

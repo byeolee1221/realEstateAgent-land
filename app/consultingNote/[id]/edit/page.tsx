@@ -18,7 +18,6 @@ const NoteEdit = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [location, setLocation] = useState("");
   const [map, setMap] = useState<any>(null);
   const [note, setNote] = useState<INote>();
   // console.log(note);
@@ -122,7 +121,7 @@ const NoteEdit = () => {
     if (map) {
       const ps = new window.kakao.maps.services.Places();
 
-      ps.keywordSearch(location, (result: any, status: any) => {
+      ps.keywordSearch(form.watch("location"), (result: any, status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const firstResult = result[0];
           const moveLatLng = new window.kakao.maps.LatLng(
@@ -180,7 +179,7 @@ const NoteEdit = () => {
         transactionType: values.transactionType,
         date: values.date,
         content: values.content,
-        location,
+        location: values.location,
       });
 
       if (response.status === 200) {
@@ -223,6 +222,7 @@ const NoteEdit = () => {
               </label>
               <input
                 {...form.register("customerName")}
+                autoComplete="off"
                 id="customerName"
                 type="text"
                 className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
@@ -234,6 +234,7 @@ const NoteEdit = () => {
               </label>
               <input
                 {...form.register("customerNumber")}
+                autoComplete="off"
                 id="customerNumber"
                 type="tel"
                 className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
@@ -245,6 +246,7 @@ const NoteEdit = () => {
               </label>
               <input
                 {...form.register("purposeUse")}
+                autoComplete="off"
                 id="purposeUse"
                 type="text"
                 className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
@@ -256,6 +258,7 @@ const NoteEdit = () => {
               </label>
               <input
                 {...form.register("kind")}
+                autoComplete="off"
                 id="kind"
                 type="text"
                 placeholder="예) 원룸 / 아파트 / 상가 등"
@@ -271,6 +274,7 @@ const NoteEdit = () => {
               </label>
               <input
                 {...form.register("transactionType")}
+                autoComplete="off"
                 id="transactionType"
                 type="text"
                 placeholder="예) 월세 / 전세 / 매매 등"
@@ -283,6 +287,7 @@ const NoteEdit = () => {
               </label>
               <input
                 {...form.register("date")}
+                autoComplete="off"
                 id="date"
                 type="text"
                 placeholder="예) 2024-04-15"
@@ -309,7 +314,6 @@ const NoteEdit = () => {
                   {...form.register("location")}
                   id="locate"
                   type="text"
-                  onChange={(e) => setLocation(e.target.value)}
                   placeholder="장소 또는 주소 검색"
                   className="focus:outline-none focus:border-blue-500 bg-transparent w-[80%]"
                 />
