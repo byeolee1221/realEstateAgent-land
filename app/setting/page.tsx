@@ -12,6 +12,7 @@ import { Moon, Sun } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
+import Link from "next/link";
 
 const Setting = () => {
   const { data: session } = useSession();
@@ -87,7 +88,7 @@ const Setting = () => {
             </DropdownMenu>
           </div>
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
+            <Link href="/notice" className="flex items-center space-x-2 w-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -103,7 +104,7 @@ const Setting = () => {
                 />
               </svg>
               <span>공지사항</span>
-            </div>
+            </Link>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -122,7 +123,7 @@ const Setting = () => {
         </div>
         <div className="bg-slate-100 flex flex-col rounded-md px-4 py-5 space-y-3 text-sm shadow-sm">
           <h2 className="font-semibold text-sm">계정 설정</h2>
-          <div className="flex items-center justify-between border-b pb-2">
+          <div className="flex items-center justify-between border-b pb-2 w-full">
             <div className="flex items-center space-x-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
