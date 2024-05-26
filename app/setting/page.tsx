@@ -1,6 +1,7 @@
 "use client";
 
 import NavBar from "@/components/navBar/NavBar";
+import AccountDisconnect from "@/components/setting/AccountDisconnect";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -121,26 +122,10 @@ const Setting = () => {
             </svg>
           </div>
         </div>
-        <div className="bg-slate-100 flex flex-col rounded-md px-4 py-5 space-y-3 text-sm shadow-sm">
+        {session ? <div className="bg-slate-100 flex flex-col rounded-md px-4 py-5 space-y-3 text-sm shadow-sm">
           <h2 className="font-semibold text-sm">계정 설정</h2>
           <div className="flex items-center justify-between border-b pb-2 w-full">
-            <div className="flex items-center space-x-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                />
-              </svg>
-              <span>계정 연동해제</span>
-            </div>
+            <AccountDisconnect />
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -156,7 +141,7 @@ const Setting = () => {
               />
             </svg>
           </div>
-        </div>
+        </div> : null}
       </div>
     </NavBar>
   );
