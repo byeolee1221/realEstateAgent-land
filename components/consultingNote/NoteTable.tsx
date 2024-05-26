@@ -10,7 +10,6 @@ import {
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "sonner";
 
 interface INoteList {
   customerName: string,
@@ -31,6 +30,7 @@ const NoteTable = () => {
 
   const { data: session } = useSession();
   const [note, setNote] = useState<INoteList[]>([]);
+  const [error, setError] = useState("");
   // console.log(note);
   useEffect(() => {
     const getNoteList = async () => {
@@ -42,9 +42,7 @@ const NoteTable = () => {
         }
       } catch (error: any) {
         console.log("consultingNote noteTable GET에서 오류 발생", error);
-        return toast("오류 발생", {
-          description: error.response.data,
-        });
+        setError(error.response.data);
       }
     }
     getNoteList();
@@ -82,6 +80,7 @@ const NoteTable = () => {
             <p>상단의 메뉴바를 눌러 로그인해주세요.</p>
           </div>
         )}
+        {error !== "" ? <h2 className="text-center p-2">{error}</h2> : null}
       </div>
       {session && (
         <div className="flex justify-end">

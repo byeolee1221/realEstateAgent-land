@@ -18,14 +18,18 @@ export async function GET(req: Request) {
     let matchData: any = [];
     let noteListData;
 
+    if (querySnapshot.empty) {
+      return new NextResponse("아직 등록한 노트가 없습니다.", {
+        status: 404,
+      });
+    }
+
     querySnapshot.forEach((doc) => {
       if (doc !== undefined) {
         noteListData = doc.data();
         noteListData.id = doc.id;
         matchData.push(noteListData);
-      } else {
-        return new NextResponse("아직 등록한 노트가 없습니다.", { status: 404 });
-      }
+      } 
     });
     
     // console.log(matchData);
