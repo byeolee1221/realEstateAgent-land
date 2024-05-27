@@ -129,7 +129,7 @@ const MemoDetail = () => {
           <h1 className="text-2xl font-semibold tracking-wider pb-1 border-b border-gray-800">
             중개메모
           </h1>
-          <p>My Consulting Memo</p>
+          <p>My consulting memo</p>
         </div>
         <div className="px-4 flex flex-col space-y-6">
           {memoArr.map((data, i) => (

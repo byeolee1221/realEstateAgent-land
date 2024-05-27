@@ -61,7 +61,7 @@ const AdminMenu = () => {
             </svg>
           </div>
           <div className="flex items-center justify-between border-b pb-2 w-full">
-            <Link href="" className="flex items-center space-x-2 w-full">
+            <Link href="/notice/write" className="flex items-center space-x-2 w-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -93,7 +93,7 @@ const AdminMenu = () => {
               />
             </svg>
           </div>
-          <div className="flex items-center justify-between pb-2 w-full">
+          <div className="flex items-center justify-between border-b pb-2 w-full">
             <Link href="" className="flex items-center space-x-2 w-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -110,6 +110,39 @@ const AdminMenu = () => {
                 />
               </svg>
               <span>문의사항 확인</span>
+            </Link>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+          <div className="flex items-center justify-between pb-2 w-full">
+            <Link href="" className="flex items-center space-x-2 w-full">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
+                />
+              </svg>
+              <span>회원 구독관리</span>
             </Link>
             <svg
               xmlns="http://www.w3.org/2000/svg"

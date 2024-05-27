@@ -15,7 +15,7 @@ const ConsultingMemo = () => {
           <h1 className="text-2xl font-semibold tracking-wider pb-1 border-b border-gray-800">
             중개메모
           </h1>
-          <p>Consulting Memo</p>
+          <p>My consulting memo</p>
         </div>
         <div className="px-4 flex flex-col space-y-6">
           <div className="flex items-center space-x-2 bg-slate-100 w-fit p-2 rounded-md shadow-sm">

@@ -9,10 +9,35 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+interface INoticeTable {
+  title: string,
+  id: string,
+  createdAt: number
+}
 
 const NoticeTable = () => {
-  const { data: session } = useSession();
+  const [notice, setNotice] = useState<INoticeTable[]>();
+  const [error, setError] = useState();
+
+  useEffect(() => {
+    const getNoticeList = async () => {
+      try {
+        const response = await axios.get("/api/notice/noticeList");
+
+        if (response.status === 200) {
+          setNotice(response.data);
+        }
+      } catch (error: any) {
+        console.log("notice noticeTable GET에서 오류 발생", error);
+        setError(error.response.data);
+      }
+    }
+
+    getNoticeList();
+  }, [])
 
   return (
     <div className="flex flex-col space-y-4">
@@ -26,20 +51,21 @@ const NoticeTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[1, 2, 3, 4, 5].map((data, i) => (
-              <TableRow key={i}>
+            {notice?.map((data, i) => (
+              <TableRow key={data.id}>
                 <TableCell>{i + 1}</TableCell>
-                <Link href="" legacyBehavior={true}>
+                <Link href={`/notice/${data.id}`} legacyBehavior={true}>
                   <TableCell className="tracking-tighter cursor-pointer">
-                    공지사항 테스트
+                    {data.title}
                   </TableCell>
                 </Link>
-                <TableCell className="text-right">2024-05-24</TableCell>
+                <TableCell className="text-right">{data.createdAt}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
+      {error !== "" ? <h2 className="text-center p-2">{error}</h2> : null}
     </div>
   );
 };

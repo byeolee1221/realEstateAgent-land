@@ -44,7 +44,7 @@ const DescriptionTwo = () => {
       </div>
       <div className="flex items-center space-x-2">
         <Link
-          href=""
+          href="/consultingMemo"
           className="bg-green-500 hover:bg-green-600 text-white  px-3 py-2 rounded-md text-center transition-colors"
         >
           무료 사용해보기

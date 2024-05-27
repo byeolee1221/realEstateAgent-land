@@ -189,7 +189,7 @@ const MemoEdit = () => {
           <h1 className="text-2xl font-semibold tracking-wider pb-1 border-b border-gray-800">
             중개메모 수정
           </h1>
-          <p>My Consulting Memo</p>
+          <p>My consulting memo</p>
         </div>
         <div className="flex flex-col space-y-6 px-4">
           <div className="flex items-center space-x-2 bg-slate-100 w-1/2 p-2 rounded-md shadow-sm">
