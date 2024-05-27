@@ -67,3 +67,31 @@ export async function DELETE(req: Request) {
     return new NextResponse("오류가 발생하여 연동해제되지 않았습니다. 다시 시도해주세요.", { status: 500 });
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    const userSnapshot = await query(collection(db, "users"), where("email", "==", session?.user?.email));
+    
+    const querySnapshot = await getDocs(userSnapshot);
+    let userId: string = "";
+
+    querySnapshot.forEach((doc) => {
+      userId = doc.id;
+    });
+
+    let adminCheck: boolean;
+
+    if (userId === "lDYn9yuhI6acZ9hNstpW") {
+      adminCheck = true;
+    } else {
+      adminCheck = false;
+    }
+
+    return NextResponse.json(adminCheck, { status: 200 });
+  } catch (error) {
+    console.error("setting GET API에서 오류 발생", error);
+    return new NextResponse("오류가 발생하여 정보를 가져오지 못했습니다.", { status: 500 });
+  }
+}

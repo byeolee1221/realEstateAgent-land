@@ -79,7 +79,7 @@ const MemoTable = () => {
             <p>상단의 메뉴바를 눌러 로그인해주세요.</p>
           </div>
         )}
-      {error !== "" ? <h2 className="text-center p-2">{error}</h2> : null}
+      {session && error !== "" ? <h2 className="text-center p-2">{error}</h2> : null}
       </div>
       {session && (
         <div className="flex justify-end">
