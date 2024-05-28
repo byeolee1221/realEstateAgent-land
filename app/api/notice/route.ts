@@ -1,6 +1,6 @@
 import { db } from "@/app/firebase";
 import { authOptions } from "@/lib/auth";
-import { addDoc, collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     // console.log(body);
 
     // 유저ID 추출
-    const userSnapshot = await query(collection(db, "users"), where("email", "==", session?.user?.email));
+    const userSnapshot = query(collection(db, "users"), where("email", "==", session?.user?.email));
     
     const querySnapshot = await getDocs(userSnapshot);
     let userId: string = "";
@@ -47,7 +47,7 @@ export async function GET(req: Request) {
   try {
     const url = req.url.split("url=/notice/");
     const noteId = url[1];
-    console.log(noteId);
+    // console.log(noteId);
 
     const docRef = doc(db, "notice", noteId);
     const docSnap = await getDoc(docRef);
@@ -60,5 +60,38 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error("notice GET API에서 오류 발생", error);
     return new NextResponse("오류가 발생하였으니 새로고침해주세요.", { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    const body = await req.json();
+    const { noticePath } = body;
+    // console.log(noticePath);
+
+    const userSnapshot = query(collection(db, "users"), where("email", "==", session?.user?.email));
+    
+    const querySnapshot = await getDocs(userSnapshot);
+    let userId: string = "";
+
+    querySnapshot.forEach((doc) => {
+      userId = doc.id;
+    });
+
+    if (userId !== "lDYn9yuhI6acZ9hNstpW") {
+      return new NextResponse("관리자만 공지사항을 삭제할 수 있습니다.", { status: 403 });
+    }
+
+    if (!noticePath) {
+      return new NextResponse("게시물 주소가 올바르지 않습니다.", { status: 404 });
+    }
+
+    const deleteNotice = deleteDoc(doc(db, "notice", noticePath));
+
+    return NextResponse.json({ status: 200 });
+  } catch (error) {
+    console.error("notice DELETE API에서 오류 발생", error);
+    return new NextResponse("오류가 발생하였으니 잠시 후 다시 시도해주세요.", { status: 500 });
   }
 }

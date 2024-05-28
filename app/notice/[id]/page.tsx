@@ -1,13 +1,15 @@
 "use client";
 
 import NavBar from "@/components/navBar/NavBar";
+import NoticeDelete from "@/components/notice/NoticeDelete";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-interface INotice {
+export interface INotice {
   title: string;
   content: string;
   authorEmail: string;
@@ -16,10 +18,11 @@ interface INotice {
 const NoticeDetail = () => {
   const { data: session } = useSession();
   const [notice, setNotice] = useState<INotice>();
-  const [error, setError] = useState();
 
   const router = useRouter();
   const pathname = usePathname();
+  const noticeUrl = pathname.split("/notice/");
+  const noticeId = noticeUrl[1];
 
   useEffect(() => {
     const getNotice = async () => {
@@ -31,7 +34,9 @@ const NoticeDetail = () => {
         }
       } catch (error: any) {
         console.log("notice noteDetail GET에서 오류 발생", error);
-        setError(error.response.data);
+        return toast("오류 발생", {
+          description: error.response.data,
+        });
       }
     };
 
@@ -65,11 +70,12 @@ const NoticeDetail = () => {
             {notice?.authorEmail === session?.user?.email ? (
               <div className="flex items-center space-x-2">
                 <Link
-                  href={``}
+                  href={`/notice/${noticeId}/edit`}
                   className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors"
                 >
                   수정
                 </Link>
+                <NoticeDelete noticePath={pathname} />
               </div>
             ) : null}
             <button
