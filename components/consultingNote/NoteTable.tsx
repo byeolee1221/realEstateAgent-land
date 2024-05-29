@@ -10,6 +10,7 @@ import {
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import SignInBtn from "../SignInBtn";
 
 interface INoteList {
   customerName: string,
@@ -77,7 +78,8 @@ const NoteTable = () => {
         ) : (
           <div className="flex flex-col items-center justify-center text-center text-sm p-2">
             <p>로그인이 필요한 서비스입니다.</p>
-            <p>상단의 메뉴바를 눌러 로그인해주세요.</p>
+            <p>아래 버튼을 눌러 로그인해주세요.</p>
+            <SignInBtn />
           </div>
         )}
         {session && error !== "" ? <h2 className="text-center p-2">{error}</h2> : null}
