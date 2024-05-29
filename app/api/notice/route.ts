@@ -70,6 +70,7 @@ export async function DELETE(req: Request) {
     const { noticePath } = body;
     // console.log(noticePath);
 
+    // 관리자인지 한번 더 확인
     const userSnapshot = query(collection(db, "users"), where("email", "==", session?.user?.email));
     
     const querySnapshot = await getDocs(userSnapshot);

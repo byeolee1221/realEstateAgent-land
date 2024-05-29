@@ -74,3 +74,9 @@
       @apply bg-background text-foreground;
     }
   }
+
+  @layer components {
+    .beforeClassName {
+      @apply before:h-60 before:w-full before:bg-slate-800 before:content-[''] before:absolute before:top-0 before:left-0 before:opacity-50;
+    }
+  }
