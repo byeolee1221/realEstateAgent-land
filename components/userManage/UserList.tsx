@@ -30,6 +30,7 @@ const UserList = () => {
           setUser(response.data);
         }
       } catch (error: any) {
+        // 비로그인유저, 관리자 아닌 유저 접속시 메인페이지로 이동
         if (error.response.status === 401 || error.response.status === 403) {
           router.push("/");
         }
@@ -37,6 +38,7 @@ const UserList = () => {
         setError(error.response.data);
       }
     };
+    
     getUser();
   }, []);
 
