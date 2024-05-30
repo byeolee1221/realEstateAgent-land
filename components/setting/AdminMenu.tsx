@@ -28,7 +28,7 @@ const AdminMenu = () => {
         <div className="bg-slate-100 flex flex-col rounded-md px-4 py-5 space-y-3 text-sm shadow-sm">
           <h2 className="font-semibold text-sm">관리자 메뉴</h2>
           <div className="flex items-center justify-between border-b pb-2 w-full">
-            <Link href="" className="flex items-center space-x-2 w-full">
+            <Link href="/userManage" className="flex items-center space-x-2 w-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

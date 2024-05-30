@@ -27,7 +27,7 @@ const Subscription = () => {
             />
             <h2 className="text-lg font-semibold">구독 안내</h2>
           </div>
-          <Link href="" className="bg-yellow-100 rounded-md flex flex-col space-y-2 p-4 border-2 border-transparent hover:border-yellow-500 transition-colors">
+          <Link href="" className="bg-yellow-100 rounded-md flex flex-col space-y-2 p-4 border-2 border-transparent hover:border-yellow-500 shadow-md transition-colors">
             <h2 className="text-xl font-semibold">스탠다드</h2>
             <p>중개랜드에서 현재 운영중인 기본적인 구독방식입니다.</p>
             <h3 className="text-3xl font-semibold">10,000원 /월</h3>
