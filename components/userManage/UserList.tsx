@@ -19,7 +19,7 @@ interface IUser {
 const UserList = () => {
   const router = useRouter();
   const [user, setUser] = useState<IUser[]>();
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const getUser = async () => {

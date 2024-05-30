@@ -1,6 +1,5 @@
 "use client";
 
-import NavBar from "@/components/navBar/NavBar";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -13,7 +12,7 @@ import { toast } from "sonner";
 
 const MemoWrite = () => {
   const router = useRouter();
-  
+
   const [map, setMap] = useState<any>(null);
 
   function displayMarker(place: any) {
@@ -89,7 +88,7 @@ const MemoWrite = () => {
     defaultValues: {
       title: "",
       content: "",
-      location: ""
+      location: "",
     },
   });
 
@@ -144,85 +143,75 @@ const MemoWrite = () => {
   };
 
   return (
-    <NavBar>
-      <div className="flex flex-col space-y-6">
-        <div className="flex flex-col items-center justify-center bg-[url('/consultingMemo.jpg')] h-60 bg-center bg-cover">
-          <h1 className="text-2xl font-semibold tracking-wider pb-1 border-b border-gray-800">
-            중개메모 작성
-          </h1>
-          <p>My consulting memo</p>
-        </div>
-        <div className="flex flex-col space-y-6 px-4">
-          <div className="flex items-center space-x-2 bg-slate-100 w-1/2 p-2 rounded-md shadow-sm">
-            <Image src="/write.png" alt="게시" width={30} height={30} />
-            <h2 className="text-lg font-semibold">메모 작성하기</h2>
-          </div>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col space-y-3 text-sm"
-          >
-            <div className="flex flex-col space-y-1">
-              <label htmlFor="title" className="text-xs text-gray-500">
-                제목
-              </label>
-              <input
-                {...form.register("title")}
-                autoComplete="off"
-                id="title"
-                type="text"
-                className="border-b pb-1 focus:outline-none focus:border-green-500 bg-transparent"
-              />
-            </div>
-            <div className="flex flex-col space-y-1">
-              <label htmlFor="content" className="text-xs text-gray-500">
-                내용
-              </label>
-              <textarea
-                {...form.register("content")}
-                id="content"
-                rows={10}
-                className="border p-1 focus:outline-none focus:border-green-500 bg-transparent resize-none whitespace-pre-wrap"
-              />
-            </div>
-            <div className="flex flex-col space-y-1">
-              <label htmlFor="locate" className="text-xs text-gray-500">
-                참고 위치정보
-              </label>
-              <div className="flex items-center justify-between border-b pb-0.5">
-                <input
-                  {...form.register("location")}
-                  id="locate"
-                  type="text"
-                  placeholder="장소 또는 주소 검색"
-                  className="focus:outline-none focus:border-green-500 bg-transparent w-[80%]"
-                />
-                <button
-                  onClick={onSearch}
-                  className="border p-1 shadow-sm rounded-sm"
-                >
-                  검색
-                </button>
-              </div>
-              <div id="map" className="w-full h-72 border" />
-            </div>
-            <div className="flex items-center justify-end space-x-2">
-              <button
-                type="submit"
-                className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors"
-              >
-                게시하기
-              </button>
-              <button
-                onClick={onCancel}
-                className="border border-green-500 hover:bg-green-500 hover:text-white px-3 py-2 rounded-md transition-colors"
-              >
-                취소
-              </button>
-            </div>
-          </form>
-        </div>
+    <div className="flex flex-col space-y-6 px-4">
+      <div className="flex items-center space-x-2 bg-slate-100 w-1/2 p-2 rounded-md shadow-sm">
+        <Image src="/write.png" alt="게시" width={30} height={30} />
+        <h2 className="text-lg font-semibold">메모 작성하기</h2>
       </div>
-    </NavBar>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col space-y-3 text-sm"
+      >
+        <div className="flex flex-col space-y-1">
+          <label htmlFor="title" className="text-xs text-gray-500">
+            제목
+          </label>
+          <input
+            {...form.register("title")}
+            autoComplete="off"
+            id="title"
+            type="text"
+            className="border-b pb-1 focus:outline-none focus:border-green-500 bg-transparent"
+          />
+        </div>
+        <div className="flex flex-col space-y-1">
+          <label htmlFor="content" className="text-xs text-gray-500">
+            내용
+          </label>
+          <textarea
+            {...form.register("content")}
+            id="content"
+            rows={10}
+            className="border p-1 focus:outline-none focus:border-green-500 bg-transparent resize-none whitespace-pre-wrap"
+          />
+        </div>
+        <div className="flex flex-col space-y-1">
+          <label htmlFor="locate" className="text-xs text-gray-500">
+            참고 위치정보
+          </label>
+          <div className="flex items-center justify-between border-b pb-0.5">
+            <input
+              {...form.register("location")}
+              id="locate"
+              type="text"
+              placeholder="장소 또는 주소 검색"
+              className="focus:outline-none focus:border-green-500 bg-transparent w-[80%]"
+            />
+            <button
+              onClick={onSearch}
+              className="border p-1 shadow-sm rounded-sm"
+            >
+              검색
+            </button>
+          </div>
+          <div id="map" className="w-full h-72 border" />
+        </div>
+        <div className="flex items-center justify-end space-x-2">
+          <button
+            type="submit"
+            className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors"
+          >
+            게시하기
+          </button>
+          <button
+            onClick={onCancel}
+            className="border border-green-500 hover:bg-green-500 hover:text-white px-3 py-2 rounded-md transition-colors"
+          >
+            취소
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

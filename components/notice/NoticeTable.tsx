@@ -20,7 +20,7 @@ interface INoticeTable {
 
 const NoticeTable = () => {
   const [notice, setNotice] = useState<INoticeTable[]>();
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const getNoticeList = async () => {

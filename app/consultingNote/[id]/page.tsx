@@ -1,7 +1,6 @@
 "use client";
 
 import NoteDelete from "@/components/consultingNote/NoteDelete";
-import NavBar from "@/components/navBar/NavBar";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -133,50 +132,40 @@ const NoteDetail = () => {
   ];
 
   return (
-    <NavBar>
-      <div className="flex flex-col space-y-6">
-        <div className="flex flex-col items-center justify-center bg-[url('/contract.jpg')] h-60 bg-center bg-cover">
-          <h1 className="text-2xl font-semibold tracking-wider pb-1 border-b border-gray-800">
-            상담노트
-          </h1>
-          <p>My consulting note</p>
+    <div className="px-4 flex flex-col space-y-6">
+      {noteArr.map((data, i) => (
+        <div key={i} className="flex flex-col space-y-3 text-sm">
+          <h2 className="text-xs text-gray-500">{data.title}</h2>
+          <span className="border-b pb-1 whitespace-pre-wrap">
+            {data.contents}
+          </span>
         </div>
-        <div className="px-4 flex flex-col space-y-6">
-          {noteArr.map((data, i) => (
-            <div key={i} className="flex flex-col space-y-3 text-sm">
-              <h2 className="text-xs text-gray-500">{data.title}</h2>
-              <span className="border-b pb-1 whitespace-pre-wrap">
-                {data.contents}
-              </span>
-            </div>
-          ))}
-          <div className="flex flex-col space-y-3 text-sm">
-            <h2 className="text-xs text-gray-500">상담 매물 위치정보</h2>
-            <span className="border-b pb-1">{note?.location}</span>
-            <div id="map" className="w-full h-72 border" />
-          </div>
-          <div className="flex items-center justify-between space-x-2">
-            {note?.userEmail === session?.user?.email ? (
-              <div className="flex items-center space-x-2">
-                <Link
-                  href={`/consultingNote/${postId}/edit`}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors"
-                >
-                  수정
-                </Link>
-                <NoteDelete postPath={pathname} />
-              </div>
-            ) : null}
-            <button
-              onClick={() => router.push("/consultingNote")}
-              className="border border-blue-500 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md transition-colors"
-            >
-              목록
-            </button>
-          </div>
-        </div>
+      ))}
+      <div className="flex flex-col space-y-3 text-sm">
+        <h2 className="text-xs text-gray-500">상담 매물 위치정보</h2>
+        <span className="border-b pb-1">{note?.location}</span>
+        <div id="map" className="w-full h-72 border" />
       </div>
-    </NavBar>
+      <div className="flex items-center justify-between space-x-2">
+        {note?.userEmail === session?.user?.email ? (
+          <div className="flex items-center space-x-2">
+            <Link
+              href={`/consultingNote/${postId}/edit`}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors"
+            >
+              수정
+            </Link>
+            <NoteDelete postPath={pathname} />
+          </div>
+        ) : null}
+        <button
+          onClick={() => router.push("/consultingNote")}
+          className="border border-blue-500 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md transition-colors"
+        >
+          목록
+        </button>
+      </div>
+    </div>
   );
 };
 
