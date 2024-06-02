@@ -1,19 +1,20 @@
 "use client";
 
+import ShowContact from "@/components/adminContact/ShowContact";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-interface IDoc {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: number;
-  userName: string;
-  userEmail: string;
-  userImage: string;
+export interface IDoc {
+  id: string,
+  title: string,
+  content: string,
+  createdAt: number,
+  userName: string,
+  userEmail: string,
+  userImage: string
 }
 
 const AdminContact = () => {
@@ -85,8 +86,8 @@ const AdminContact = () => {
             </div>
           </div>
           <div className="flex justify-between items-center w-full border-b border-gray-800 py-1">
-            <h2>제목: {data.title}</h2>
-            <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition-colors">문의사항 보기</button>
+            <h2 className="truncate">제목: {data.title}</h2>
+            <ShowContact contactId={data.id} />
           </div>
         </div>
       ))}
