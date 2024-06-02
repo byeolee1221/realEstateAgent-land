@@ -60,7 +60,7 @@ const ShowContact = (props: IProps) => {
         <DialogHeader>
           <DialogTitle className="text-start">문의사항</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col space-y-6">
+        {!error ? <div className="flex flex-col space-y-6">
           {contactArr.map((data, i) => (
             <div key={i} className="flex flex-col space-y-3 text-sm">
               <h2 className="text-xs text-gray-500">{data.title}</h2>
@@ -69,11 +69,11 @@ const ShowContact = (props: IProps) => {
               </span>
             </div>
           ))}
-        </div>
+        </div> : <p className="text-sm text-red-500">{error}</p>}
         <DialogFooter className="flex items-center flex-row space-x-2 justify-end">
-          <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors w-1/3">
+          {!error && <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors w-1/3">
             삭제
-          </button>
+          </button>}
           <DialogClose asChild>
             <button className="border border-green-500 hover:bg-green-500 hover:text-white px-3 py-2 rounded-md transition-colors w-1/3">
               닫기
