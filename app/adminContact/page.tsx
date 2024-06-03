@@ -63,7 +63,7 @@ const AdminContact = () => {
         </h2>
       </div>
       {doc?.map((data) => (
-        <div key={data.id} className="flex flex-col space-y-1 w-full bg-slate-100 rounded-md p-2">
+        <div key={data.id} className="flex flex-col space-y-1 w-full bg-slate-100 rounded-md p-2 shadow-md">
           <div className="flex space-x-2 items-center">
             {data.userImage ? (
               <img
@@ -85,7 +85,7 @@ const AdminContact = () => {
               <h2 className="text-xs">{data.userEmail}</h2>
             </div>
           </div>
-          <div className="flex justify-between items-center w-full border-b border-gray-800 py-1">
+          <div className="flex justify-between items-center w-full border-b border-slate-300 py-1">
             <h2 className="truncate">제목: {data.title}</h2>
             <ShowContact contactId={data.id} />
           </div>

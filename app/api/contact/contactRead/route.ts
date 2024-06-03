@@ -1,6 +1,6 @@
 import { db } from "@/app/firebase";
 import { authOptions } from "@/lib/auth";
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -51,5 +51,24 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error("contactRead GET API에서 오류 발생", error);
     return new NextResponse("오류가 발생하였으니 새로고침해주세요.", { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const body = await req.json();
+    const { id } = body;
+    // console.log(id);
+
+    if (!id) {
+      return new NextResponse("게시물 주소가 올바르지 않습니다.", { status: 404 });
+    }
+
+    const deleteContact = deleteDoc(doc(db, "contact", id));
+
+    return NextResponse.json({ status: 200 });
+  } catch (error) {
+    console.error("contactRead DELETE API에서 오류 발생", error);
+    return new NextResponse("오류가 발생하였으니 잠시 후 다시 시도해주세요.", { status: 500 });
   }
 }

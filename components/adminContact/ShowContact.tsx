@@ -9,12 +9,14 @@ import {
 } from "../ui/dialog";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import ContactDelete from "./ContactDelete";
 
 interface IProps {
   contactId: string;
 }
 
 interface IDoc {
+  id: string;
   title: string;
   content: string;
   createdAt: number;
@@ -71,9 +73,7 @@ const ShowContact = (props: IProps) => {
           ))}
         </div> : <p className="text-sm text-red-500">{error}</p>}
         <DialogFooter className="flex items-center flex-row space-x-2 justify-end">
-          {!error && <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors w-1/3">
-            삭제
-          </button>}
+          {!error && <ContactDelete id={doc?.id!} />}
           <DialogClose asChild>
             <button className="border border-green-500 hover:bg-green-500 hover:text-white px-3 py-2 rounded-md transition-colors w-1/3">
               닫기

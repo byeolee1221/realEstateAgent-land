@@ -9,11 +9,13 @@ import {
 } from "../ui/table";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import UserProfile from "./UserProfile";
 
 interface IUser {
   id: string;
   email: string;
   name: string;
+  image: string;
 }
 
 const UserList = () => {
@@ -55,9 +57,9 @@ const UserList = () => {
           </TableHeader>
           <TableBody>
             {user?.map((data, i) => (
-              <TableRow key={data.id}>
+              <TableRow key={data.id} className="cursor-pointer">
                 <TableCell>{i + 1}</TableCell>
-                <TableCell>{data.email}</TableCell>
+                <UserProfile email={data.email} id={data.id} image={data.image} name={data.name} />
                 <TableCell className="text-right">{data.name}</TableCell>
               </TableRow>
             ))}

@@ -46,6 +46,7 @@ export async function GET(req: Request) {
 
       userData.createdAt = formatDate(createdAt);
       matchData.push(userData);
+      // console.log(matchData)
     });
 
     return NextResponse.json(matchData, { status: 200 });
