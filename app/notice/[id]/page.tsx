@@ -1,6 +1,5 @@
 "use client";
 
-import NavBar from "@/components/navBar/NavBar";
 import NoticeDelete from "@/components/notice/NoticeDelete";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -49,45 +48,35 @@ const NoticeDetail = () => {
   ];
 
   return (
-    <NavBar>
-      <div className="flex flex-col space-y-6">
-        <div className="flex flex-col items-center justify-center bg-[url('/notice.jpg')] h-60 bg-center bg-cover">
-          <h1 className="text-2xl font-semibold tracking-wider pb-1 border-b border-gray-800">
-            공지사항
-          </h1>
-          <p>Notice</p>
+    <div className="px-4 flex flex-col space-y-6">
+      {NoticeArr.map((data, i) => (
+        <div key={i} className="flex flex-col space-y-3 text-sm">
+          <h2 className="text-xs text-gray-500">{data.title}</h2>
+          <span className="border-b pb-1 whitespace-pre-wrap">
+            {data.content}
+          </span>
         </div>
-        <div className="px-4 flex flex-col space-y-6">
-          {NoticeArr.map((data, i) => (
-            <div key={i} className="flex flex-col space-y-3 text-sm">
-              <h2 className="text-xs text-gray-500">{data.title}</h2>
-              <span className="border-b pb-1 whitespace-pre-wrap">
-                {data.content}
-              </span>
-            </div>
-          ))}
-          <div className="flex items-center justify-between space-x-2">
-            {notice?.authorEmail === session?.user?.email ? (
-              <div className="flex items-center space-x-2">
-                <Link
-                  href={`/notice/${noticeId}/edit`}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors"
-                >
-                  수정
-                </Link>
-                <NoticeDelete noticePath={pathname} />
-              </div>
-            ) : null}
-            <button
-              onClick={() => router.push("/notice")}
-              className="border border-blue-500 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md transition-colors"
+      ))}
+      <div className="flex items-center justify-between space-x-2">
+        {notice?.authorEmail === session?.user?.email ? (
+          <div className="flex items-center space-x-2">
+            <Link
+              href={`/notice/${noticeId}/edit`}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors"
             >
-              목록
-            </button>
+              수정
+            </Link>
+            <NoticeDelete noticePath={pathname} />
           </div>
-        </div>
+        ) : null}
+        <button
+          onClick={() => router.push("/notice")}
+          className="border border-blue-500 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md transition-colors"
+        >
+          목록
+        </button>
       </div>
-    </NavBar>
+    </div>
   );
 };
 

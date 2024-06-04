@@ -53,6 +53,11 @@ const DescriptionTwo = () => {
           더 알아보기
         </button>
       </div>
+      <img
+        src={"/memoPage.png"}
+        alt="메모페이지"
+        className="object-cover object-center rounded-md shadow-2xl shadow-green-500/40 skew-y-12 scale-90"
+      />
     </div>
   );
 };

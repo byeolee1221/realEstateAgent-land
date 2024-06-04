@@ -43,7 +43,6 @@ const NoticeWrite = () => {
   }
 
   return (
-    <NavBar>
         <div className="flex flex-col space-y-6 px-4">
           <div className="flex items-center space-x-2 bg-slate-100 w-1/2 p-2 rounded-md shadow-sm">
             <Image src="/write.png" alt="게시" width={30} height={30} />
@@ -85,7 +84,6 @@ const NoticeWrite = () => {
             </div>
           </form>
         </div>
-    </NavBar>
   );
 };
 

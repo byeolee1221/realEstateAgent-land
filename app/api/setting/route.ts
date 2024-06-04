@@ -14,7 +14,7 @@ export async function DELETE(req: Request) {
     }
 
     // 유저ID 추출
-    const userSnapshot = await query(collection(db, "users"), where("email", "==", session.user?.email));
+    const userSnapshot = query(collection(db, "users"), where("email", "==", session.user?.email));
     
     const querySnapshot = await getDocs(userSnapshot);
     let userId: string = "";
@@ -72,7 +72,7 @@ export async function GET(req: Request) {
   try {
     const session = await getServerSession(authOptions);
 
-    const userSnapshot = await query(collection(db, "users"), where("email", "==", session?.user?.email));
+    const userSnapshot = query(collection(db, "users"), where("email", "==", session?.user?.email));
     
     const querySnapshot = await getDocs(userSnapshot);
     let userId: string = "";
