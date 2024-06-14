@@ -2,9 +2,17 @@
 
 import axios from "axios";
 import Image from "next/image";
+import { useState } from "react";
 import { toast } from "sonner";
 
+interface IData {
+  tid: string,
+  next_redirect_pc_url: string
+}
+
 const Subscription = () => {
+  const [data, setData] = useState<IData>();
+  
   const standardArr = [
     "상담노트 및 중개메모 무제한 사용 가능",
     "추후 추가될 새 기능 중의 일부",
@@ -22,6 +30,8 @@ const Subscription = () => {
 
       if (response.status === 200) {
         console.log("정기결제 준비단계 테스트 완료");
+        setData(response.data);
+        window.open(data?.next_redirect_pc_url);
       }
     } catch (error: any) {
       console.log("subscription POST에서 오류 발생", error);
@@ -29,7 +39,7 @@ const Subscription = () => {
         description: error.response.data,
       });
     }
-  }
+  };
 
   return (
     <div className="px-4 flex flex-col space-y-6">
