@@ -1,22 +1,18 @@
-"use client"
+"use client";
 
+import PaymentApprove from "@/components/subscription/PaymentApprove";
+import PaymentInfo from "@/components/subscription/PaymentInfo";
+import { getApproveState } from "@/lib/selectorState";
+import { cn } from "@/lib/utils";
 import axios from "axios";
 import Image from "next/image";
-import { useState } from "react";
+import { useRecoilValue } from "recoil";
 import { toast } from "sonner";
 
-interface IData {
-  tid: string,
-  next_redirect_pc_url: string
-}
-
 const Subscription = () => {
-  const [data, setData] = useState<IData>();
-  
-  const standardArr = [
-    "상담노트 및 중개메모 무제한 사용 가능",
-    "추후 추가될 새 기능 중의 일부",
-  ];
+  const approve = useRecoilValue(getApproveState);
+
+  const standardArr = ["상담노트 및 중개메모 무제한 사용 가능", "추후 추가될 새 기능 중의 일부"];
 
   const item_name = "중개랜드 스탠다드구독";
   const amount = 10000;
@@ -25,13 +21,13 @@ const Subscription = () => {
     try {
       const response = await axios.post("/api/kakaoPay", {
         item_name,
-        amount
+        amount,
       });
 
       if (response.status === 200) {
         console.log("정기결제 준비단계 테스트 완료");
-        setData(response.data);
-        window.open(data?.next_redirect_pc_url);
+
+        window.open(response.data.next_redirect_pc_url);
       }
     } catch (error: any) {
       console.log("subscription POST에서 오류 발생", error);
@@ -47,9 +43,7 @@ const Subscription = () => {
         <Image src="/subscriptionIcon.png" alt="구독" width={30} height={30} />
         <h2 className="text-lg font-semibold">구독 안내</h2>
       </div>
-      <div
-        className="bg-yellow-100 rounded-md flex flex-col space-y-2 p-4 border-2 border-transparent hover:border-yellow-200 shadow-md transition-colors"
-      >
+      <div className="bg-yellow-100 rounded-md flex flex-col space-y-2 p-4 border-2 border-transparent hover:border-yellow-200 shadow-md transition-colors">
         <h2 className="text-xl font-semibold">스탠다드</h2>
         <p>중개랜드에서 현재 운영중인 기본적인 구독방식입니다.</p>
         <h3 className="text-3xl font-semibold">10,000원 /월</h3>
@@ -75,8 +69,16 @@ const Subscription = () => {
             </div>
           ))}
         </div>
-        <button onClick={onSubscribe} className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-md transition-colors">선택</button>
+        <PaymentApprove />
+        <button
+          onClick={onSubscribe}
+          className={cn("text-white px-3 py-2 rounded-md transition-colors", !approve ? "bg-orange-200" : "bg-orange-500 hover:bg-orange-600")}
+          disabled={!approve}
+        >
+          선택
+        </button>
       </div>
+      <PaymentInfo />
     </div>
   );
 };

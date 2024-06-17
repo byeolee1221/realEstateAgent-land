@@ -31,9 +31,9 @@ export async function POST(req: Request) {
           total_amount: amount,
           vat_amount: "900",
           tax_free_amount: "0",
-          approval_url: "http://localhost:3000/api/kakaoPay/success",
-          fail_url: "http://localhost:3000/api/kakaoPay/fail",
-          cancel_url: "http://localhost:3000/api/kakaoPay/cancel",
+          approval_url: "http://localhost:3000/subscription/success",
+          fail_url: "http://localhost:3000/subscription/fail",
+          cancel_url: "http://localhost:3000/subscription/cancel",
         },
         {
           headers: {
