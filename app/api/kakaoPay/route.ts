@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       return new NextResponse("상품명과 금액을 확인해주세요.", { status: 404 });
     }
 
-    // kakaoPay 준비단계 POST 요청
+    // kakaoPay 1회차 POST 요청
     try {
       const response = await axios.post(
         "https://open-api.kakaopay.com/online/v1/payment/ready",
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
           item_name,
           quantity: "1",
           total_amount: amount,
-          vat_amount: "900",
+          vat_amount: "1000",
           tax_free_amount: "0",
           approval_url: "http://localhost:3000/subscription/success",
           fail_url: "http://localhost:3000/subscription/fail",

@@ -25,7 +25,7 @@ const Subscription = () => {
       });
 
       if (response.status === 200) {
-        console.log("정기결제 준비단계 테스트 완료");
+        console.log("정기결제 1회차 테스트 완료");
 
         window.open(response.data.next_redirect_pc_url);
       }
