@@ -21,7 +21,7 @@ const PaymentApprove = () => {
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value="item-1">
         <AccordionTrigger className="py-2 hover:no-underline">
-          <div className="flex items-center space-x-2 font-semibold">
+          <div className="flex items-center space-x-2">
             <input type="checkbox" id="approve" name="approve" onChange={onApprove} />
             <span>스탠다드 정기구독 결제에 동의합니다.</span>
           </div>
