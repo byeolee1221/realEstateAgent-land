@@ -1,8 +1,13 @@
+import { db } from "@/app/firebase";
+import { authOptions } from "@/lib/auth";
 import axios from "axios";
+import { addDoc, collection } from "firebase/firestore";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
     const body = await req.json();
     const { tid, pgToken } = body;
     // console.log(pgToken, tid);
@@ -26,6 +31,13 @@ export async function POST(req: Request) {
       });
 
       if (response.status === 200) {
+        const addSubscription = await addDoc(collection(db, "subscription"), {
+          userName: session?.user?.name,
+          userEmail: session?.user?.email,
+          sid: response.data.sid,
+          approved_at: response.data.approved_at
+        });
+        
         return NextResponse.json({ sid: response.data.sid });
       }
     } catch (error) {

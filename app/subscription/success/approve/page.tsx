@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+// 정기결제 approve 이후 표출 페이지
+
 const SubscriptionApprove = () => {
   const router = useRouter();
 

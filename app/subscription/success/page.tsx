@@ -7,6 +7,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 
+// 정기결제 ready 통과 후 표출 페이지
+
 const SubscriptionSuccess = () => {
   const query = useSearchParams();
   const pgToken = query.get("pg_token");

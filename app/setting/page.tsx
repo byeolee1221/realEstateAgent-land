@@ -144,7 +144,7 @@ const Setting = () => {
               </svg>
             </div>
             <div className="flex items-center justify-between pb-2 w-full">
-              <div className="flex items-center space-x-2 w-full">
+              <Link href="/mySubscription" className="flex items-center space-x-2 w-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -160,7 +160,7 @@ const Setting = () => {
                   />
                 </svg>
                 <span>구독관리</span>
-              </div>
+              </Link>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
