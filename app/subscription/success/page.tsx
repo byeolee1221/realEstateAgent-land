@@ -1,19 +1,23 @@
 "use client"
 
+import { tidState } from "@/lib/atomState";
 import { getTidState } from "@/lib/selectorState";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 // 정기결제 ready 통과 후 표출 페이지
 
 const SubscriptionSuccess = () => {
   const query = useSearchParams();
   const pgToken = query.get("pg_token");
+  
   const router = useRouter();
+
   const tid = useRecoilValue(getTidState);
+  const [newTid, setNewTid] = useRecoilState(tidState);
 
   // approve api 호출
   useEffect(() => {
@@ -26,6 +30,8 @@ const SubscriptionSuccess = () => {
 
         if (response.status === 200) {
           console.log("정기결제 승인 완료");
+          setNewTid("");
+
           router.push("/subscription/success/approve");
         }
       } catch (error: any) {
