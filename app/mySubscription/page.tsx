@@ -1,5 +1,6 @@
 "use client";
 
+import PlanCancel from "@/components/subscription/PlanCancel";
 import { getTidState } from "@/lib/selectorState";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -21,6 +22,9 @@ const MySubscription = () => {
 
   const tid = useRecoilValue(getTidState);
   const date = payment?.approvedAt.split("T")[0];
+  
+  const approvedDate = new Date(payment?.approvedAt!);
+  const nextPaymentDate = `${approvedDate.getFullYear()}-${(approvedDate.getMonth() + 2).toString().padStart(2, "0")}-${approvedDate.getDate()}`;
 
   useEffect(() => {
     const userPayment = async () => {
@@ -44,7 +48,7 @@ const MySubscription = () => {
   const dataArr = [
     { title: "가입일", data: date },
     { title: "정기결제 금액", data: `${payment?.amount}원` },
-    { title: "다음 결제일", data: "0000-00-00" },
+    { title: "다음 결제일", data: nextPaymentDate },
   ];
 
   return (
@@ -62,7 +66,7 @@ const MySubscription = () => {
           </span>
         </div>
       </div>
-      <div className="bg-slate-100 flex flex-col rounded-md px-4 py-5 space-y-3 text-sm shadow-sm">
+      {!error ? <div className="bg-slate-100 flex flex-col rounded-md px-4 py-5 space-y-3 text-sm shadow-sm">
         <h2 className="font-semibold text-lg">구독 정보</h2>
         {dataArr.map((item, i) => (
           <div key={i} className="flex items-center justify-between">
@@ -70,7 +74,8 @@ const MySubscription = () => {
             <span>{item.data}</span>
           </div>
         ))}
-      </div>
+      </div> : null}
+      <PlanCancel tid={tid} />
     </div>
   );
 };
