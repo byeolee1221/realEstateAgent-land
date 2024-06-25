@@ -37,14 +37,11 @@ export async function POST(req: Request) {
           sid: response.data.sid,
           approved_at: response.data.approved_at
         });
-        
-        return NextResponse.json({ sid: response.data.sid });
       }
     } catch (error) {
       console.error("approve POST API의 정기결제 요청에서 오류 발생", error);
       return new NextResponse("오류가 발생하여 결제가 취소되었습니다. 다시 시도해주세요.", { status: 500 });
     }
-
     return NextResponse.json({ status: 200 });
   } catch (error) {
     console.error("approve POST API에서 오류 발생", error);

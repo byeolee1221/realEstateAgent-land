@@ -1,7 +1,7 @@
 import { db } from "@/app/firebase";
 import { authOptions } from "@/lib/auth";
 import axios from "axios";
-import { deleteDoc, doc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -40,7 +40,16 @@ export async function POST(req: Request) {
 
       if (response.status === 200) {
         console.log("취소 완료");
-        const deletePayInfo = deleteDoc(doc(db, "subscription"))
+
+        const paymentSnapshot = query(collection(db, "subscription"), where("userEmail", "==", session.user?.email));
+        const querySnapshot = await getDocs(paymentSnapshot);
+        let docId: string = "";
+
+        querySnapshot.forEach((doc) => {
+          docId = doc.id
+        });
+
+        const deletePayInfo = deleteDoc(doc(db, "subscription", docId));
       }
     } catch (error) {
       console.error("kakaoPay cancel 결제취소 POST API에서 오류 발생", error);

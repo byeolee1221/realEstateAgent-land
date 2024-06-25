@@ -1,5 +1,7 @@
+import { db } from "@/app/firebase";
 import { authOptions } from "@/lib/auth";
 import axios from "axios";
+import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -40,12 +42,26 @@ export async function POST(req: Request) {
       );
 
       if (response.status === 200) {
+        const paymentSnapshot = query(collection(db, "subscription"), where("sid", "==", sid));
+        const querySnapshot = await getDocs(paymentSnapshot);
+        let docId: string = "";
 
+        querySnapshot.forEach((doc) => {
+          docId = doc.id
+        });
+
+        const editDoc = await setDoc(doc(db, "subscription", docId), {
+          userName: session?.user?.name,
+          userEmail: session?.user?.email,
+          sid,
+          approved_at: response.data.approved_at
+        });
       }
     } catch (error) {
       console.error("kakaoPay regularPayment 정기결제 POST API에서 오류 발생", error);
       return new NextResponse("오류가 발생하여 결제되지 않았습니다. 관리자에게 문의해주세요.", { status: 500 });
     }
+    return NextResponse.json({ status: 200 });
   } catch (error) {
     console.error("kakaoPay regularPayment POST API에서 오류 발생", error);
     return new NextResponse("오류가 발생하여 결제되지 않았습니다. 관리자에게 문의해주세요.", { status: 500 });

@@ -24,6 +24,7 @@ const MySubscription = () => {
   const tid = useRecoilValue(getTidState);
   const date = payment?.approvedAt.split("T")[0];
 
+  // 표시될 승인시각, 현재시각 형식 맞추는 코드
   const approvedDate = new Date(payment?.approvedAt!);
   const nextPaymentDate = `${approvedDate.getFullYear()}-${(approvedDate.getMonth() + 2)
     .toString()
@@ -34,6 +35,7 @@ const MySubscription = () => {
     .padStart(2, "0")}-${currentDate.getDate()}`;
   // console.log(formattedCurrentDate)
 
+  // 조건부 코드
   useEffect(() => {
     if (payment?.status === "SUCCESS_PAYMENT") {
       setStatusMsg("현재 스탠다드플랜을 구독중입니다.");
@@ -79,6 +81,8 @@ const MySubscription = () => {
             console.error("mySubscription 정기결제 POST에서 오류 발생", error);
           }
         };
+
+        regularPayment();
       }
     }, 1000);
 
