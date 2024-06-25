@@ -30,6 +30,7 @@ const SubscriptionSuccess = () => {
 
         if (response.status === 200) {
           console.log("정기결제 승인 완료");
+          localStorage.removeItem("recoil-persist");
           setNewTid("");
 
           router.push("/subscription/success/approve");

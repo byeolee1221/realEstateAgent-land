@@ -20,27 +20,40 @@ export async function POST(req: Request) {
     }
 
     try {
-      const response = await axios.post("https://open-api.kakaopay.com/online/v1/payment/cancel", {
-        cid: "TC0ONETIME",
-        tid
-      }, {
-        headers: {
-          Authorization: `SECRET_KEY ${process.env.KAKAO_PAY_SECRET_KEY_DEV}`,
-          "Content-Type": "application/json",
+      const response = await axios.post(
+        "https://open-api.kakaopay.com/online/v1/payment/cancel",
+        {
+          cid: "TC0ONETIME",
+          tid,
+          cancel_amount: 10000,
+          cancel_tax_free_amount: 0,
+          cancel_vat_amount: 1000,
+          cancel_available_amount: 10000,
+        },
+        {
+          headers: {
+            Authorization: `SECRET_KEY ${process.env.KAKAO_PAY_SECRET_KEY_DEV}`,
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
 
       if (response.status === 200) {
-        console.log("취소 완료")
-        // const deletePayInfo = deleteDoc(doc(db, "subscription"))
+        console.log("취소 완료");
+        const deletePayInfo = deleteDoc(doc(db, "subscription"))
       }
     } catch (error) {
       console.error("kakaoPay cancel 결제취소 POST API에서 오류 발생", error);
-      return new NextResponse("오류가 발생하여 결제취소되지 않았습니다. 잠시 후 다시 시도해주세요.", { status: 500 });
+      return new NextResponse(
+        "오류가 발생하여 결제취소되지 않았습니다. 잠시 후 다시 시도해주세요.",
+        { status: 500 }
+      );
     }
     return NextResponse.json({ status: 200 });
   } catch (error) {
     console.error("kakaoPay cancel POST API에서 오류 발생", error);
-    return new NextResponse("오류가 발생하여 결제취소되지 않았습니다. 잠시 후 다시 시도해주세요.", { status: 500 });
+    return new NextResponse("오류가 발생하여 결제취소되지 않았습니다. 잠시 후 다시 시도해주세요.", {
+      status: 500,
+    });
   }
 }
