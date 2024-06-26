@@ -1,5 +1,7 @@
+import { db } from "@/app/firebase";
 import { authOptions } from "@/lib/auth";
 import axios from "axios";
+import { addDoc, collection } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -44,6 +46,12 @@ export async function POST(req: Request) {
       );
       // 반환되는 자료는 하드코딩하는 것이 아님
       if (response.status === 200) {
+        const addSubscription = await addDoc(collection(db, "subscription"), {
+          userName: session.user?.name,
+          userEmail: session.user?.email,
+          tid: response.data.tid
+        });
+
         return NextResponse.json({
           tid: response.data.tid,
           next_redirect_pc_url: response.data.next_redirect_pc_url

@@ -1,23 +1,36 @@
 "use client"
 
-import { tidState } from "@/lib/atomState";
-import { getTidState } from "@/lib/selectorState";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useEffect, useState } from "react";
 
 // 정기결제 ready 통과 후 표출 페이지
 
 const SubscriptionSuccess = () => {
   const query = useSearchParams();
   const pgToken = query.get("pg_token");
+
+  const [tid, setTid] = useState("");
   
   const router = useRouter();
 
-  const tid = useRecoilValue(getTidState);
-  const [newTid, setNewTid] = useRecoilState(tidState);
+  // tid 값 가져오기
+  useEffect(() => {
+    const getTid = async () => {
+      try {
+        const response = await axios.get("/api/kakaoPay/approve");
+
+        if (response.status === 200) {
+          setTid(response.data);
+        }
+      } catch (error: any) {
+        console.error("mySubscription 구독정보 GET에서 오류 발생", error);
+      }
+    }
+
+    getTid();
+  }, [])
 
   // approve api 호출
   useEffect(() => {
@@ -30,8 +43,6 @@ const SubscriptionSuccess = () => {
 
         if (response.status === 200) {
           console.log("정기결제 승인 완료");
-          localStorage.removeItem("recoil-persist");
-          setNewTid("");
 
           router.push("/subscription/success/approve");
         }

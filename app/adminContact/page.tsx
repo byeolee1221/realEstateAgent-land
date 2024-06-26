@@ -51,6 +51,7 @@ const AdminContact = () => {
   }
 
   return (
+    // tabs 넣어서 접수된 개선사항 및 불편사항 메뉴 추가 예정
     <div className="px-4 flex flex-col space-y-6">
       <div className="flex items-center space-x-2 bg-slate-100 w-fit p-2 rounded-md shadow-sm px-5">
         <Image src="/memo.png" alt="메모" width={30} height={30} />

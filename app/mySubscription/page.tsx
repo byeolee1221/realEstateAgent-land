@@ -1,12 +1,10 @@
 "use client";
 
 import PlanCancel from "@/components/subscription/PlanCancel";
-import { getTidState } from "@/lib/selectorState";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
 
 interface IPayment {
   status: string;
@@ -19,9 +17,9 @@ const MySubscription = () => {
   const { data: session } = useSession();
   const [error, setError] = useState();
   const [statusMsg, setStatusMsg] = useState("");
+  const [tid, setTid] = useState("");
   const [payment, setPayment] = useState<IPayment>();
 
-  const tid = useRecoilValue(getTidState);
   const date = payment?.approvedAt.split("T")[0];
 
   // 표시될 승인시각, 현재시각 형식 맞추는 코드
@@ -43,6 +41,24 @@ const MySubscription = () => {
       setStatusMsg("구독중인 상품이 없습니다.");
     }
   }, [payment]);
+
+
+  // DB에서 tid 값 가져오기
+  useEffect(() => {
+    const getTid = async () => {
+      try {
+        const response = await axios.get("/api/kakaoPay/userPayment");
+
+        if (response.status === 200) {
+          setTid(response.data);
+        }
+      } catch (error: any) {
+        console.error("mySubscription 구독정보 GET에서 오류 발생", error);
+      }
+    }
+
+    getTid();
+  }, [])
 
   // 결제 조회
   useEffect(() => {
@@ -126,7 +142,7 @@ const MySubscription = () => {
         )
       ) : (
         <div className="bg-slate-100 rounded-md px-4 py-5 space-y-3 shadow-sm">
-          <h2>{error}</h2>
+          <h2 className="text-center">{error}</h2>
         </div>
       )}
       {payment?.status === "SUCCESS_PAYMENT" ? <PlanCancel tid={tid} /> : null}
