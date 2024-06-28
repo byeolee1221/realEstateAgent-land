@@ -2,17 +2,15 @@
 
 import PaymentApprove from "@/components/subscription/PaymentApprove";
 import PaymentInfo from "@/components/subscription/PaymentInfo";
-import { tidState } from "@/lib/atomState";
 import { getApproveState } from "@/lib/selectorState";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import Image from "next/image";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { toast } from "sonner";
 
 const Subscription = () => {
   const approve = useRecoilValue(getApproveState);
-  const [tid, setTid] = useRecoilState(tidState);
 
   const standardArr = ["상담노트 및 중개메모 무제한 사용 가능", "추후 추가될 새 기능 중의 일부"];
 
@@ -28,10 +26,6 @@ const Subscription = () => {
       });
 
       if (response.status === 200) {
-        console.log("정기결제 1회차 테스트 완료");
-        setTid(response.data.tid);
-        // setPgToken()
-
         window.open(response.data.next_redirect_pc_url);
       }
     } catch (error: any) {

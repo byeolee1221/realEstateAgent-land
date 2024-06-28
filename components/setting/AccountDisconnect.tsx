@@ -54,7 +54,7 @@ const AccountDisconnect = () => {
           <span>계정 연동해제</span>
         </div>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="w-[95%] rounded-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>계정연동 해제</AlertDialogTitle>
           <AlertDialogDescription>
