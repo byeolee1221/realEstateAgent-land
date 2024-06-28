@@ -103,13 +103,15 @@ export async function GET(req: Request) {
     const paymentDocRef = doc(db, "subscription", docId);
     const paymentDocSnap = await getDoc(paymentDocRef);
     let tid: string = "";
+    let sid: string = "";
 
     if (paymentDocSnap.exists()) {
-      console.log(paymentDocSnap.data().tid)
+      // console.log(paymentDocSnap.data().tid);
       tid = paymentDocSnap.data().tid;
+      sid = paymentDocSnap.data().sid;
     }
 
-    return NextResponse.json(tid, { status: 200 });
+    return NextResponse.json({tid, sid}, { status: 200 });
   } catch (error) {
     console.error("카카오페이 approve GET API에서 오류 발생", error);
     return new NextResponse("오류가 발생하여 결제승인 값을 불러오지 못했습니다.", { status: 500 });

@@ -32,6 +32,18 @@ export async function POST(req: Request) {
       createdAt: Date.now(),
     });
 
+    let freeCount: number = 1;
+
+    // 카운트가 0이 되면 더 이상 숫자가 내려가지 않도록 수정 예정.
+    if (addNote) {
+      const addFreeCount = await addDoc(collection(db, "freeCount"), {
+        userName: session.user?.name,
+        userEmail: session.user?.email,
+        freeCount: freeCount - 1,
+        createdAt: Date.now()
+      });
+    }
+
     return NextResponse.json(addNote.id, { status: 200 });
   } catch (error) {
     console.error("consultiongNote POST API에서 오류 발생", error);

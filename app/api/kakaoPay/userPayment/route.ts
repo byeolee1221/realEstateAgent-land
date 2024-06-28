@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
     const body = await req.json();
     const { tid } = body;
-
+    
     if (!session) {
       return new NextResponse("로그인이 필요한 서비스입니다.", { status: 401 });
     }
@@ -16,9 +16,10 @@ export async function POST(req: Request) {
     if (!tid) {
       return new NextResponse("결제승인 값이 없습니다. 다시 확인해주세요.", { status: 404 });
     }
-
+    
     // 결제조회 api 호출
     try {
+      // console.log(tid);
       const response = await axios.post(
         "https://open-api.kakaopay.com/online/v1/payment/order",
         {

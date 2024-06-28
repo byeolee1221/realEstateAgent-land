@@ -15,10 +15,12 @@ interface IPayment {
 
 const MySubscription = () => {
   const { data: session } = useSession();
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
   const [statusMsg, setStatusMsg] = useState("");
   const [tid, setTid] = useState("");
+  const [sid, setSid] = useState("");
   const [payment, setPayment] = useState<IPayment>();
+  // console.log(sid);
 
   const date = payment?.approvedAt.split("T")[0];
 
@@ -42,15 +44,15 @@ const MySubscription = () => {
     }
   }, [payment]);
 
-
   // DB에서 tid 값 가져오기
   useEffect(() => {
     const getTid = async () => {
       try {
-        const response = await axios.get("/api/kakaoPay/userPayment");
+        const response = await axios.get("/api/kakaoPay/approve");
 
         if (response.status === 200) {
-          setTid(response.data);
+          setTid(response.data.tid);
+          setSid(response.data.sid);
         }
       } catch (error: any) {
         console.error("mySubscription 구독정보 GET에서 오류 발생", error);
@@ -77,8 +79,10 @@ const MySubscription = () => {
       }
     };
 
-    userPayment();
-  }, []);
+    if (tid) {
+      userPayment();
+    }
+  }, [tid]);
 
   // 2회차 이상 자동 결제 호출
   useEffect(() => {
@@ -87,7 +91,7 @@ const MySubscription = () => {
         const regularPayment = async () => {
           try {
             const response = await axios.post("/api/kakaoPay/regularPayment", {
-              // sid
+              sid
             });
 
             if (response.status === 200) {
