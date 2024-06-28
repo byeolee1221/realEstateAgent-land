@@ -1,6 +1,6 @@
 import { db } from "@/app/firebase";
 import { authOptions } from "@/lib/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -14,7 +14,8 @@ export async function GET(req: Request) {
 
     const q = query(
       collection(db, "consultingMemo"),
-      where("userEmail", "==", session?.user?.email)
+      where("userEmail", "==", session?.user?.email),
+      orderBy("createdAt", "desc")
     );
 
     const querySnapshot = await getDocs(q);

@@ -22,13 +22,13 @@ export async function GET(req: Request) {
 
     const getCount = doc(db, "freeCount", docId);
     const countDocSnap = await getDoc(getCount);
-    let count: string = "";
-
+    let count: number;
+  
     if (countDocSnap.exists()) {
-      count = countDocSnap.data().count;
+      count = countDocSnap.data().freeCount;
+      return NextResponse.json(count, { status: 200 });
     }
 
-    return NextResponse.json(count, { status: 200 });
   } catch (error) {
     console.error("noteCount GET API에서 오류 발생", error);
     return new NextResponse("오류가 발생하여 정보를 불러오지 못했습니다.", { status: 500 });

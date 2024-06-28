@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     let tid: string = "";
 
     if (paymentDocSnap.exists()) {
-      console.log(paymentDocSnap.data().tid)
+      // console.log(paymentDocSnap.data().tid);
       tid = paymentDocSnap.data().tid;
     }
 

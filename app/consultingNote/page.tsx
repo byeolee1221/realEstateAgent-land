@@ -18,8 +18,7 @@ const ConsultingNote = () => {
         const response = await axios.get("/api/consultingNote/noteCount");
 
         if (response.status === 200) {
-          console.log(+response.data)
-          setFreeUse(+response.data);
+          setFreeUse(response.data);
         }
       } catch (error: any) {
         console.error("상담노트 getCount에서 오류 발생", error);
@@ -28,6 +27,7 @@ const ConsultingNote = () => {
         });
       }
     }
+    
     getCount();
   }, [])
 
@@ -42,7 +42,9 @@ const ConsultingNote = () => {
                 <span className="font-semibold">{session.user?.name}</span>
                 님의 상담노트 목록
               </h2>
-              <p className="text-xs">무료사용가능 횟수: {freeUse}회</p>
+              <p className="text-xs">
+                {freeUse !== 0 ? `무료사용가능 횟수: ${freeUse}회` : "무료사용이 만료되었습니다."}
+              </p>
             </div>
           ) : (
             <h2 className="text-lg">상담노트 목록</h2>

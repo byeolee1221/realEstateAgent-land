@@ -1,7 +1,7 @@
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { addDoc, collection, deleteDoc, doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/app/firebase";
  
 export async function POST(req: Request) {
@@ -32,18 +32,34 @@ export async function POST(req: Request) {
       createdAt: Date.now(),
     });
 
+    // 무료사용횟수 조회
+    const countSnapshot = query(collection(db, "freeCount"), where("userEmail", "==", session.user?.email));
+    const querySnapshot = await getDocs(countSnapshot);
+    let docId: string = "";
+
+    querySnapshot.forEach((doc) => {
+      docId = doc.id
+    });
+
+    const getCount = doc(db, "freeCount", docId);
+    const countDocSnap = await getDoc(getCount); 
     let freeCount: number = 1;
 
-    // 카운트가 0이 되면 더 이상 숫자가 내려가지 않도록 수정 예정.
-    if (addNote) {
+    if (countDocSnap.exists()) {
+      freeCount = countDocSnap.data().freeCount;
+    }
+
+    // 구독여부 확인
+    
+
+    if (addNote && freeCount !== 0) {
       const addFreeCount = await addDoc(collection(db, "freeCount"), {
         userName: session.user?.name,
         userEmail: session.user?.email,
         freeCount: freeCount - 1,
         createdAt: Date.now()
       });
-    }
-
+    } 
     return NextResponse.json(addNote.id, { status: 200 });
   } catch (error) {
     console.error("consultiongNote POST API에서 오류 발생", error);
