@@ -10,8 +10,10 @@ import { toast } from "sonner";
 
 const ConsultingNote = () => {
   const { data: session } = useSession();
+
   const [freeUse, setFreeUse] = useState(1);
 
+  // 상담노트 무료사용횟수 조회
   useEffect(() => {
     const getCount = async () => {
       try {
@@ -29,7 +31,7 @@ const ConsultingNote = () => {
     }
     
     getCount();
-  }, [])
+  }, []);
 
   return (
     <NavBar>
@@ -50,7 +52,7 @@ const ConsultingNote = () => {
             <h2 className="text-lg">상담노트 목록</h2>
           )}
         </div>
-        <NoteTable />
+        <NoteTable freeUse={freeUse} />
       </div>
     </NavBar>
   );

@@ -1,27 +1,25 @@
 import Link from "next/link";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import SignInBtn from "../SignInBtn";
+import SubscribeAlert from "./SubscribeAlert";
 
 interface INoteList {
-  customerName: string,
-  purposeUse: string,
-  kind: string,
-  transactionType: string,
-  date: string,
-  id: string
+  customerName: string;
+  purposeUse: string;
+  kind: string;
+  transactionType: string;
+  date: string;
+  id: string;
 }
 
-const NoteTable = () => {
+interface IProps {
+  freeUse: number;
+}
+
+const NoteTable = (props: IProps) => {
   const alertArr = [
     "무료체험은 계정당 1회에 한정됩니다.",
     "무료버전 노트는 계속 업데이트가 가능합니다.",
@@ -32,7 +30,19 @@ const NoteTable = () => {
   const { data: session } = useSession();
   const [note, setNote] = useState<INoteList[]>([]);
   const [error, setError] = useState("");
-  // console.log(note);
+  const [countZero, setCountZero] = useState(false);
+  const [subscribeStatus, setSubscribeStatus] = useState("");
+  const [tid, setTid] = useState("");
+
+  useEffect(() => {
+    if (props.freeUse === 0) {
+      setCountZero(true);
+    } else {
+      setCountZero(false);
+    }
+  }, [props.freeUse]);
+
+  // 상담노트 리스트 가져오기
   useEffect(() => {
     const getNoteList = async () => {
       try {
@@ -45,9 +55,49 @@ const NoteTable = () => {
         console.log("consultingNote noteTable GET에서 오류 발생", error);
         setError(error.response.data);
       }
-    }
+    };
     getNoteList();
   }, []);
+
+  // 구독여부 조회
+
+  // DB에서 tid 값 가져오기
+  useEffect(() => {
+    const getTid = async () => {
+      try {
+        const response = await axios.get("/api/kakaoPay/approve");
+
+        if (response.status === 200) {
+          setTid(response.data.tid);
+        }
+      } catch (error: any) {
+        console.error("consultingNote 구독정보 GET에서 오류 발생", error);
+      }
+    }
+
+    getTid();
+  }, [])
+
+  // 결제 조회
+  useEffect(() => {
+    const userPayment = async () => {
+      try {
+        const response = await axios.post("/api/kakaoPay/userPayment", {
+          tid,
+        });
+
+        if (response.status === 200) {
+          setSubscribeStatus(response.data.status);
+        }
+      } catch (error: any) {
+        console.error("consultingNote NoteTable POST에서 오류 발생", error);
+      }
+    };
+
+    if (tid) {
+      userPayment();
+    }
+  }, [tid]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -64,7 +114,7 @@ const NoteTable = () => {
             <TableBody>
               {note.map((data, i) => (
                 <TableRow key={data.id}>
-                  <TableCell>{i+1}</TableCell>
+                  <TableCell>{i + 1}</TableCell>
                   <Link href={`/consultingNote/${data.id}`} legacyBehavior={true}>
                     <TableCell className="tracking-tighter cursor-pointer">
                       {data.customerName} / {data.purposeUse} / {data.kind} {data.transactionType}
@@ -86,12 +136,16 @@ const NoteTable = () => {
       </div>
       {session && (
         <div className="flex justify-end">
-          <Link
-            href="/consultingNote/write"
-            className="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-md text-white w-1/3 text-center"
-          >
-            노트 만들기
-          </Link>
+          {!countZero || subscribeStatus === "SUCCESS_PAYMENT" ? (
+            <Link
+              href="/consultingNote/write"
+              className="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-md text-white w-1/3 text-center"
+            >
+              노트 만들기
+            </Link>
+          ) : (
+            <SubscribeAlert />
+          )}
         </div>
       )}
       <div className="flex flex-col space-y-2 bg-blue-100 px-4 py-5 rounded-lg">
