@@ -15,8 +15,14 @@ interface INoteList {
   id: string;
 }
 
+interface ISubscribe {
+  status: string;
+  itemName: string;
+}
+
 interface IProps {
   freeUse: number;
+  subscribe: ISubscribe;
 }
 
 const NoteTable = (props: IProps) => {
@@ -31,8 +37,6 @@ const NoteTable = (props: IProps) => {
   const [note, setNote] = useState<INoteList[]>([]);
   const [error, setError] = useState("");
   const [countZero, setCountZero] = useState(false);
-  const [subscribeStatus, setSubscribeStatus] = useState("");
-  const [tid, setTid] = useState("");
 
   useEffect(() => {
     if (props.freeUse === 0) {
@@ -58,46 +62,6 @@ const NoteTable = (props: IProps) => {
     };
     getNoteList();
   }, []);
-
-  // 구독여부 조회
-
-  // DB에서 tid 값 가져오기
-  useEffect(() => {
-    const getTid = async () => {
-      try {
-        const response = await axios.get("/api/kakaoPay/approve");
-
-        if (response.status === 200) {
-          setTid(response.data.tid);
-        }
-      } catch (error: any) {
-        console.error("consultingNote 구독정보 GET에서 오류 발생", error);
-      }
-    }
-
-    getTid();
-  }, [])
-
-  // 결제 조회
-  useEffect(() => {
-    const userPayment = async () => {
-      try {
-        const response = await axios.post("/api/kakaoPay/userPayment", {
-          tid,
-        });
-
-        if (response.status === 200) {
-          setSubscribeStatus(response.data.status);
-        }
-      } catch (error: any) {
-        console.error("consultingNote NoteTable POST에서 오류 발생", error);
-      }
-    };
-
-    if (tid) {
-      userPayment();
-    }
-  }, [tid]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -136,7 +100,7 @@ const NoteTable = (props: IProps) => {
       </div>
       {session && (
         <div className="flex justify-end">
-          {!countZero || subscribeStatus === "SUCCESS_PAYMENT" ? (
+          {!countZero || props.subscribe?.status === "SUCCESS_PAYMENT" ? (
             <Link
               href="/consultingNote/write"
               className="bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-md text-white w-1/3 text-center"
