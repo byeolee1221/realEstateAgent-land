@@ -6,11 +6,19 @@ import { getApproveState } from "@/lib/selectorState";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { toast } from "sonner";
 
+interface ISubscribe {
+  status: string;
+  itemName: string;
+}
+
 const Subscription = () => {
   const approve = useRecoilValue(getApproveState);
+  const [tid, setTid] = useState("");
+  const [subscribe, setSubscribe] = useState<ISubscribe>();
 
   const standardArr = ["상담노트 및 중개메모 무제한 사용 가능", "추후 추가될 새 기능 중의 일부"];
 
@@ -35,6 +43,46 @@ const Subscription = () => {
       });
     }
   };
+
+  // 구독여부 조회
+
+  // DB에서 tid 값 가져오기
+  useEffect(() => {
+    const getTid = async () => {
+      try {
+        const response = await axios.get("/api/kakaoPay/approve");
+
+        if (response.status === 200) {
+          setTid(response.data.tid);
+        }
+      } catch (error: any) {
+        console.error("consultingNote 구독정보 GET에서 오류 발생", error);
+      }
+    };
+
+    getTid();
+  }, []);
+
+  // 결제 조회
+  useEffect(() => {
+    const userPayment = async () => {
+      try {
+        const response = await axios.post("/api/kakaoPay/userPayment", {
+          tid,
+        });
+
+        if (response.status === 200) {
+          setSubscribe(response.data);
+        }
+      } catch (error: any) {
+        console.error("MySubscription POST에서 오류 발생", error);
+      }
+    };
+
+    if (tid) {
+      userPayment();
+    }
+  }, [tid]);
 
   return (
     <div className="px-4 flex flex-col space-y-6">
@@ -68,13 +116,13 @@ const Subscription = () => {
             </div>
           ))}
         </div>
-        <PaymentApprove />
+        {subscribe?.status !== "SUCCESS_PAYMENT" && <PaymentApprove />}
         <button
           onClick={onSubscribe}
           className={cn("text-white px-3 py-2 rounded-md transition-colors", !approve ? "bg-orange-200" : "bg-orange-500 hover:bg-orange-600")}
-          disabled={!approve}
+          disabled={!approve || subscribe?.status === "SUCCESS_PAYMENT"}
         >
-          선택
+          {subscribe?.status !== "SUCCESS_PAYMENT" ? "선택" : "이미 구독중입니다."}
         </button>
       </div>
       <PaymentInfo />

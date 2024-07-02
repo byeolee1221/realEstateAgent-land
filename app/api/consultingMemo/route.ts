@@ -1,6 +1,6 @@
 import { db } from "@/app/firebase";
 import { authOptions } from "@/lib/auth";
-import { addDoc, collection, deleteDoc, doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -26,7 +26,28 @@ export async function POST(req: Request) {
       content,
       location,
       createdAt: Date.now()
-    })
+    });
+
+    // 무료사용횟수 조회
+    const countSnapshot = query(collection(db, "freeCount"), where("userEmail", "==", session.user?.email));
+    const querySnapshot = await getDocs(countSnapshot);
+    let docId: string = "";
+
+    querySnapshot.forEach((doc) => {
+      docId = doc.id
+    });
+
+    const getCount = doc(db, "freeCount", docId);
+    const countDocSnap = await getDoc(getCount); 
+    let freeCount: number = 1;
+
+    if (countDocSnap.exists()) {
+      freeCount = countDocSnap.data().MemoFreeCount;
+    }
+
+    // 구독조회
+    
+
 
     return NextResponse.json(addMemo.id, { status: 200 });
   } catch (error) {

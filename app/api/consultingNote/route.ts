@@ -50,9 +50,7 @@ export async function POST(req: Request) {
     }
 
     // 구독여부 확인
-    
-
-    if (addNote && freeCount !== 0) {
+    if (addNote && !countDocSnap.exists() && freeCount !== 0) {
       const addFreeCount = await addDoc(collection(db, "freeCount"), {
         userName: session.user?.name,
         userEmail: session.user?.email,

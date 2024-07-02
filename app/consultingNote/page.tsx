@@ -80,6 +80,8 @@ const ConsultingNote = () => {
     }
   }, [tid]);
 
+  // noteTable로 보내는 subscribe 타입 에러 수정 예정 
+
   return (
     <NavBar>
       <div className="px-4 flex flex-col space-y-6">
