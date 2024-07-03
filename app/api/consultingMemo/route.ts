@@ -1,6 +1,6 @@
 import { db } from "@/app/firebase";
 import { authOptions } from "@/lib/auth";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -39,15 +39,26 @@ export async function POST(req: Request) {
 
     const getCount = doc(db, "freeCount", docId);
     const countDocSnap = await getDoc(getCount); 
-    let freeCount: number = 1;
+    let memoFreeCount: number = 1;
 
     if (countDocSnap.exists()) {
-      freeCount = countDocSnap.data().MemoFreeCount;
+      memoFreeCount = countDocSnap.data().MemoFreeCount;
     }
 
-    // 구독조회
-    
-
+    // 무료사용횟수 문서 생성 또는 업데이트 및 횟수 차감
+    if (addMemo && !countDocSnap.exists() && memoFreeCount !== 0) {
+      const addFreeCount = await addDoc(collection(db, "freeCount"), {
+        userName: session.user?.name,
+        userEmail: session.user?.email,
+        memoFreeCount: memoFreeCount - 1,
+        createdAt: Date.now()
+      });
+    } else if (addMemo && countDocSnap.exists() && memoFreeCount !== 0) {
+      const updateFreeCount = await setDoc(doc(db, "freeCount", docId), {
+        memoFreeCount: memoFreeCount - 1,
+        createdAt: Date.now()
+      }, { merge: true });
+    }
 
     return NextResponse.json(addMemo.id, { status: 200 });
   } catch (error) {
