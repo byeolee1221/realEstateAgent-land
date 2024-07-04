@@ -39,10 +39,12 @@ export async function POST(req: Request) {
 
     const getCount = doc(db, "freeCount", docId);
     const countDocSnap = await getDoc(getCount); 
-    let memoFreeCount: number = 1;
+    let memoFreeCount: number = 5;
+    let freeCount: number = 1; // 초기값을 존재해야 수정 시 NaN를 안뜨게 할 수 있다.
 
     if (countDocSnap.exists()) {
-      memoFreeCount = countDocSnap.data().MemoFreeCount;
+      memoFreeCount = countDocSnap.data().memoFreeCount;
+      freeCount = countDocSnap.data().freeCount;
     }
 
     // 무료사용횟수 문서 생성 또는 업데이트 및 횟수 차감
@@ -51,6 +53,7 @@ export async function POST(req: Request) {
         userName: session.user?.name,
         userEmail: session.user?.email,
         memoFreeCount: memoFreeCount - 1,
+        freeCount,
         createdAt: Date.now()
       });
     } else if (addMemo && countDocSnap.exists() && memoFreeCount !== 0) {

@@ -25,7 +25,7 @@ export async function GET(req: Request) {
     let count: number;
   
     if (countDocSnap.exists()) {
-      count = countDocSnap.data().MemoFreeCount;
+      count = countDocSnap.data().memoFreeCount;
       return NextResponse.json(count, { status: 200 });
     }
 

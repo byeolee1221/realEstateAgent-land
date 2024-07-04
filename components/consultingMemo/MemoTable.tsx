@@ -19,7 +19,17 @@ interface IMemoList {
   createdAt: number
 }
 
-const MemoTable = () => {
+interface ISubscribe {
+  status: string;
+  itemName: string;
+}
+
+interface IProps {
+  freeUse: number;
+  subscribe?: ISubscribe;
+}
+
+const MemoTable = (props: IProps) => {
   const alertArr = [
     "무료체험은 계정당 5회에 한정됩니다.",
     "무료버전 메모는 계속 업데이트가 가능합니다.",

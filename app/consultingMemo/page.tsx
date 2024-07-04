@@ -35,7 +35,49 @@ const ConsultingMemo = () => {
         });
       }
     }
-  }, [])
+
+    getCount();
+  }, []);
+
+  // 구독여부 조회
+
+  // DB에서 tid 값 가져오기
+  useEffect(() => {
+    const getTid = async () => {
+      try {
+        const response = await axios.get("/api/kakaoPay/approve");
+
+        if (response.status === 200) {
+          setTid(response.data.tid);
+        }
+      } catch (error: any) {
+        console.error("consultingNote 구독정보 GET에서 오류 발생", error);
+      }
+    };
+
+    getTid();
+  }, []);
+
+  // 결제 조회
+  useEffect(() => {
+    const userPayment = async () => {
+      try {
+        const response = await axios.post("/api/kakaoPay/userPayment", {
+          tid,
+        });
+
+        if (response.status === 200) {
+          setSubscribe(response.data);
+        }
+      } catch (error: any) {
+        console.error("MySubscription POST에서 오류 발생", error);
+      }
+    };
+
+    if (tid) {
+      userPayment();
+    }
+  }, [tid]);
 
   return (
     <div className="px-4 flex flex-col space-y-6">
@@ -47,13 +89,19 @@ const ConsultingMemo = () => {
               <span className="font-semibold">{session.user?.name}</span>
               님의 중개메모 목록
             </h2>
-            <p className="text-xs">무료사용가능 횟수: <span>{freeUse}</span>회</p>
+            {subscribe?.status !== "SUCCESS_PAYMENT" ? (
+              <p className="text-xs">
+                {freeUse !== 0 ? `무료사용가능 횟수: ${freeUse}회` : "무료사용이 만료되었습니다."}
+              </p>
+            ) : (
+              <p className="text-xs">{subscribe.itemName}을 이용중입니다.</p>  
+            )}
           </div>
         ) : (
           <h2 className="text-lg">중개메모 목록</h2>
         )}
       </div>
-      <MemoTable />
+      <MemoTable freeUse={freeUse} subscribe={subscribe} />
     </div>
   );
 };

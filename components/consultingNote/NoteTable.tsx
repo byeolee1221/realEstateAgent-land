@@ -22,7 +22,7 @@ interface ISubscribe {
 
 interface IProps {
   freeUse: number;
-  subscribe: ISubscribe;
+  subscribe?: ISubscribe;
 }
 
 const NoteTable = (props: IProps) => {
