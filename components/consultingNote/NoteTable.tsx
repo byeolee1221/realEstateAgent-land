@@ -29,6 +29,7 @@ const NoteTable = (props: IProps) => {
   const alertArr = [
     "무료체험은 계정당 1회에 한정됩니다.",
     "무료버전 노트는 계속 업데이트가 가능합니다.",
+    "사용횟수가 차감되면 노트를 삭제해도 복구되지 않습니다.",
     "삭제는 각 노트의 세부페이지에서 가능합니다.",
     "노트는 본인외에는 확인할 수 없습니다.",
   ];
@@ -132,7 +133,7 @@ const NoteTable = (props: IProps) => {
                 d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
               />
             </svg>
-            <span>{item}</span>
+            <span className="tracking-tighter">{item}</span>
           </div>
         ))}
       </div>

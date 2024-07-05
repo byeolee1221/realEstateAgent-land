@@ -35,6 +35,8 @@ const MySubscription = () => {
     .padStart(2, "0")}-${currentDate.getDate()}`;
   // console.log(formattedCurrentDate)
 
+  // 해지해도 다음 결제일까지 이용할 수 있도록 다음 결제일값을 리코일로 저장해야 함.
+
   // 조건부 코드
   useEffect(() => {
     if (payment?.status === "SUCCESS_PAYMENT") {

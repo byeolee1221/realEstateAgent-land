@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import SignInBtn from "../SignInBtn";
+import SubscribeAlert from "../consultingNote/SubscribeAlert";
 
 interface IMemoList {
   title: string,
@@ -33,6 +34,7 @@ const MemoTable = (props: IProps) => {
   const alertArr = [
     "무료체험은 계정당 5회에 한정됩니다.",
     "무료버전 메모는 계속 업데이트가 가능합니다.",
+    "사용횟수가 차감되면 메모를 삭제해도 복구되지 않습니다.",
     "삭제는 각 메모의 세부페이지에서 가능합니다.",
     "메모는 본인외에는 확인할 수 없습니다.",
   ];
@@ -40,6 +42,15 @@ const MemoTable = (props: IProps) => {
   const { data: session } = useSession();
   const [memo, setMemo] = useState<IMemoList[]>([]);
   const [error, setError] = useState("");
+  const [countZero, setCountZero] = useState(false);
+
+  useEffect(() => {
+    if (props.freeUse === 0) {
+      setCountZero(true);
+    } else {
+      setCountZero(false);
+    }
+  }, [props.freeUse]);
 
   useEffect(() => {
     const getMemoList = async () => {
@@ -95,12 +106,16 @@ const MemoTable = (props: IProps) => {
       </div>
       {session && (
         <div className="flex justify-end">
-          <Link
+          {!countZero || props.subscribe?.status === "SUCCESS_PAYMENT" ? (
+            <Link
             href="/consultingMemo/write"
             className="bg-green-500 hover:bg-green-600 px-3 py-2 rounded-md text-white w-1/3 text-center"
           >
             메모 만들기
           </Link>
+          ) : (
+            <SubscribeAlert />  
+          )}
         </div>
       )}
       <div className="flex flex-col space-y-2 bg-green-100 px-4 py-5 rounded-lg">
@@ -123,7 +138,7 @@ const MemoTable = (props: IProps) => {
                 d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
               />
             </svg>
-            <span>{item}</span>
+            <span className="tracking-tighter">{item}</span>
           </div>
         ))}
       </div>
