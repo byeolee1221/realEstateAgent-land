@@ -2,10 +2,12 @@
 
 import NoteTable from "@/components/consultingNote/NoteTable";
 import NavBar from "@/components/navBar/NavBar";
+import { getNextPaymentState } from "@/lib/selectorState";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import { toast } from "sonner";
 
 interface ISubscribe {
@@ -15,10 +17,13 @@ interface ISubscribe {
 
 const ConsultingNote = () => {
   const { data: session } = useSession();
+  const nextPayment = useRecoilValue(getNextPaymentState);
 
   const [freeUse, setFreeUse] = useState(1);
   const [subscribe, setSubscribe] = useState<ISubscribe>();
   const [tid, setTid] = useState("");
+
+  // 구독해지 시 다음 결제일까지 이용할 수 있도록 설정
 
   // 상담노트 무료사용횟수 조회
   useEffect(() => {

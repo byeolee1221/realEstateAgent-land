@@ -1,10 +1,12 @@
 "use client";
 
 import PlanCancel from "@/components/subscription/PlanCancel";
+import { nextPaymentState } from "@/lib/atomState";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 
 interface IPayment {
   status: string;
@@ -15,6 +17,8 @@ interface IPayment {
 
 const MySubscription = () => {
   const { data: session } = useSession();
+  const [nextPayment, setNextPayment] = useRecoilState(nextPaymentState);
+
   const [error, setError] = useState("");
   const [statusMsg, setStatusMsg] = useState("");
   const [tid, setTid] = useState("");
@@ -28,14 +32,20 @@ const MySubscription = () => {
   const approvedDate = new Date(payment?.approvedAt!);
   const nextPaymentDate = `${approvedDate.getFullYear()}-${(approvedDate.getMonth() + 2)
     .toString()
-    .padStart(2, "0")}-${approvedDate.getDate()}`;
+    .padStart(2, "0")}-${approvedDate.getDate().toString().padStart(2, "0")}`;
   const currentDate = new Date();
   const formattedCurrentDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
     .toString()
-    .padStart(2, "0")}-${currentDate.getDate()}`;
-  // console.log(formattedCurrentDate)
+    .padStart(2, "0")}-${currentDate.getDate().toString().padStart(2, "0")}`;
+  // console.log(nextPaymentDate, formattedCurrentDate);
 
-  // 해지해도 다음 결제일까지 이용할 수 있도록 다음 결제일값을 리코일로 저장해야 함.
+  // 해지해도 다음 결제일까지 이용할 수 있도록 다음 결제일값을 리코일로 저장
+  useEffect(() => {
+    if (session && nextPaymentDate) {
+      setNextPayment(nextPaymentDate);
+    } 
+    // 다른 사람이 같은 곳에서 로그인 시 다음 결제일 정보를 덮어씌우는지 확인 필요
+  }, [nextPaymentDate, session]);
 
   // 조건부 코드
   useEffect(() => {

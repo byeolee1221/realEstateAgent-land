@@ -1,5 +1,5 @@
 import { selector } from "recoil";
-import { approveState } from "./atomState";
+import { approveState, nextPaymentState } from "./atomState";
 
 export const getApproveState = selector({
   key: "getApproveState",
@@ -10,4 +10,11 @@ export const getApproveState = selector({
   }
 });
 
+export const getNextPaymentState = selector({
+  key: "getNextPayment",
+  get: ({ get }) => {
+    const value = get(nextPaymentState);
 
+    return value;
+  }
+});

@@ -1,4 +1,7 @@
+"use client"
+
 import NavBar from "@/components/navBar/NavBar";
+import { RecoilRoot } from "recoil";
 
 const ConsultingMemoManageLayout = ({
   children,
@@ -6,17 +9,19 @@ const ConsultingMemoManageLayout = ({
   children: React.ReactNode;
 }) => {
   return (
-    <NavBar>
-      <div className="flex flex-col space-y-6">
-        <div className="flex flex-col items-center justify-center bg-[url('/consultingMemo.jpg')] h-60 bg-center bg-cover">
-          <h1 className="text-2xl font-semibold tracking-wider pb-1 border-b border-gray-800">
-            중개메모
-          </h1>
-          <p>My consulting memo</p>
+    <RecoilRoot>
+      <NavBar>
+        <div className="flex flex-col space-y-6">
+          <div className="flex flex-col items-center justify-center bg-[url('/consultingMemo.jpg')] h-60 bg-center bg-cover">
+            <h1 className="text-2xl font-semibold tracking-wider pb-1 border-b border-gray-800">
+              중개메모
+            </h1>
+            <p>My consulting memo</p>
+          </div>
+          {children}
         </div>
-        {children}
-      </div>
-    </NavBar>
+      </NavBar>
+    </RecoilRoot>
   );
 };
 
