@@ -20,10 +20,22 @@ const ConsultingNote = () => {
   const nextPayment = useRecoilValue(getNextPaymentState);
 
   const [freeUse, setFreeUse] = useState(1);
+  const [message, setMessage] = useState("");
   const [subscribe, setSubscribe] = useState<ISubscribe>();
   const [tid, setTid] = useState("");
 
   // 구독해지 시 다음 결제일까지 이용할 수 있도록 설정
+  useEffect(() => {
+    if (subscribe?.status !== "SUCCESS_PAYMENT" && freeUse !== 0) {
+      setMessage(`무료사용가능 횟수: ${freeUse}회`);
+    } else if (subscribe?.status !== "SUCCESS_PAYMENT" && freeUse === 0) {
+      setMessage("무료사용이 만료되었습니다.");
+    } else if (subscribe?.status === "CANCEL_PAYMENT" && nextPayment !== "") {
+      setMessage(`${nextPayment}까지 구독혜택이 지속됩니다.`);
+    } else {
+      setMessage(`${subscribe?.itemName}을 이용중입니다.`);
+    }
+  }, [subscribe]);
 
   // 상담노트 무료사용횟수 조회
   useEffect(() => {
@@ -96,13 +108,7 @@ const ConsultingNote = () => {
                 <span className="font-semibold">{session.user?.name}</span>
                 님의 상담노트 목록
               </h2>
-              {subscribe?.status !== "SUCCESS_PAYMENT" ? (
-                <p className="text-xs">
-                  {freeUse !== 0 ? `무료사용가능 횟수: ${freeUse}회` : "무료사용이 만료되었습니다."}
-                </p>
-              ) : (
-                <p className="text-xs">{subscribe.itemName}을 이용중입니다.</p>
-              )}
+              <p className="text-xs">{message}</p>
             </div>
           ) : (
             <h2 className="text-lg">상담노트 목록</h2>
