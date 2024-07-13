@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import SignInBtn from "../SignInBtn";
 import SubscribeAlert from "../consultingNote/SubscribeAlert";
+import { getNextPaymentDate, getSubscriptionStatus } from "@/lib/subscriptionUtils";
 
 interface IMemoList {
   title: string,
@@ -20,14 +21,8 @@ interface IMemoList {
   createdAt: number
 }
 
-interface ISubscribe {
-  status: string;
-  itemName: string;
-}
-
 interface IProps {
   freeUse: number;
-  subscribe?: ISubscribe;
 }
 
 const MemoTable = (props: IProps) => {
@@ -40,10 +35,56 @@ const MemoTable = (props: IProps) => {
   ];
 
   const { data: session } = useSession();
+
+  const [nextPayment, setNextPayment] = useState<string | undefined>("");
+  const [subscriptionStatus, setSubscriptionStatus] = useState<string | undefined>("");
+  const [endBenefit, setEndBenefit] = useState(false);
   const [memo, setMemo] = useState<IMemoList[]>([]);
   const [error, setError] = useState("");
   const [countZero, setCountZero] = useState(false);
 
+  // 구독해지 및 다음 결제일
+  const subscriptionCancel = subscriptionStatus === "CANCEL_PAYMENT" && nextPayment !== "";
+
+  // 다음 결제일과 현재 날짜가 같아지면 유료서비스 종료
+  useEffect(() => {
+    const currentDate = new Date();
+    const formattedCurrentDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${currentDate.getDate().toString().padStart(2, "0")}`;
+    
+    if (formattedCurrentDate === nextPayment) {
+      setEndBenefit(true);
+    } else {
+      setEndBenefit(false);
+    }
+  }, [subscriptionCancel]);
+
+  // 유틸리티 함수에서 다음 결제일, 구독상태 가져오기
+  useEffect(() => {
+    const fetchNextPayment = async () => {
+      try {
+        const result = await getNextPaymentDate();
+        setNextPayment(result);
+      } catch (error) {
+        console.error("MemoTable fetchNextPayment에서 오류 발생", error);
+      }
+    };
+
+    const fetchSubscriptionStatus = async () => {
+      try {
+        const result = await getSubscriptionStatus();
+        setSubscriptionStatus(result);
+      } catch (error) {
+        console.error("MemoTable fetchSubscriptionStatus에서 오류 발생", error);
+      }
+    };
+
+    fetchNextPayment();
+    fetchSubscriptionStatus();
+  }, []);
+
+  // 무료사용횟수 
   useEffect(() => {
     if (props.freeUse === 0) {
       setCountZero(true);
@@ -52,6 +93,7 @@ const MemoTable = (props: IProps) => {
     }
   }, [props.freeUse]);
 
+  // 메모 리스트 가져오기
   useEffect(() => {
     const getMemoList = async () => {
       try {
@@ -106,7 +148,7 @@ const MemoTable = (props: IProps) => {
       </div>
       {session && (
         <div className="flex justify-end">
-          {!countZero || props.subscribe?.status === "SUCCESS_PAYMENT" ? (
+          {!countZero || subscriptionStatus === "SUCCESS_PAYMENT" || !endBenefit ? (
             <Link
             href="/consultingMemo/write"
             className="bg-green-500 hover:bg-green-600 px-3 py-2 rounded-md text-white w-1/3 text-center"

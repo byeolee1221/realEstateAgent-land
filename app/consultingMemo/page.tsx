@@ -112,7 +112,7 @@ const ConsultingMemo = () => {
           <h2 className="text-lg">중개메모 목록</h2>
         )}
       </div>
-      <MemoTable freeUse={freeUse} subscribe={subscribe} />
+      <MemoTable freeUse={freeUse} />
     </div>
   );
 };

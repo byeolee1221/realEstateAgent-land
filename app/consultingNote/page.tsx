@@ -24,7 +24,7 @@ const ConsultingNote = () => {
   const [subscribe, setSubscribe] = useState<ISubscribe>();
   const [tid, setTid] = useState("");
 
-  // 구독해지 시 다음 결제일까지 이용할 수 있도록 설정
+  // 구독상태 및 무료사용횟수에 따른 메세지 출력
   useEffect(() => {
     if (subscribe?.status !== "SUCCESS_PAYMENT" && freeUse !== 0) {
       setMessage(`무료사용가능 횟수: ${freeUse}회`);
@@ -56,8 +56,6 @@ const ConsultingNote = () => {
 
     getCount();
   }, []);
-
-  // 구독여부 조회
 
   // DB에서 tid 값 가져오기
   useEffect(() => {
@@ -114,7 +112,7 @@ const ConsultingNote = () => {
             <h2 className="text-lg">상담노트 목록</h2>
           )}
         </div>
-        <NoteTable freeUse={freeUse} subscribe={subscribe} />
+        <NoteTable freeUse={freeUse} />
       </div>
     </NavBar>
   );
