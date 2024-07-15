@@ -60,28 +60,23 @@ const MemoTable = (props: IProps) => {
     }
   }, [subscriptionCancel]);
 
-  // 유틸리티 함수에서 다음 결제일, 구독상태 가져오기
+  // 유틸리티 함수에서 다음 결제일, 구독상태 가져오기 (병렬처리로 수정)
   useEffect(() => {
-    const fetchNextPayment = async () => {
+    const fetchSubscriptionData = async () => {
       try {
-        const result = await getNextPaymentDate();
-        setNextPayment(result);
-      } catch (error) {
-        console.error("MemoTable fetchNextPayment에서 오류 발생", error);
-      }
-    };
+        const [nextPaymentDate, subscriptionStatus] = await Promise.all([
+          getNextPaymentDate(),
+          getSubscriptionStatus()
+        ]);
 
-    const fetchSubscriptionStatus = async () => {
-      try {
-        const result = await getSubscriptionStatus();
-        setSubscriptionStatus(result);
+        setNextPayment(nextPaymentDate);
+        setSubscriptionStatus(subscriptionStatus);
       } catch (error) {
-        console.error("MemoTable fetchSubscriptionStatus에서 오류 발생", error);
+        console.error("MemoTable fetchSubscriptoinData에서 오류 발생", error);
       }
-    };
+    }
 
-    fetchNextPayment();
-    fetchSubscriptionStatus();
+    fetchSubscriptionData();
   }, []);
 
   // 무료사용횟수 
