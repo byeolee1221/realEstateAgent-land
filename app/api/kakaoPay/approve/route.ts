@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
     const body = await req.json();
     const { pgToken } = body;
-    // console.log(pgToken, tid);
+    // console.log(pgToken);
 
     if (!pgToken) {
       return new NextResponse("결제승인에 필요한 값이 존재하지 않습니다.", { status: 404 });

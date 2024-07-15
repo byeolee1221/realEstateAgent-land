@@ -79,9 +79,7 @@ const Subscription = () => {
       }
     };
 
-    if (tid) {
-      userPayment();
-    }
+    userPayment();
   }, [tid]);
 
   return (
