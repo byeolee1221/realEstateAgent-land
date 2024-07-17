@@ -66,7 +66,7 @@ const NoteTable = (props: IProps) => {
         setNextPayment(nextPaymentDate);
         setSubscriptionStatus(subscriptionStatus);
       } catch (error) {
-        console.error("NoteTable fetchSubscriptoinData에서 오류 발생", error);
+        console.error("NoteTable fetchSubscriptionData에서 오류 발생", error);
       }
     }
 

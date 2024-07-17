@@ -72,7 +72,7 @@ const MemoTable = (props: IProps) => {
         setNextPayment(nextPaymentDate);
         setSubscriptionStatus(subscriptionStatus);
       } catch (error) {
-        console.error("MemoTable fetchSubscriptoinData에서 오류 발생", error);
+        console.error("MemoTable fetchSubscriptionData에서 오류 발생", error);
       }
     }
 

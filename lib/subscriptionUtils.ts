@@ -1,5 +1,21 @@
 import axios from "axios";
 
+// tid값 받아오는 유틸리티 함수
+export async function getTid() {
+  try {
+    const getTid = await axios.get("/api/kakaoPay/approve");
+    let tid: string = "";
+
+    if (getTid.status === 200) {
+      tid = getTid.data.tid;
+    }
+
+    return tid;
+  } catch (error) {
+    console.error("tid값 받아오는 유틸리티 함수에서 오류 발생", error);
+  }
+}
+
 // 구독자의 다음 결제일을 받아오는 유틸리티 함수
 export async function getNextPaymentDate() {
   try {

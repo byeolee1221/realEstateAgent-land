@@ -127,7 +127,7 @@ const AdminMenu = () => {
             </svg>
           </div>
           <div className="flex items-center justify-between pb-2 w-full">
-            <Link href="" className="flex items-center space-x-2 w-full">
+            <Link href="/subscriptionManage" className="flex items-center space-x-2 w-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
