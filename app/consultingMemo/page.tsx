@@ -45,11 +45,13 @@ const ConsultingMemo = () => {
         if (response.status === 200) {
           setFreeUse(response.data);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error("중개메모 getCount에서 오류 발생", error);
-        return toast("오류 발생", {
-          description: error.response.data,
-        });
+        if (axios.isAxiosError(error)) {
+          return toast("오류 발생", {
+            description: error.response?.data,
+          });
+        }
       }
     };
 
@@ -67,7 +69,7 @@ const ConsultingMemo = () => {
         if (response.status === 200) {
           setTid(response.data.tid);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error("consultingNote 구독정보 GET에서 오류 발생", error);
       }
     };
@@ -86,7 +88,7 @@ const ConsultingMemo = () => {
         if (response.status === 200) {
           setSubscribe(response.data);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error("MySubscription POST에서 오류 발생", error);
       }
     };

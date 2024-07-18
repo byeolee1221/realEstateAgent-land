@@ -33,11 +33,13 @@ const NoteDelete = (props: IProps) => {
         alert("상담노트가 삭제되었습니다.");
         router.push("/consultingNote");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.log("consultingNote noteDelete DELETE에서 오류 발생", error);
-      return toast("오류 발생", {
-        description: error.response.data,
-      });
+      if (axios.isAxiosError(error)) {
+        return toast("오류 발생", {
+          description: error.response?.data,
+        });
+      }
     }
   };
 

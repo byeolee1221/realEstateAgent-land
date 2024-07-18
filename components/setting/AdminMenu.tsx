@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 const AdminMenu = () => {
   const [isAdmin, setAdmin] = useState(false);
-  // console.log(isAdmin);
 
   useEffect(() => {
     const getUserRole = async () => {
@@ -14,8 +13,8 @@ const AdminMenu = () => {
         if (response.status === 200) {
           setAdmin(response.data);
         }
-      } catch (error: any) {
-        console.log("setting GET에서 오류 발생", error);
+      } catch (error) {
+        console.error("setting GET에서 오류 발생", error);
       }
     };
 

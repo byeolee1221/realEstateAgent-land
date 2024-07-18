@@ -130,11 +130,13 @@ const MemoWrite = () => {
         form.reset();
         router.push(`/consultingMemo/${response.data}`);
       }
-    } catch (error: any) {
+    } catch (error) {
       console.log("consultingMemo write POST에서 오류 발생", error);
-      return toast("오류 발생", {
-        description: error.response.data,
-      });
+      if (axios.isAxiosError(error)) {
+        return toast("오류 발생", {
+          description: error.response?.data,
+        });
+      }
     }
   };
 

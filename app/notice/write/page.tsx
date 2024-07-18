@@ -33,8 +33,8 @@ const NoticeWrite = () => {
         form.reset();
         router.push(`/notice/${response.data}`);
       }
-    } catch (error: any) {
-      console.log("notice write POST에서 에러 발생");
+    } catch (error) {
+      console.error("notice write POST에서 에러 발생");
     }
   }
 

@@ -38,9 +38,11 @@ const UserProfile = (props: IProps) => {
         if (response.status === 200) {
           setCount(response.data);
         }
-      } catch (error: any) {
-        console.log("userProfile GET에서 오류 발생", error);
-        setError(error.response.data);
+      } catch (error) {
+        console.error("userProfile GET에서 오류 발생", error);
+        if (axios.isAxiosError(error)) {
+          setError(error.response?.data);
+        }
       }
     };
 

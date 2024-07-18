@@ -36,9 +36,11 @@ const ShowContact = (props: IProps) => {
         if (response.status === 200) {
           setDoc(response.data);
         }
-      } catch (error: any) {
-        console.log("showContact GET에서 오류 발생", error);
-        setError(error.response.data);
+      } catch (error) {
+        console.error("showContact GET에서 오류 발생", error);
+        if (axios.isAxiosError(error)) {
+          setError(error.response?.data);
+        }
       }
     };
 

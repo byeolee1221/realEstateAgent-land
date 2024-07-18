@@ -103,11 +103,13 @@ const NoteEdit = () => {
         if (response.status === 200) {
           setNote(response.data);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.log("consultingNote noteEdit GET에서 오류 발생", error);
-        return toast("오류 발생", {
-          description: error.response.data,
-        });
+        if (axios.isAxiosError(error)) {
+          return toast("오류 발생", {
+            description: error.response?.data,
+          });
+        }
       }
     };
 
@@ -188,11 +190,13 @@ const NoteEdit = () => {
         form.reset();
         router.push(`/consultingNote/${response.data}`);
       }
-    } catch (error: any) {
+    } catch (error) {
       console.log("consultingNote noteEdit POST에서 오류 발생", error);
-      return toast("오류 발생", {
-        description: error.response.data,
-      });
+      if (axios.isAxiosError(error)) {
+        return toast("오류 발생", {
+          description: error.response?.data,
+        });
+      }
     }
   };
 

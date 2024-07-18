@@ -33,11 +33,13 @@ const NoticeDelete = (props: IProps) => {
         alert("공지사항이 삭제되었습니다.");
         router.push("/notice");
       }
-    } catch (error: any) {
-      console.log("notice noticeDelete DELETE에서 오류 발생", error);
-      return toast("오류 발생", {
-        description: error.response.data,
-      });
+    } catch (error) {
+      console.error("notice noticeDelete DELETE에서 오류 발생", error);
+      if (axios.isAxiosError(error)) {
+        return toast("오류 발생", {
+          description: error.response?.data,
+        });
+      }
     }
   }
 

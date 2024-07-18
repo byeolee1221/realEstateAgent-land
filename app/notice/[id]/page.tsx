@@ -31,11 +31,13 @@ const NoticeDetail = () => {
         if (response.status === 200) {
           setNotice(response.data);
         }
-      } catch (error: any) {
-        console.log("notice noteDetail GET에서 오류 발생", error);
-        return toast("오류 발생", {
-          description: error.response.data,
-        });
+      } catch (error) {
+        console.error("notice noteDetail GET에서 오류 발생", error);
+        if (axios.isAxiosError(error)) {
+          return toast("오류 발생", {
+            description: error.response?.data,
+          });
+        }
       }
     };
 

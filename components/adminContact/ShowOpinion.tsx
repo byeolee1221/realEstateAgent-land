@@ -25,9 +25,11 @@ const ShowOpinion = (props: IProps) => {
         if (response.status === 200) {
           setOpinion(response.data);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error("showOpinion GET에서 오류 발생", error);
-        setError(error.response.data);
+        if (axios.isAxiosError(error)) {
+          setError(error.response?.data);
+        }
       }
     }
 

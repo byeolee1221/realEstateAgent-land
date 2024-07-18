@@ -39,9 +39,11 @@ const ContactContent = () => {
         form.reset();
         alert("문의사항이 등록되었습니다. 감사합니다.");
       }
-    } catch (error: any) {
-      console.log("contact post에서 오류 발생", error);
-      setError(error.response.data);
+    } catch (error) {
+      console.error("contact post에서 오류 발생", error);
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data);
+      }
     }
   };
 

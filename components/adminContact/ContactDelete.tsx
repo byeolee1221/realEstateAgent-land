@@ -32,11 +32,13 @@ const ContactDelete = (props: IProps) => {
         alert("문의사항이 삭제되었습니다.");
         router.refresh();
       }
-    } catch (error: any) {
-      console.log("contactDelete DELETE에서 오류 발생", error);
-      return toast("오류 발생", {
-        description: error.response.data,
-      });
+    } catch (error) {
+      console.error("contactDelete DELETE에서 오류 발생", error);
+      if (axios.isAxiosError(error)) {
+        return toast("오류 발생", {
+          description: error.response?.data,
+        });
+      }
     }
   }
 

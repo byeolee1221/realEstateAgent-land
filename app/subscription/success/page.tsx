@@ -26,9 +26,11 @@ const SubscriptionSuccess = () => {
 
           router.push("/subscription/success/approve");
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error("approve post에서 오류 발생", error);
-        alert(error.response.data);
+        if (axios.isAxiosError(error)) {
+          alert(error.response?.data);
+        }
       }
     }
 

@@ -26,16 +26,17 @@ const NoticeEdit = () => {
         if (response.status === 200) {
           setNotice(response.data);
         }
-      } catch (error: any) {
-        console.log("notice noticeEdit GET에서 오류 발생", error);
-
-        if (error.response.status === 401 || error.response.status === 403) {
-          router.push("/");
+      } catch (error) {
+        console.error("notice noticeEdit GET에서 오류 발생", error);
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 401 || error.response?.status === 403) {
+            router.push("/");
+          }
+  
+          return toast("오류 발생", {
+            description: error.response?.data,
+          });
         }
-
-        return toast("오류 발생", {
-          description: error.response.data,
-        });
       }
     };
 
@@ -72,11 +73,13 @@ const NoticeEdit = () => {
       if (response.status === 200) {
         router.push(`/notice/${response.data}`);
       }
-    } catch (error: any) {
-      console.log("notice noticeEdit POST에서 오류 발생", error);
-      return toast("오류 발생", {
-        description: error.response.data,
-      });
+    } catch (error) {
+      console.error("notice noticeEdit POST에서 오류 발생", error);
+      if (axios.isAxiosError(error)) {
+        return toast("오류 발생", {
+          description: error.response?.data,
+        });
+      }
     }
   };
 

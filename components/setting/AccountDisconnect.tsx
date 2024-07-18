@@ -25,11 +25,13 @@ const AccountDisconnect = () => {
         signOut();
         router.push("/");
       }
-    } catch (error: any) {
-      console.log("setting AccountDelete DELETE에서 오류 발생", error);
-      return toast("오류 발생", {
-        description: error.response.data,
-      });
+    } catch (error) {
+      console.error("setting AccountDelete DELETE에서 오류 발생", error);
+      if (axios.isAxiosError(error)) {
+        return toast("오류 발생", {
+          description: error.response?.data,
+        });
+      }
     }
   }
 

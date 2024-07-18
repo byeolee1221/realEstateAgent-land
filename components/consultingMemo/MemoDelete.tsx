@@ -34,11 +34,13 @@ const MemoDelete = (props: IProps) => {
         alert("중개메모가 삭제되었습니다.");
         router.push("/consultingMemo");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.log("consultingMemo memoDelete DELETE에서 오류 발생", error);
-      return toast("오류 발생", {
-        description: error.response.data,
-      });
+      if (axios.isAxiosError(error)) {
+        return toast("오류 발생", {
+          description: error.response?.data,
+        });
+      }
     }
   };
 

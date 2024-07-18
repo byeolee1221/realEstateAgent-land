@@ -3,6 +3,7 @@
 import PaymentApprove from "@/components/subscription/PaymentApprove";
 import PaymentInfo from "@/components/subscription/PaymentInfo";
 import { getApproveState } from "@/lib/selectorState";
+import { getTid } from "@/lib/subscriptionUtils";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import Image from "next/image";
@@ -17,7 +18,6 @@ interface ISubscribe {
 
 const Subscription = () => {
   const approve = useRecoilValue(getApproveState);
-  const [tid, setTid] = useState("");
   const [subscribe, setSubscribe] = useState<ISubscribe>();
 
   const standardArr = ["상담노트 및 중개메모 무제한 사용 가능", "추후 추가될 새 기능 중의 일부"];
@@ -36,36 +36,21 @@ const Subscription = () => {
       if (response.status === 200) {
         window.open(response.data.next_redirect_pc_url);
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("subscription POST에서 오류 발생", error);
-      return toast("오류 발생", {
-        description: error.response.data,
-      });
+      if (axios.isAxiosError(error)) {
+        return toast("오류 발생", {
+          description: error.response?.data,
+        });
+      }
     }
   };
-
-  // 구독여부 조회
-
-  // DB에서 tid 값 가져오기
-  useEffect(() => {
-    const getTid = async () => {
-      try {
-        const response = await axios.get("/api/kakaoPay/approve");
-
-        if (response.status === 200) {
-          setTid(response.data.tid);
-        }
-      } catch (error: any) {
-        console.error("consultingNote 구독정보 GET에서 오류 발생", error);
-      }
-    };
-
-    getTid();
-  }, []);
 
   // 결제 조회
   useEffect(() => {
     const userPayment = async () => {
+      const tid = await getTid();
+
       try {
         const response = await axios.post("/api/kakaoPay/userPayment", {
           tid,
@@ -74,13 +59,13 @@ const Subscription = () => {
         if (response.status === 200) {
           setSubscribe(response.data);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error("MySubscription POST에서 오류 발생", error);
       }
     };
 
     userPayment();
-  }, [tid]);
+  }, []);
 
   return (
     <div className="px-4 flex flex-col space-y-6">

@@ -31,13 +31,15 @@ const UserList = () => {
         if (response.status === 200) {
           setUser(response.data);
         }
-      } catch (error: any) {
+      } catch (error) {
         // 비로그인유저, 관리자 아닌 유저 접속시 메인페이지로 이동
-        if (error.response.status === 401 || error.response.status === 403) {
-          router.push("/");
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 401 || error.response?.status === 403) {
+            router.push("/");
+          }
+          console.error("userList GET에서 오류 발생", error);
+          setError(error.response?.data);
         }
-        console.log("userList GET에서 오류 발생", error);
-        setError(error.response.data);
       }
     };
     

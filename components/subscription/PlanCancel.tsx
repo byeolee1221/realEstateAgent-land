@@ -28,9 +28,11 @@ const PlanCancel = (props: IProps) => {
       if (response.status === 200) {
         router.push("/mySubscription/paymentCancel");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("PlanCancel POST에서 오류 발생", error);
-      alert(error.response.data);
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data);
+      }
     }
   }
 

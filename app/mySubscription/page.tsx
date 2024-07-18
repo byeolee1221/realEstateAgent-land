@@ -24,7 +24,6 @@ const MySubscription = () => {
   const [tid, setTid] = useState("");
   const [sid, setSid] = useState("");
   const [payment, setPayment] = useState<IPayment>();
-  // console.log(sid);
 
   const date = payment?.approvedAt.split("T")[0];
 
@@ -37,7 +36,6 @@ const MySubscription = () => {
   const formattedCurrentDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
     .toString()
     .padStart(2, "0")}-${currentDate.getDate().toString().padStart(2, "0")}`;
-  // console.log(nextPaymentDate, formattedCurrentDate);
 
   // 해지해도 다음 결제일까지 이용할 수 있도록 다음 결제일값을 리코일로 저장
   useEffect(() => {
@@ -56,7 +54,7 @@ const MySubscription = () => {
     }
   }, [payment]);
 
-  // DB에서 tid 값 가져오기
+  // DB에서 tid, sid 값 가져오기
   useEffect(() => {
     const getTid = async () => {
       try {
@@ -66,13 +64,13 @@ const MySubscription = () => {
           setTid(response.data.tid);
           setSid(response.data.sid);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error("mySubscription 구독정보 GET에서 오류 발생", error);
       }
     }
 
     getTid();
-  }, [])
+  }, []);
 
   // 결제 조회
   useEffect(() => {
@@ -85,12 +83,15 @@ const MySubscription = () => {
         if (response.status === 200) {
           setPayment(response.data);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error("MySubscription POST에서 오류 발생", error);
-        setError(error.response.data);
+        if (axios.isAxiosError(error)) {
+          setError(error.response?.data);
+        }
       }
     };
 
+    // tid값을 불러오기 전에 userPayment 함수가 끝나서 데이터 표시를 못하는 경우를 방지하기 위해 조건문 추가
     if (tid) {
       userPayment();
     }
@@ -109,7 +110,7 @@ const MySubscription = () => {
             if (response.status === 200) {
               console.log("정기결제 성공");
             }
-          } catch (error: any) {
+          } catch (error) {
             console.error("mySubscription 정기결제 POST에서 오류 발생", error);
           }
         };

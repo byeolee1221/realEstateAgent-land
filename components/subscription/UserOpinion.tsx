@@ -40,11 +40,13 @@ const UserOpinion = () => {
         alert("의견을 보내주셔서 감사합니다. 서비스 운영에 소중한 자료로 활용하겠습니다.");
         router.push("/");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("userOpinion POST에서 오류 발생", error);
-      return toast("오류 발생", {
-        description: error.response.data,
-      });
+      if (axios.isAxiosError(error)) {
+        return toast("오류 발생", {
+          description: error.response?.data,
+        });
+      }
     }
   }
 
