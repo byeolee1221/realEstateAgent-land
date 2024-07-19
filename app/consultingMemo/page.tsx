@@ -1,12 +1,11 @@
 "use client";
 
 import MemoTable from "@/components/consultingMemo/MemoTable";
-import { getNextPaymentState } from "@/lib/selectorState";
+import { getNextPaymentDate, getTid } from "@/lib/subscriptionUtils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
 import { toast } from "sonner";
 
 interface ISubscribe {
@@ -16,12 +15,26 @@ interface ISubscribe {
 
 const ConsultingMemo = () => {
   const { data: session } = useSession();
-  const nextPayment = useRecoilValue(getNextPaymentState);
 
+  const [nextPayment, setNextPayment] = useState<string | undefined>("");
   const [freeUse, setFreeUse] = useState(5);
   const [message, setMessage] = useState("");
   const [subscribe, setSubscribe] = useState<ISubscribe>();
-  const [tid, setTid] = useState("");
+
+  // 유틸리티 함수에서 다음 결제일 가져오기 
+  useEffect(() => {
+    const fetchSubscriptionData = async () => {
+      try {
+        const nextPaymentDate = await getNextPaymentDate();
+
+        setNextPayment(nextPaymentDate);
+      } catch (error) {
+        console.error("consultingMemo fetchSubscriptionData에서 오류 발생", error);
+      }
+    };
+
+    fetchSubscriptionData();
+  }, []);
 
   // 구독해지 시 다음 결제일까지 이용할 수 있도록 설정
   useEffect(() => {
@@ -58,28 +71,10 @@ const ConsultingMemo = () => {
     getCount();
   }, []);
 
-  // 구독여부 조회
-
-  // DB에서 tid 값 가져오기
-  useEffect(() => {
-    const getTid = async () => {
-      try {
-        const response = await axios.get("/api/kakaoPay/approve");
-
-        if (response.status === 200) {
-          setTid(response.data.tid);
-        }
-      } catch (error) {
-        console.error("consultingNote 구독정보 GET에서 오류 발생", error);
-      }
-    };
-
-    getTid();
-  }, []);
-
   // 결제 조회
   useEffect(() => {
     const userPayment = async () => {
+      const tid = await getTid();
       try {
         const response = await axios.post("/api/kakaoPay/userPayment", {
           tid,
@@ -93,10 +88,8 @@ const ConsultingMemo = () => {
       }
     };
 
-    if (tid) {
-      userPayment();
-    }
-  }, [tid]);
+    userPayment();
+  }, []);
 
   return (
     <div className="px-4 flex flex-col space-y-6">

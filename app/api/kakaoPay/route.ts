@@ -44,18 +44,21 @@ export async function POST(req: Request) {
           },
         }
       );
-      // 반환되는 자료는 하드코딩하는 것이 아님
+      
       if (response.status === 200) {
         const addSubscription = await addDoc(collection(db, "subscription"), {
           userName: session.user?.name,
           userEmail: session.user?.email,
-          tid: response.data.tid
+          userImage: session.user?.image,
+          tid: response.data.tid,
+          item_name,
+          amount
         });
-
+        // 반환되는 자료는 하드코딩하는 것이 아님
         return NextResponse.json({
           tid: response.data.tid,
           next_redirect_pc_url: response.data.next_redirect_pc_url
-        });
+        }, { status: 200 });
       }
     } catch (error) {
       console.error("kakaoPay POST 내 api post 요청에서 오류 발생", error);
@@ -64,7 +67,6 @@ export async function POST(req: Request) {
         { status: 500 }
       );
     }
-    return NextResponse.json({ status: 200 });
   } catch (error) {
     console.error("kakaoPay POST API에서 오류 발생", error);
     return new NextResponse(

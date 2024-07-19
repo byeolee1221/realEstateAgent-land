@@ -1,29 +1,26 @@
 import { useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
-import { getTid } from "@/lib/subscriptionUtils";
 import axios from "axios";
+import SubscriptionInfo from "./SubscriptionInfo";
+import { getSubscriptionStatus } from "@/lib/subscriptionUtils";
 
 interface ISubscription {
-  status: string;
-  itemName: string;
-  approvedAt: string;
-  amount: string;
+  approvedAt: Date;
   userEmail: string;
   userName: string;
+  id: string;
 }
 
 const SubscriptionList = () => {
   const [subscription, setSubscription] = useState<ISubscription[]>([]);
+  const [status, setStatus] = useState("");
   const [error, setError] = useState("");
 
+  // DB의 구독정보 가져오기
   useEffect(() => {
     const getUserSubscriptionData = async () => {
-      const tid = await getTid();
-
       try {
-        const response = await axios.post("/api/subscriptionManage", {
-          tid,
-        });
+        const response = await axios.get("/api/subscriptionManage");
   
         if (response.status === 200) {
           setSubscription(response.data);
@@ -39,6 +36,26 @@ const SubscriptionList = () => {
     getUserSubscriptionData();
   }, []);
 
+  useEffect(() => {
+    const getStatus = async () => {
+      try {
+        const subscriptionStatus = await getSubscriptionStatus();
+
+        if (subscriptionStatus === "SUCCESS_PAYMENT") {
+          setStatus("구독중");
+        } else if (subscriptionStatus === "FAIL_PAYMENT") {
+          setStatus("구독실패");
+        } else if (subscriptionStatus === "CANCEL_PAYMENT") {
+          setStatus("구독취소");
+        }
+      } catch (error) {
+        console.error("subscriptionManage getStatus에서 오류 발생", error);
+      }
+    }
+
+    getStatus();
+  }, []);
+
   return (
     <div className="flex flex-col space-y-4">
       <div className="border rounded-sm">
@@ -51,16 +68,17 @@ const SubscriptionList = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[1, 2, 3].map((data, i) => (
-              <TableRow key={i} className="cursor-pointer">
+            {subscription.map((data, i) => (
+              <TableRow key={data.id} className="cursor-pointer">
                 <TableCell>{i + 1}</TableCell>
-                <TableCell>test@test.com</TableCell>
-                <TableCell className="text-right">구독중</TableCell>
+                <SubscriptionInfo userEmail={data.userEmail} userName={data.userName} status={status} />
+                <TableCell className="text-right">{status}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
+      {error !== "" ? <h2 className="text-center p-2">{error}</h2> : null}
     </div>
   );
 };

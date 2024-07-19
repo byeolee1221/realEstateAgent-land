@@ -9,7 +9,7 @@ export async function GET(req: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session) {
-      return new NextResponse("관리자만 조회할 수 있습니다.", { status: 401 });
+      return new NextResponse("세션 오류입니다.", { status: 401 });
     }
 
     const userSnapshot = query(collection(db, "users"), where("email", "==", session.user?.email));
@@ -46,7 +46,6 @@ export async function GET(req: Request) {
 
       userData.createdAt = formatDate(createdAt);
       matchData.push(userData);
-      // console.log(matchData)
     });
 
     return NextResponse.json(matchData, { status: 200 });

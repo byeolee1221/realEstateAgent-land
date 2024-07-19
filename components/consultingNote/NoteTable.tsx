@@ -92,7 +92,7 @@ const NoteTable = (props: IProps) => {
           setNote(response.data);
         }
       } catch (error) {
-        console.log("consultingNote noteTable GET에서 오류 발생", error);
+        console.error("consultingNote noteTable GET에서 오류 발생", error);
         if (axios.isAxiosError(error)) {
           setError(error.response?.data);
         }
