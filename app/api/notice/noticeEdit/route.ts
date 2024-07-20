@@ -24,7 +24,7 @@ export async function GET(req: Request) {
       userId = doc.id;
     });
 
-    if (userId !== "lDYn9yuhI6acZ9hNstpW") {
+    if (userId !== `${process.env.ADMIN_ID}`) {
       return new NextResponse("관리자만 공지사항을 수정할 수 있습니다.", { status: 403 });
     }
 

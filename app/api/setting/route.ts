@@ -83,7 +83,7 @@ export async function GET(req: Request) {
 
     let adminCheck: boolean;
 
-    if (userId === "lDYn9yuhI6acZ9hNstpW") {
+    if (userId === `${process.env.ADMIN_ID}`) {
       adminCheck = true;
     } else {
       adminCheck = false;

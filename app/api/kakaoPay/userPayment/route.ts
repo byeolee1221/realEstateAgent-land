@@ -42,7 +42,7 @@ export async function POST(req: Request) {
           amount: response.data.amount.total,
         };
         // console.log(paymentObj);
-        return NextResponse.json(paymentObj);
+        return NextResponse.json(paymentObj, { status: 200 });
       }
     } catch (error) {
       console.error("userPayment 내 결제조회 api 호출에서 오류 발생", error);
@@ -51,8 +51,6 @@ export async function POST(req: Request) {
         { status: 500 }
       );
     }
-
-    return NextResponse.json({ status: 200 });
   } catch (error) {
     console.error("userPayment POST API에서 오류 발생", error);
     return new NextResponse("오류가 발생하였습니다. 잠시 후 다시 시도해주세요.", { status: 500 });

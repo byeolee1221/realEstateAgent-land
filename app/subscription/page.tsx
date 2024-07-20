@@ -22,7 +22,7 @@ const Subscription = () => {
 
   const standardArr = ["상담노트 및 중개메모 무제한 사용 가능", "추후 추가될 새 기능 중의 일부"];
 
-  const item_name = "중개랜드 스탠다드구독";
+  const item_name = "스탠다드";
   const amount = 10000;
 
   // ready api 호출

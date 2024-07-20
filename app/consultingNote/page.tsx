@@ -2,7 +2,7 @@
 
 import NoteTable from "@/components/consultingNote/NoteTable";
 import NavBar from "@/components/navBar/NavBar";
-import { getNextPaymentDate, getTid } from "@/lib/subscriptionUtils";
+import { getPaymentDate, getTid } from "@/lib/subscriptionUtils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -26,9 +26,9 @@ const ConsultingNote = () => {
   useEffect(() => {
     const fetchSubscriptionData = async () => {
       try {
-        const nextPaymentDate = await getNextPaymentDate();
+        const nextPaymentDate = await getPaymentDate();
 
-        setNextPayment(nextPaymentDate);
+        setNextPayment(nextPaymentDate?.nextPaymentDate);
       } catch (error) {
         console.error("consultingNote fetchSubscriptionData에서 오류 발생", error);
       }

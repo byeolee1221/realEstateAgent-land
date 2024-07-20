@@ -1,7 +1,7 @@
 "use client";
 
 import MemoTable from "@/components/consultingMemo/MemoTable";
-import { getNextPaymentDate, getTid } from "@/lib/subscriptionUtils";
+import { getPaymentDate, getTid } from "@/lib/subscriptionUtils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -25,9 +25,9 @@ const ConsultingMemo = () => {
   useEffect(() => {
     const fetchSubscriptionData = async () => {
       try {
-        const nextPaymentDate = await getNextPaymentDate();
+        const nextPaymentDate = await getPaymentDate();
 
-        setNextPayment(nextPaymentDate);
+        setNextPayment(nextPaymentDate?.nextPaymentDate);
       } catch (error) {
         console.error("consultingMemo fetchSubscriptionData에서 오류 발생", error);
       }

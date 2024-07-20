@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       userId = doc.id;
     });
 
-    if (userId !== "lDYn9yuhI6acZ9hNstpW") {
+    if (userId !== `${process.env.ADMIN_ID}`) {
       return new NextResponse("관리자만 공지사항을 작성할 수 있습니다.", { status: 403 });
     }
 
@@ -80,7 +80,7 @@ export async function DELETE(req: Request) {
       userId = doc.id;
     });
 
-    if (userId !== "lDYn9yuhI6acZ9hNstpW") {
+    if (userId !== `${process.env.ADMIN_ID}`) {
       return new NextResponse("관리자만 공지사항을 삭제할 수 있습니다.", { status: 403 });
     }
 

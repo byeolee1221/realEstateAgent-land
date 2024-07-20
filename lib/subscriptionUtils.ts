@@ -16,8 +16,8 @@ export async function getTid() {
   }
 }
 
-// 구독자의 다음 결제일을 받아오는 유틸리티 함수
-export async function getNextPaymentDate() {
+// 구독자의 결제일을 받아오는 유틸리티 함수
+export async function getPaymentDate() {
   try {
     const getTid = await axios.get("/api/kakaoPay/approve");
     let tid: string = "";
@@ -37,11 +37,17 @@ export async function getNextPaymentDate() {
     }
 
     const approvedDate = new Date(paymentApproveDate);
+    // 결제일 포맷 변경
+    const formattedApprovedDate = `${approvedDate.getFullYear()}-${(approvedDate.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${approvedDate.getDate().toString().padStart(2, "0")}`;
+
+    // 다음 결제일
     const nextPaymentDate = `${approvedDate.getFullYear()}-${(approvedDate.getMonth() + 2)
       .toString()
       .padStart(2, "0")}-${approvedDate.getDate().toString().padStart(2, "0")}`;
 
-    return nextPaymentDate;
+    return { formattedApprovedDate, nextPaymentDate };
   } catch (error) {
     console.error("다음 결제일 받아오는 유틸리티 함수에서 오류 발생", error);
   }

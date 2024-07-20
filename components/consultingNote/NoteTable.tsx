@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import SignInBtn from "../SignInBtn";
 import SubscribeAlert from "./SubscribeAlert";
-import { getNextPaymentDate, getSubscriptionStatus } from "@/lib/subscriptionUtils";
+import { getPaymentDate, getSubscriptionStatus } from "@/lib/subscriptionUtils";
 
 interface INoteList {
   customerName: string;
@@ -59,11 +59,11 @@ const NoteTable = (props: IProps) => {
     const fetchSubscriptionData = async () => {
       try {
         const [nextPaymentDate, subscriptionStatus] = await Promise.all([
-          getNextPaymentDate(),
+          getPaymentDate(),
           getSubscriptionStatus()
         ]);
 
-        setNextPayment(nextPaymentDate);
+        setNextPayment(nextPaymentDate?.nextPaymentDate);
         setSubscriptionStatus(subscriptionStatus);
       } catch (error) {
         console.error("NoteTable fetchSubscriptionData에서 오류 발생", error);
