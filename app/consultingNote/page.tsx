@@ -24,17 +24,19 @@ const ConsultingNote = () => {
 
   // 유틸리티 함수에서 다음 결제일 가져오기
   useEffect(() => {
-    const fetchSubscriptionData = async () => {
-      try {
-        const nextPaymentDate = await getPaymentDate();
-
-        setNextPayment(nextPaymentDate?.nextPaymentDate);
-      } catch (error) {
-        console.error("consultingNote fetchSubscriptionData에서 오류 발생", error);
-      }
-    };
-
-    fetchSubscriptionData();
+    if (session) {
+      const fetchSubscriptionData = async () => {
+        try {
+          const nextPaymentDate = await getPaymentDate();
+  
+          setNextPayment(nextPaymentDate?.nextPaymentDate);
+        } catch (error) {
+          console.error("consultingNote fetchSubscriptionData에서 오류 발생", error);
+        }
+      };
+  
+      fetchSubscriptionData();
+    }
   }, []);
 
   // 구독상태 및 무료사용횟수에 따른 메세지 출력
@@ -52,44 +54,48 @@ const ConsultingNote = () => {
 
   // 상담노트 무료사용횟수 조회
   useEffect(() => {
-    const getCount = async () => {
-      try {
-        const response = await axios.get("/api/consultingNote/noteCount");
-
-        if (response.status === 200) {
-          setFreeUse(response.data);
+    if (session) {
+      const getCount = async () => {
+        try {
+          const response = await axios.get("/api/consultingNote/noteCount");
+  
+          if (response.status === 200) {
+            setFreeUse(response.data);
+          }
+        } catch (error) {
+          console.error("상담노트 getCount에서 오류 발생", error);
+          if (axios.isAxiosError(error)) {
+            return toast("오류 발생", {
+              description: error.response?.data,
+            });
+          }
         }
-      } catch (error) {
-        console.error("상담노트 getCount에서 오류 발생", error);
-        if (axios.isAxiosError(error)) {
-          return toast("오류 발생", {
-            description: error.response?.data,
-          });
-        }
-      }
-    };
-
-    getCount();
+      };
+  
+      getCount();
+    }
   }, []);
 
   // 결제 조회
   useEffect(() => {
-    const userPayment = async () => {
-      const tid = await getTid();
-      try {
-        const response = await axios.post("/api/kakaoPay/userPayment", {
-          tid,
-        });
-
-        if (response.status === 200) {
-          setSubscribe(response.data);
+    if (session) {
+      const userPayment = async () => {
+        const tid = await getTid();
+        try {
+          const response = await axios.post("/api/kakaoPay/userPayment", {
+            tid,
+          });
+  
+          if (response.status === 200) {
+            setSubscribe(response.data);
+          }
+        } catch (error) {
+          console.error("MySubscription POST에서 오류 발생", error);
         }
-      } catch (error) {
-        console.error("MySubscription POST에서 오류 발생", error);
-      }
-    };
-
-    userPayment();
+      };
+  
+      userPayment();
+    }
   }, []);
 
   return (
