@@ -1,24 +1,28 @@
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const AdminMenu = () => {
+  const { data: session } = useSession();
   const [isAdmin, setAdmin] = useState(false);
 
   useEffect(() => {
-    const getUserRole = async () => {
-      try {
-        const response = await axios.get("/api/setting");
-
-        if (response.status === 200) {
-          setAdmin(response.data);
+    if (session) {
+      const getUserRole = async () => {
+        try {
+          const response = await axios.get("/api/setting");
+  
+          if (response.status === 200) {
+            setAdmin(response.data);
+          }
+        } catch (error) {
+          console.error("setting GET에서 오류 발생", error);
         }
-      } catch (error) {
-        console.error("setting GET에서 오류 발생", error);
-      }
-    };
-
-    getUserRole();
+      };
+  
+      getUserRole();
+    }
   }, []);
 
   return (
