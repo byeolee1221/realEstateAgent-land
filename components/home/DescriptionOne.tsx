@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import NoteDescription from "./NoteDescription";
 
 const DescriptionOne = () => {
   const descriptionArr = [
@@ -48,9 +49,7 @@ const DescriptionOne = () => {
         >
           무료 사용해보기
         </Link>
-        <button className="border border-blue-500 rounded-md text-blue-500 hover:bg-blue-500 hover:text-white px-3 py-2 text-center transition-colors">
-          더 알아보기
-        </button>
+        <NoteDescription />
       </div>
       <img
         src={"/notePage.png"}
