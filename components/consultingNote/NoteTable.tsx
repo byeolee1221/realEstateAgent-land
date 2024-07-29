@@ -46,7 +46,7 @@ const NoteTable = (props: IProps) => {
     const formattedCurrentDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
       .toString()
       .padStart(2, "0")}-${currentDate.getDate().toString().padStart(2, "0")}`;
-    
+
     if (formattedCurrentDate === nextPayment) {
       setEndBenefit(true);
     } else {
@@ -61,16 +61,16 @@ const NoteTable = (props: IProps) => {
         try {
           const [nextPaymentDate, subscriptionStatus] = await Promise.all([
             getPaymentDate(),
-            getSubscriptionStatus()
+            getSubscriptionStatus(),
           ]);
-  
+
           setNextPayment(nextPaymentDate?.nextPaymentDate);
           setSubscriptionStatus(subscriptionStatus);
         } catch (error) {
           console.error("NoteTable fetchSubscriptionData에서 오류 발생", error);
         }
-      }
-  
+      };
+
       fetchSubscriptionData();
     }
   }, []);

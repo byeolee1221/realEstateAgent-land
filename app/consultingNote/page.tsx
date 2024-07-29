@@ -28,29 +28,29 @@ const ConsultingNote = () => {
       const fetchSubscriptionData = async () => {
         try {
           const nextPaymentDate = await getPaymentDate();
-  
+
           setNextPayment(nextPaymentDate?.nextPaymentDate);
         } catch (error) {
           console.error("consultingNote fetchSubscriptionData에서 오류 발생", error);
         }
       };
-  
+
       fetchSubscriptionData();
     }
   }, []);
 
   // 구독상태 및 무료사용횟수에 따른 메세지 출력
   useEffect(() => {
-    if (subscribe?.status !== "SUCCESS_PAYMENT" && freeUse !== 0) {
-      setMessage(`무료사용가능 횟수: ${freeUse}회`);
-    } else if (subscribe?.status !== "SUCCESS_PAYMENT" && freeUse === 0) {
-      setMessage("무료사용이 만료되었습니다.");
-    } else if (subscribe?.status === "CANCEL_PAYMENT" && nextPayment !== "") {
-      setMessage(`${nextPayment}까지 구독혜택이 지속됩니다.`);
+    if (subscribe) {
+      if (subscribe.status === "CANCEL_PAYMENT" && nextPayment) {
+        setMessage(`${nextPayment}까지 구독혜택이 지속됩니다.`);
+      } else if (subscribe.status === "SUCCESS_PAYMENT") {
+        setMessage(`${subscribe.itemName}을 이용중입니다.`);
+      } 
     } else {
-      setMessage(`${subscribe?.itemName}을 이용중입니다.`);
+      setMessage("구독정보를 가져오고 있습니다.");
     }
-  }, [subscribe]);
+  }, [subscribe, nextPayment]);
 
   // 상담노트 무료사용횟수 조회
   useEffect(() => {
@@ -58,7 +58,7 @@ const ConsultingNote = () => {
       const getCount = async () => {
         try {
           const response = await axios.get("/api/consultingNote/noteCount");
-  
+
           if (response.status === 200) {
             setFreeUse(response.data);
           }
@@ -71,7 +71,7 @@ const ConsultingNote = () => {
           }
         }
       };
-  
+
       getCount();
     }
   }, []);
@@ -85,7 +85,7 @@ const ConsultingNote = () => {
           const response = await axios.post("/api/kakaoPay/userPayment", {
             tid,
           });
-  
+
           if (response.status === 200) {
             setSubscribe(response.data);
           }
@@ -93,7 +93,7 @@ const ConsultingNote = () => {
           console.error("MySubscription POST에서 오류 발생", error);
         }
       };
-  
+
       userPayment();
     }
   }, []);
