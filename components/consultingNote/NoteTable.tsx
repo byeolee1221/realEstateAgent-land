@@ -20,14 +20,6 @@ interface IProps {
 }
 
 const NoteTable = (props: IProps) => {
-  const alertArr = [
-    "무료체험은 계정당 1회에 한정됩니다.",
-    "무료버전 노트는 계속 업데이트가 가능합니다.",
-    "사용횟수가 차감되면 노트를 삭제해도 복구되지 않습니다.",
-    "삭제는 각 노트의 세부페이지에서 가능합니다.",
-    "노트는 본인외에는 확인할 수 없습니다.",
-  ];
-
   const { data: session } = useSession();
 
   const [nextPayment, setNextPayment] = useState<string | undefined>("");
@@ -36,6 +28,16 @@ const NoteTable = (props: IProps) => {
   const [note, setNote] = useState<INoteList[]>([]);
   const [error, setError] = useState("");
   const [countZero, setCountZero] = useState(false);
+  const [freeUseMsg, setFreeUseMsg] = useState("");
+
+  const alertArr = [
+    "무료체험은 계정당 1회에 한정됩니다.",
+    `${freeUseMsg}`,
+    "무료버전 노트는 계속 업데이트가 가능합니다.",
+    "사용횟수가 차감되면 노트를 삭제해도 복구되지 않습니다.",
+    "삭제는 각 노트의 세부페이지에서 가능합니다.",
+    "노트는 본인외에는 확인할 수 없습니다.",
+  ];
 
   // 구독해지 및 다음 결제일
   const subscriptionCancel = subscriptionStatus === "CANCEL_PAYMENT" && nextPayment !== "";
@@ -102,6 +104,15 @@ const NoteTable = (props: IProps) => {
     };
     getNoteList();
   }, []);
+
+  // 무료사용횟수 메세지 추가
+  useEffect(() => {
+    if (props.freeUse !== 0) {
+      setFreeUseMsg(`현재 남은 무료횟수는 ${props.freeUse}회입니다.`);
+    } else {
+      setFreeUseMsg("현재 모든 무료사용횟수를 이용하셨습니다.");
+    }
+  }, [props.freeUse]);
 
   return (
     <div className="flex flex-col space-y-4">

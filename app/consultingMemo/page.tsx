@@ -38,18 +38,18 @@ const ConsultingMemo = () => {
     }
   }, []);
 
-  // 구독해지 시 다음 결제일까지 이용할 수 있도록 설정
+  // 구독상태에 따른 메세지 출력. 무료사용횟수 반영 예정
   useEffect(() => {
-    if (subscribe?.status !== "SUCCESS_PAYMENT" && freeUse !== 0) {
-      setMessage(`무료사용가능 횟수: ${freeUse}회`);
-    } else if (subscribe?.status !== "SUCCESS_PAYMENT" && freeUse === 0) {
-      setMessage("무료사용이 만료되었습니다.");
-    } else if (subscribe?.status === "CANCEL_PAYMENT" && nextPayment !== "") {
-      setMessage(`${nextPayment}까지 구독혜택이 지속됩니다.`);
+    if (subscribe) {
+      if (subscribe.status === "CANCEL_PAYMENT" && nextPayment) {
+        setMessage(`${nextPayment}까지 구독혜택이 지속됩니다.`);
+      } else if (subscribe.status === "SUCCESS_PAYMENT") {
+        setMessage(`${subscribe.itemName}을 이용중입니다.`);
+      } 
     } else {
-      setMessage(`${subscribe?.itemName}을 이용중입니다.`);
+      setMessage("구독정보를 가져오고 있습니다.");
     }
-  }, [subscribe]);
+  }, [subscribe, nextPayment]);
 
   // 중개메모 무료사용횟수 조회
   useEffect(() => {

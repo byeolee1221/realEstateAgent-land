@@ -39,7 +39,7 @@ const ConsultingNote = () => {
     }
   }, []);
 
-  // 구독상태 및 무료사용횟수에 따른 메세지 출력
+  // 구독상태에 따른 메세지 출력
   useEffect(() => {
     if (subscribe) {
       if (subscribe.status === "CANCEL_PAYMENT" && nextPayment) {
