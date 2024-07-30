@@ -2,6 +2,7 @@
 
 import PaymentApprove from "@/components/subscription/PaymentApprove";
 import PaymentInfo from "@/components/subscription/PaymentInfo";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getApproveState } from "@/lib/selectorState";
 import { getTid } from "@/lib/subscriptionUtils";
 import { cn } from "@/lib/utils";
@@ -19,6 +20,7 @@ interface ISubscribe {
 const Subscription = () => {
   const approve = useRecoilValue(getApproveState);
   const [subscribe, setSubscribe] = useState<ISubscribe>();
+  const [isLoading, setLoading] = useState(false);
 
   const standardArr = ["상담노트 및 중개메모 무제한 사용 가능", "추후 추가될 새 기능 중의 일부"];
 
@@ -67,6 +69,14 @@ const Subscription = () => {
     userPayment();
   }, []);
 
+  useEffect(() => {
+    if (!subscribe) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, [subscribe]);
+
   return (
     <div className="px-4 flex flex-col space-y-6">
       <div className="flex items-center space-x-2 bg-slate-100 w-fit p-2 rounded-md shadow-sm px-5">
@@ -99,14 +109,27 @@ const Subscription = () => {
             </div>
           ))}
         </div>
-        {subscribe?.status !== "SUCCESS_PAYMENT" && <PaymentApprove />}
-        <button
+        {subscribe?.status !== "SUCCESS_PAYMENT" ? (
+          isLoading ? (
+            <Skeleton className="h-4 w-full rounded-xl bg-orange-200" />
+          ) : (
+            <PaymentApprove />
+          )
+        ) : null}
+        {!isLoading ? (
+          <button
           onClick={onSubscribe}
-          className={cn("text-white px-3 py-2 rounded-md transition-colors", !approve ? "bg-orange-200" : "bg-orange-500 hover:bg-orange-600")}
+          className={cn(
+            "text-white px-3 py-2 rounded-md transition-colors",
+            !approve ? "bg-orange-200" : "bg-orange-500 hover:bg-orange-600"
+          )}
           disabled={!approve || subscribe?.status === "SUCCESS_PAYMENT"}
         >
           {subscribe?.status !== "SUCCESS_PAYMENT" ? "선택" : "이미 구독중입니다."}
         </button>
+        ) : (
+            <Skeleton className="h-10 bg-orange-200 w-full" />
+        )}
       </div>
       <PaymentInfo />
     </div>

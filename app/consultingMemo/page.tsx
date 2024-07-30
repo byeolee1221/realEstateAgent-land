@@ -38,7 +38,7 @@ const ConsultingMemo = () => {
     }
   }, []);
 
-  // 구독상태에 따른 메세지 출력. 무료사용횟수 반영 예정
+  // 구독상태에 따른 메세지 출력
   useEffect(() => {
     if (subscribe) {
       if (subscribe.status === "CANCEL_PAYMENT" && nextPayment) {
