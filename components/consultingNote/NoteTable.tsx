@@ -107,12 +107,16 @@ const NoteTable = (props: IProps) => {
 
   // 무료사용횟수 메세지 추가
   useEffect(() => {
-    if (props.freeUse !== 0) {
-      setFreeUseMsg(`현재 남은 무료횟수는 ${props.freeUse}회입니다.`);
+    if (session) {
+      if (props.freeUse !== 0) {
+        setFreeUseMsg(`현재 남은 무료횟수는 ${props.freeUse}회입니다.`);
+      } else {
+        setFreeUseMsg("현재 모든 무료사용횟수를 이용하셨습니다.");
+      }
     } else {
-      setFreeUseMsg("현재 모든 무료사용횟수를 이용하셨습니다.");
+      setFreeUseMsg("로그인하시면 남은 횟수를 확인하실 수 있습니다.");
     }
-  }, [props.freeUse]);
+  }, [props.freeUse, session]);
 
   return (
     <div className="flex flex-col space-y-4">

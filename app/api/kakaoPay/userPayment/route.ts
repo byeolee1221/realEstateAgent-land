@@ -17,7 +17,7 @@ export async function POST(req: Request) {
       return new NextResponse("결제승인 값이 없습니다. 다시 확인해주세요.", { status: 404 });
     }
     
-    // 결제조회 api 호출
+    // 결제조회 api 호출 (정기결제시 최근 결제일 정보 없음)
     try {
       // console.log(tid);
       const response = await axios.post(
@@ -29,12 +29,13 @@ export async function POST(req: Request) {
         {
           headers: {
             Authorization: `SECRET_KEY ${process.env.KAKAO_PAY_SECRET_KEY_DEV}`,
-            "Content-Type": "application/json",
+            "Content-Type" : "application/json"
           },
         }
       );
 
       if (response.status === 200) {
+        // console.log(response.data)
         const paymentObj = {
           status: response.data.status,
           itemName: response.data.item_name,

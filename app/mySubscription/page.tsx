@@ -9,8 +9,12 @@ import { useEffect, useState } from "react";
 interface IPayment {
   status: string;
   itemName: string;
-  approvedAt: string;
   amount: number;
+}
+
+interface IPaymentDate {
+  approvedAt: string;
+  formattedNextDate: string;
 }
 
 const MySubscription = () => {
@@ -21,14 +25,11 @@ const MySubscription = () => {
   const [tid, setTid] = useState("");
   const [sid, setSid] = useState("");
   const [payment, setPayment] = useState<IPayment>();
+  const [paymentDate, setPaymentDate] = useState<IPaymentDate>();
 
-  const date = payment?.approvedAt.split("T")[0];
+  const lastPaymentDate = paymentDate?.approvedAt.split("T")[0];
 
-  // 표시될 승인시각, 현재시각 형식 맞추는 코드
-  const approvedDate = new Date(payment?.approvedAt!);
-  const nextPaymentDate = `${approvedDate.getFullYear()}-${(approvedDate.getMonth() + 2)
-    .toString()
-    .padStart(2, "0")}-${approvedDate.getDate().toString().padStart(2, "0")}`;
+  // 현재시각 형식 맞추는 코드
   const currentDate = new Date();
   const formattedCurrentDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
     .toString()
@@ -56,10 +57,27 @@ const MySubscription = () => {
       } catch (error) {
         console.error("mySubscription 구독정보 GET에서 오류 발생", error);
       }
-    }
+    };
 
     getTid();
   }, []);
+
+  // 구독 결제일 정보 가져오기
+  useEffect(() => {
+    const getApprovedDate = async () => {
+      try {
+        const response = await axios.get("/api/subscriptionUpdateInfo");
+
+        if (response.status === 200) {
+          setPaymentDate(response.data);
+        }
+      } catch (error) {
+        console.error("MySubscription getApprovedDate에서 오류 발생", error);
+      }
+    }
+
+    getApprovedDate();
+  }, [])
 
   // 결제 조회
   useEffect(() => {
@@ -86,35 +104,33 @@ const MySubscription = () => {
     }
   }, [tid]);
 
-  // 2회차 이상 자동 결제 호출
+  // 2회차 이상 자동 결제 호출 (스케쥴러 사용 예정)
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (nextPaymentDate === formattedCurrentDate) {
-        const regularPayment = async () => {
-          try {
-            const response = await axios.post("/api/kakaoPay/regularPayment", {
-              sid
-            });
+    if (paymentDate?.formattedNextDate === formattedCurrentDate) {
+      const regularPayment = async () => {
+        try {
+          const response = await axios.post("/api/kakaoPay/regularPayment", {
+            sid,
+          });
 
-            if (response.status === 200) {
-              console.log("정기결제 성공");
-            }
-          } catch (error) {
-            console.error("mySubscription 정기결제 POST에서 오류 발생", error);
+          if (response.status === 200) {
+            console.log("정기결제 성공");
           }
-        };
+        } catch (error) {
+          console.error("mySubscription 정기결제 POST에서 오류 발생", error);
+        }
+      };
 
+      if (sid) {
         regularPayment();
       }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+    }
+  }, [sid]);
 
   const dataArr = [
-    { title: "가입일", data: date },
+    { title: "구독일", data: lastPaymentDate },
     { title: "정기결제 금액", data: `${payment?.amount}원` },
-    { title: "다음 결제일", data: nextPaymentDate },
+    { title: "다음 결제일", data: paymentDate?.formattedNextDate },
   ];
 
   return (

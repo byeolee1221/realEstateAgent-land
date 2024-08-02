@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
     const body = await req.json();
     const { sid } = body;
-    // console.log(sid);
+    console.log(sid);
 
     if (!session) {
       return new NextResponse("로그인이 필요한 서비스입니다.", { status: 401 });
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
           sid,
           partner_order_id: "subscription_order_id_1",
           partner_user_id: "subscription_user_id_1",
-          item_name: "중개랜드 스탠다드구독 정기결제",
+          item_name: "스탠다드",
           quantity: 1,
           total_amount: 10000,
           vat_amount: 1000,
@@ -90,7 +90,7 @@ export async function GET(req: Request) {
     let tid: string = "";
 
     if (paymentDocSnap.exists()) {
-      // console.log(paymentDocSnap.data().tid);
+      // console.log(paymentDocSnap.data());
       tid = paymentDocSnap.data().tid;
     }
 

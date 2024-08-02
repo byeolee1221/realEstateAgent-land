@@ -7,6 +7,7 @@ import { getApproveState } from "@/lib/selectorState";
 import { getTid } from "@/lib/subscriptionUtils";
 import { cn } from "@/lib/utils";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
@@ -18,6 +19,7 @@ interface ISubscribe {
 }
 
 const Subscription = () => {
+  const { data: session } = useSession();
   const approve = useRecoilValue(getApproveState);
   const [subscribe, setSubscribe] = useState<ISubscribe>();
   const [isLoading, setLoading] = useState(false);
@@ -70,12 +72,16 @@ const Subscription = () => {
   }, []);
 
   useEffect(() => {
-    if (!subscribe) {
-      setLoading(true);
+    if (session) {
+      if (!subscribe) {
+        setLoading(true);
+      } else {
+        setLoading(false);
+      }
     } else {
       setLoading(false);
     }
-  }, [subscribe]);
+  }, [subscribe, session]);
 
   return (
     <div className="px-4 flex flex-col space-y-6">
