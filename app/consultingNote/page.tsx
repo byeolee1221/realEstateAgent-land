@@ -18,7 +18,7 @@ const ConsultingNote = () => {
   const { data: session } = useSession();
 
   const [nextPayment, setNextPayment] = useState<string | undefined>("");
-  const [freeUse, setFreeUse] = useState(1);
+  const [freeUse, setFreeUse] = useState<number>();
   const [message, setMessage] = useState("");
   const [subscribe, setSubscribe] = useState<ISubscribe>();
 
@@ -41,16 +41,23 @@ const ConsultingNote = () => {
 
   // 구독상태에 따른 메세지 출력
   useEffect(() => {
-    if (subscribe) {
-      if (subscribe.status === "CANCEL_PAYMENT" && nextPayment) {
-        setMessage(`${nextPayment}까지 구독혜택이 지속됩니다.`);
-      } else if (subscribe.status === "SUCCESS_PAYMENT") {
-        setMessage(`${subscribe.itemName}을 이용중입니다.`);
-      } 
-    } else {
+    if (!subscribe) {
       setMessage("구독정보를 가져오고 있습니다.");
+      return;
     }
-  }, [subscribe, nextPayment]);
+
+    const { status, itemName } = subscribe;
+
+    if (status === "CANCEL_PAYMENT") {
+      if (nextPayment) {
+        setMessage(`${nextPayment}까지 구독혜택이 지속됩니다.`);
+      } else {
+        setMessage("구독이 종료되었습니다.");
+      }
+    } else if (status === "SUCCESS_PAYMENT") {
+      setMessage(`${itemName}을 이용중입니다.`);
+    }
+  }, [subscribe, nextPayment])
 
   // 상담노트 무료사용횟수 조회
   useEffect(() => {

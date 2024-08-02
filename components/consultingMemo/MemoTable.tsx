@@ -22,7 +22,7 @@ interface IMemoList {
 }
 
 interface IProps {
-  freeUse: number;
+  freeUse: number | undefined;
 }
 
 const MemoTable = (props: IProps) => {
@@ -110,18 +110,24 @@ const MemoTable = (props: IProps) => {
     }
 
     getMemoList();
-  }, [])
+  }, []);
 
   // 무료사용횟수 메세지 추가
   useEffect(() => {
-    if (session) {
-      if (props.freeUse !== 0) {
-        setFreeUseMsg(`현재 남은 무료횟수는 ${props.freeUse}회입니다.`);
-      } else {
-        setFreeUseMsg("현재 모든 무료사용횟수를 이용하셨습니다.");
-      }
-    } else {
+    if (!session) {
       setFreeUseMsg("로그인하시면 남은 횟수를 확인하실 수 있습니다.");
+      return;
+    }
+
+    if (!props.freeUse) {
+      setFreeUseMsg("무료사용횟수를 조회중입니다.");
+      return;
+    }
+
+    if (props.freeUse > 0) {
+      setFreeUseMsg(`현재 남은 무료횟수는 ${props.freeUse}회입니다.`);
+    } else {
+      setFreeUseMsg("현재 모든 무료사용횟수를 이용하셨습니다.");
     }
   }, [props.freeUse, session]);
 

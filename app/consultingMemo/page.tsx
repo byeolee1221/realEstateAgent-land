@@ -17,7 +17,7 @@ const ConsultingMemo = () => {
   const { data: session } = useSession();
 
   const [nextPayment, setNextPayment] = useState<string | undefined>("");
-  const [freeUse, setFreeUse] = useState(5);
+  const [freeUse, setFreeUse] = useState<number>();
   const [message, setMessage] = useState("");
   const [subscribe, setSubscribe] = useState<ISubscribe>();
 
