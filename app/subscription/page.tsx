@@ -69,7 +69,7 @@ const Subscription = () => {
     };
 
     userPayment();
-  }, []);
+  }, [session]);
 
   useEffect(() => {
     if (session) {
@@ -127,9 +127,9 @@ const Subscription = () => {
           onClick={onSubscribe}
           className={cn(
             "text-white px-3 py-2 rounded-md transition-colors",
-            !approve ? "bg-orange-200" : "bg-orange-500 hover:bg-orange-600"
+            !approve || !session ? "bg-orange-200" : "bg-orange-500 hover:bg-orange-600"
           )}
-          disabled={!approve || subscribe?.status === "SUCCESS_PAYMENT"}
+          disabled={!approve || subscribe?.status === "SUCCESS_PAYMENT" || !session}
         >
           {subscribe?.status !== "SUCCESS_PAYMENT" ? "선택" : "이미 구독중입니다."}
         </button>
