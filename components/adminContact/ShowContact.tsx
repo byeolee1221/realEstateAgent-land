@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import axios from "axios";
 import ContactDelete from "./ContactDelete";
 
@@ -87,4 +87,4 @@ const ShowContact = (props: IProps) => {
   );
 };
 
-export default ShowContact;
+export default memo(ShowContact);

@@ -45,15 +45,17 @@ const AdminContact = () => {
         if (response.status === 200) {
           setDoc(response.data);
         }
-      } catch (error: any) {
+      } catch (error) {
         // 비로그인유저, 관리자 아닌 유저 접속시 메인페이지로 이동
-        if (error.response.status === 401 || error.response.status === 403) {
-          router.push("/");
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 401 || error.response?.status === 403) {
+            router.push("/");
+          }
+          console.error("adminContact 문의사항 GET에서 오류 발생", error);
+          return toast("오류 발생", {
+            description: error.response?.data,
+          });
         }
-        console.error("adminContact 문의사항 GET에서 오류 발생", error);
-        return toast("오류 발생", {
-          description: error.response.data,
-        });
       }
     };
 
@@ -69,11 +71,13 @@ const AdminContact = () => {
         if (response.status === 200) {
           setOpinion(response.data);
         }
-      } catch (error: any) {
-        console.error("adminContact 개선사항 GET에서 오류 발생", error);
-        return toast("오류 발생", {
-          description: error.response.data,
-        });
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error("adminContact 개선사항 GET에서 오류 발생", error);
+          return toast("오류 발생", {
+            description: error.response?.data,
+          });
+        }
       }
     };
 

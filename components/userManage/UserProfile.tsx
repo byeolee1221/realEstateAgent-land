@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { TableCell } from "../ui/table";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import axios from "axios";
 
 interface IProps {
@@ -111,4 +111,4 @@ const UserProfile = (props: IProps) => {
   );
 };
 
-export default UserProfile;
+export default memo(UserProfile);
