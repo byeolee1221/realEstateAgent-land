@@ -1,6 +1,14 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { memo, useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import OpinionDelete from "./OpinionDelete";
 
 interface IProps {
@@ -31,7 +39,7 @@ const ShowOpinion = (props: IProps) => {
           setError(error.response?.data);
         }
       }
-    }
+    };
 
     getOpinionDoc();
   }, []);
@@ -75,7 +83,7 @@ const ShowOpinion = (props: IProps) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default ShowOpinion;
+export default memo(ShowOpinion);

@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     const body = await req.json();
-    const postUrl = await req.url.split("/");
+    const postUrl = req.url.split("/");
     const postId = postUrl[7];
     const { currentUser, customerName, customerNumber, purposeUse, kind, transactionType, date, content, location } = body;
     // console.log(postId);
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const session = await getServerSession(authOptions);
-    const postUrl = await req.url.split("/");
+    const postUrl = req.url.split("/");
     const postId = postUrl[7];
     // console.log(postId);
 
