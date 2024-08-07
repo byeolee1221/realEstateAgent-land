@@ -79,7 +79,7 @@ const ConsultingMemo = () => {
             <SubscriptionMessage subscribe={subscribe} />
           </div>
         ) : (
-          <h2 className="text-lg">중개메모 목록</h2>
+          <h2 className="text-lg font-semibold">중개메모 목록</h2>
         )}
       </div>
       <MemoTable freeUse={freeUse} />

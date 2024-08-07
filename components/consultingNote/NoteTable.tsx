@@ -102,7 +102,10 @@ const NoteTable = (props: IProps) => {
         }
       }
     };
-    getNoteList();
+
+    if (session) {
+      getNoteList();
+    }
   }, []);
 
   // 무료사용횟수 메세지 추가

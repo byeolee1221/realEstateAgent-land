@@ -81,7 +81,7 @@ const ConsultingNote = () => {
               <SubscriptionMessage subscribe={subscribe} />
             </div>
           ) : (
-            <h2 className="text-lg">상담노트 목록</h2>
+            <h2 className="text-lg font-semibold">상담노트 목록</h2>
           )}
         </div>
         <NoteTable freeUse={freeUse} />

@@ -109,7 +109,9 @@ const MemoTable = (props: IProps) => {
       }
     }
 
-    getMemoList();
+    if (session) {
+      getMemoList();
+    }
   }, []);
 
   // 무료사용횟수 메세지 추가

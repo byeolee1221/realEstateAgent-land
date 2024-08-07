@@ -68,7 +68,9 @@ const Subscription = () => {
       }
     };
 
-    userPayment();
+    if (session) {
+      userPayment();
+    }
   }, [session]);
 
   useEffect(() => {
