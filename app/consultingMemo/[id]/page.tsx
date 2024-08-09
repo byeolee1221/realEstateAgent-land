@@ -1,6 +1,7 @@
 "use client";
 
 import MemoDelete from "@/components/consultingMemo/MemoDelete";
+import { getPost } from "@/lib/utils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -97,25 +98,9 @@ const MemoDetail = () => {
     }
   }, [memo?.location]);
 
+  // 중개메모 불러오기
   useEffect(() => {
-    const getMemo = async () => {
-      try {
-        const response = await axios.get(`/api/consultingMemo?url=${pathname}`);
-
-        if (response.status === 200) {
-          setMemo(response.data);
-        }
-      } catch (error) {
-        console.log("consultingMemo memoDetail GET에서 오류 발생", error);
-        if (axios.isAxiosError(error)) {
-          return toast("오류 발생", {
-            description: error.response?.data,
-          });
-        }
-      }
-    };
-
-    getMemo();
+    getPost("중개메모", `/api/consultingMemo?url=${pathname}`, setMemo);
   }, []);
 
   const memoArr = [

@@ -1,6 +1,7 @@
 "use client";
 
 import NoteDelete from "@/components/consultingNote/NoteDelete";
+import { getPost } from "@/lib/utils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -102,25 +103,9 @@ const NoteDetail = () => {
     }
   }, [note?.location]);
 
+  // 상담노트 불러오기
   useEffect(() => {
-    const getNote = async () => {
-      try {
-        const response = await axios.get(`/api/consultingNote?url=${pathname}`);
-
-        if (response.status === 200) {
-          setNote(response.data);
-        }
-      } catch (error) {
-        console.log("consultingNote noteDetail GET에서 오류 발생", error);
-        if (axios.isAxiosError(error)) {
-          return toast("오류 발생", {
-            description: error.response?.data,
-          });
-        }
-      }
-    };
-
-    getNote();
+    getPost("상담노트", `/api/consultingNote?url=${pathname}`, setNote);
   }, []);
 
   const noteArr = [

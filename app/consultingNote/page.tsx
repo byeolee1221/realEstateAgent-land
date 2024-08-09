@@ -3,14 +3,12 @@
 import NoteTable from "@/components/consultingNote/NoteTable";
 import NavBar from "@/components/navBar/NavBar";
 import SubscriptionMessage from "@/lib/SubscriptionMessage";
-import { getTid } from "@/lib/subscriptionUtils";
-import axios from "axios";
+import { getCount, userPayment } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
-interface ISubscribe {
+export interface ISubscribe {
   status: string;
   itemName: string;
 }
@@ -24,46 +22,14 @@ const ConsultingNote = () => {
   // 상담노트 무료사용횟수 조회
   useEffect(() => {
     if (session) {
-      const getCount = async () => {
-        try {
-          const response = await axios.get("/api/consultingNote/noteCount");
-
-          if (response.status === 200) {
-            setFreeUse(response.data);
-          }
-        } catch (error) {
-          console.error("상담노트 getCount에서 오류 발생", error);
-          if (axios.isAxiosError(error)) {
-            return toast("오류 발생", {
-              description: error.response?.data,
-            });
-          }
-        }
-      };
-
-      getCount();
+      getCount("상담노트", "/api/consultingNote/noteCount", setFreeUse);
     }
   }, []);
 
   // 결제 조회
   useEffect(() => {
     if (session) {
-      const userPayment = async () => {
-        const tid = await getTid();
-        try {
-          const response = await axios.post("/api/kakaoPay/userPayment", {
-            tid,
-          });
-
-          if (response.status === 200) {
-            setSubscribe(response.data);
-          }
-        } catch (error) {
-          console.error("MySubscription POST에서 오류 발생", error);
-        }
-      };
-
-      userPayment();
+      userPayment("상담노트", "/api/kakaoPay/userPayment", setSubscribe);
     }
   }, []);
 

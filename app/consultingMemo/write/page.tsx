@@ -131,7 +131,7 @@ const MemoWrite = () => {
         router.push(`/consultingMemo/${response.data}`);
       }
     } catch (error) {
-      console.log("consultingMemo write POST에서 오류 발생", error);
+      console.error("consultingMemo write POST에서 오류 발생", error);
       if (axios.isAxiosError(error)) {
         return toast("오류 발생", {
           description: error.response?.data,

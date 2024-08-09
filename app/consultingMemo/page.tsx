@@ -2,12 +2,10 @@
 
 import MemoTable from "@/components/consultingMemo/MemoTable";
 import SubscriptionMessage from "@/lib/SubscriptionMessage";
-import { getTid } from "@/lib/subscriptionUtils";
-import axios from "axios";
+import { getCount, userPayment } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 interface ISubscribe {
   status: string;
@@ -23,46 +21,14 @@ const ConsultingMemo = () => {
   // 중개메모 무료사용횟수 조회
   useEffect(() => {
     if (session) {
-      const getCount = async () => {
-        try {
-          const response = await axios.get("/api/consultingMemo/memoCount");
-  
-          if (response.status === 200) {
-            setFreeUse(response.data);
-          }
-        } catch (error) {
-          console.error("중개메모 getCount에서 오류 발생", error);
-          if (axios.isAxiosError(error)) {
-            return toast("오류 발생", {
-              description: error.response?.data,
-            });
-          }
-        }
-      };
-  
-      getCount();
+      getCount("중개메모", "/api/consultingMemo/memoCount", setFreeUse);
     }
   }, []);
 
   // 결제 조회
   useEffect(() => {
     if (session) {
-      const userPayment = async () => {
-        const tid = await getTid();
-        try {
-          const response = await axios.post("/api/kakaoPay/userPayment", {
-            tid,
-          });
-  
-          if (response.status === 200) {
-            setSubscribe(response.data);
-          }
-        } catch (error) {
-          console.error("MySubscription POST에서 오류 발생", error);
-        }
-      };
-  
-      userPayment();
+      userPayment("중개메모", "/api/kakaoPay/userPayment", setSubscribe);
     }
   }, []);
 
