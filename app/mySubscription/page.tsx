@@ -1,6 +1,7 @@
 "use client";
 
 import PlanCancel from "@/components/subscription/PlanCancel";
+import { Skeleton } from "@/components/ui/skeleton";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -26,6 +27,7 @@ const MySubscription = () => {
   const [sid, setSid] = useState("");
   const [payment, setPayment] = useState<IPayment>();
   const [paymentDate, setPaymentDate] = useState<IPaymentDate>();
+  const [isLoading, setLoading] = useState(false);
 
   const lastPaymentDate = paymentDate?.approvedAt.split("T")[0];
 
@@ -37,6 +39,11 @@ const MySubscription = () => {
 
   // 조건부 코드
   useEffect(() => {
+    if (!payment?.status) {
+      setStatusMsg("구독정보를 불러오고 있습니다.");
+      return;
+    }
+
     if (payment?.status === "SUCCESS_PAYMENT") {
       setStatusMsg("현재 스탠다드플랜을 구독중입니다.");
     } else if (payment?.status === "FAIL_PAYMENT" || payment?.status === "CANCEL_PAYMENT") {
@@ -74,15 +81,16 @@ const MySubscription = () => {
       } catch (error) {
         console.error("MySubscription getApprovedDate에서 오류 발생", error);
       }
-    }
+    };
 
     getApprovedDate();
-  }, [])
+  }, []);
 
   // 결제 조회
   useEffect(() => {
     const userPayment = async () => {
       try {
+        setLoading(true);
         const response = await axios.post("/api/kakaoPay/userPayment", {
           tid,
         });
@@ -95,6 +103,8 @@ const MySubscription = () => {
         if (axios.isAxiosError(error)) {
           setError(error.response?.data);
         }
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -129,7 +139,7 @@ const MySubscription = () => {
 
   const dataArr = [
     { title: "구독일", data: lastPaymentDate },
-    { title: "정기결제 금액", data: `${payment?.amount}원` },
+    { title: "정기결제 금액", data: `${payment?.amount.toLocaleString("ko-KR")}원` },
     { title: "다음 결제일", data: paymentDate?.formattedNextDate },
   ];
 
@@ -146,26 +156,32 @@ const MySubscription = () => {
           </span>
         </div>
       </div>
-      {!error ? (
-        payment?.status === "SUCCESS_PAYMENT" ? (
-          <div className="bg-slate-100 flex flex-col rounded-md px-4 py-5 space-y-3 text-sm shadow-sm">
-            <h2 className="font-semibold text-lg">구독 정보</h2>
-            {dataArr.map((item, i) => (
-              <div key={i} className="flex items-center justify-between">
-                <h3>{item.title}</h3>
-                <span>{item.data}</span>
-              </div>
-            ))}
-          </div>
+      {!isLoading ? (
+        !error ? (
+          payment?.status === "SUCCESS_PAYMENT" ? (
+            <div className="bg-slate-100 flex flex-col rounded-md px-4 py-5 space-y-3 text-sm shadow-sm">
+              <h2 className="font-semibold text-lg">구독 정보</h2>
+              {dataArr.map((item, i) => (
+                <div key={`${tid} - ${i}`} className="flex items-center justify-between">
+                  <h3>{item.title}</h3>
+                  <span>{item.data}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-slate-100 rounded-md px-4 py-5 space-y-3 shadow-sm">
+                <h2 className="text-center">
+                  {payment?.status !== undefined ? "현재 구독하신 상품이 없습니다." : "구독정보를 불러오고 있습니다."}
+              </h2>
+            </div>
+          )
         ) : (
           <div className="bg-slate-100 rounded-md px-4 py-5 space-y-3 shadow-sm">
-            <h2 className="text-center">현재 구독하신 상품이 없습니다.</h2>
+            <h2 className="text-center">{error}</h2>
           </div>
         )
       ) : (
-        <div className="bg-slate-100 rounded-md px-4 py-5 space-y-3 shadow-sm">
-          <h2 className="text-center">{error}</h2>
-        </div>
+        <Skeleton className="h-[164px] w-full rounded-md bg-slate-100 shadow-sm" />
       )}
       {payment?.status === "SUCCESS_PAYMENT" ? <PlanCancel tid={tid} /> : null}
     </div>

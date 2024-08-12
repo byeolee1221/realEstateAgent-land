@@ -35,7 +35,6 @@ export async function POST(req: Request) {
       );
 
       if (response.status === 200) {
-        // console.log(response.data)
         const paymentObj = {
           status: response.data.status,
           itemName: response.data.item_name,
