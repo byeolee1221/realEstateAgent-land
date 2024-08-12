@@ -85,7 +85,7 @@ export async function GET(req: Request) {
 
     if (docSnap.exists()) {
       // console.log(docSnap.data());
-      return NextResponse.json(docSnap.data(), { status: 200 });
+      return NextResponse.json({ ...docSnap.data(), id: docSnap.id }, { status: 200 });
     } else {
       return new NextResponse("메모가 존재하지 않습니다.", { status: 404 });
     }

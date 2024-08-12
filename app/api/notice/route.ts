@@ -53,7 +53,7 @@ export async function GET(req: Request) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      return NextResponse.json(docSnap.data(), { status: 200 });
+      return NextResponse.json({ ...docSnap.data(), id: docSnap.id }, { status: 200 });
     } else {
       return new NextResponse("게시글이 존재하지 않습니다.", { status: 404 });
     }
