@@ -45,9 +45,9 @@ const ShowOpinion = (props: IProps) => {
   }, []);
 
   const opinionArr = [
-    { title: "제목", content: "구독해지 후 개선의견" },
-    { title: "접수일", content: opinion?.createdAt },
-    { title: "문의내용", content: opinion?.opinion },
+    { id: 1, title: "제목", content: "구독해지 후 개선의견" },
+    { id: 2, title: "접수일", content: opinion?.createdAt },
+    { id: 3, title: "문의내용", content: opinion?.opinion },
   ];
 
   return (
@@ -63,8 +63,8 @@ const ShowOpinion = (props: IProps) => {
         </DialogHeader>
         {!error ? (
           <div className="flex flex-col space-y-6">
-            {opinionArr.map((data, i) => (
-              <div key={`${opinion?.id} - ${i}`} className="flex flex-col space-y-3 text-sm">
+            {opinionArr.map((data) => (
+              <div key={data.id} className="flex flex-col space-y-3 text-sm">
                 <h2 className="text-xs text-gray-500">{data.title}</h2>
                 <span className="border-b pb-1 whitespace-pre-wrap">{data.content}</span>
               </div>

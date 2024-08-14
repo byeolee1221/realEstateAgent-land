@@ -30,8 +30,8 @@ const SubscriptionInfo = (props: IProps) => {
   const [error, setError] = useState("");
 
   const userInfoArr = [
-    { title: "구독시작일", value: approvedAt },
-    { title: "구독아이템", value: userPayment?.itemName },
+    { id: 1, title: "구독시작일", value: approvedAt },
+    { id: 2, title: "구독아이템", value: userPayment?.itemName },
   ];
 
   // 유저 결제정보 가져오기
@@ -94,9 +94,9 @@ const SubscriptionInfo = (props: IProps) => {
               <h1 className="font-semibold">{props.userName}</h1>
             </div>
             <div className="flex items-center justify-between">
-              {userInfoArr.map((data, i) => (
+              {userInfoArr.map((data) => (
                 <div
-                  key={i}
+                  key={data.id}
                   className="flex flex-col space-y-1 bg-slate-100 rounded-md px-5 py-2 text-center shadow-sm"
                 >
                   <h2 className="font-semibold">{data.title}</h2>

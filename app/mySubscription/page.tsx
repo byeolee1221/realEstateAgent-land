@@ -138,9 +138,9 @@ const MySubscription = () => {
   }, [sid]);
 
   const dataArr = [
-    { title: "구독일", data: lastPaymentDate },
-    { title: "정기결제 금액", data: `${payment?.amount.toLocaleString("ko-KR")}원` },
-    { title: "다음 결제일", data: paymentDate?.formattedNextDate },
+    { id: 1, title: "구독일", data: lastPaymentDate },
+    { id: 2, title: "정기결제 금액", data: `${payment?.amount.toLocaleString("ko-KR")}원` },
+    { id: 3, title: "다음 결제일", data: paymentDate?.formattedNextDate },
   ];
 
   return (
@@ -161,8 +161,8 @@ const MySubscription = () => {
           payment?.status === "SUCCESS_PAYMENT" ? (
             <div className="bg-slate-100 flex flex-col rounded-md px-4 py-5 space-y-3 text-sm shadow-sm">
               <h2 className="font-semibold text-lg">구독 정보</h2>
-              {dataArr.map((item, i) => (
-                <div key={`${tid} - ${i}`} className="flex items-center justify-between">
+              {dataArr.map((item) => (
+                <div key={item.id} className="flex items-center justify-between">
                   <h3>{item.title}</h3>
                   <span>{item.data}</span>
                 </div>

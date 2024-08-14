@@ -35,7 +35,7 @@ const MemoDelete = (props: IProps) => {
         router.push("/consultingMemo");
       }
     } catch (error) {
-      console.log("consultingMemo memoDelete DELETE에서 오류 발생", error);
+      console.error("consultingMemo memoDelete DELETE에서 오류 발생", error);
       if (axios.isAxiosError(error)) {
         return toast("오류 발생", {
           description: error.response?.data,

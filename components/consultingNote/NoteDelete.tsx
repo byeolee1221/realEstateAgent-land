@@ -34,7 +34,7 @@ const NoteDelete = (props: IProps) => {
         router.push("/consultingNote");
       }
     } catch (error) {
-      console.log("consultingNote noteDelete DELETE에서 오류 발생", error);
+      console.error("consultingNote noteDelete DELETE에서 오류 발생", error);
       if (axios.isAxiosError(error)) {
         return toast("오류 발생", {
           description: error.response?.data,

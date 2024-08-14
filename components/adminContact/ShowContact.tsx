@@ -48,9 +48,9 @@ const ShowContact = (props: IProps) => {
   }, []);
 
   const contactArr = [
-    { title: "제목", content: doc?.title },
-    { title: "접수일", content: doc?.createdAt },
-    { title: "문의내용", content: doc?.content },
+    { id: 1, title: "제목", content: doc?.title },
+    { id: 2, title: "접수일", content: doc?.createdAt },
+    { id: 3, title: "문의내용", content: doc?.content },
   ];
 
   return (
@@ -65,8 +65,8 @@ const ShowContact = (props: IProps) => {
           <DialogTitle className="text-start">문의사항</DialogTitle>
         </DialogHeader>
         {!error ? <div className="flex flex-col space-y-6">
-          {contactArr.map((data, i) => (
-            <div key={`${doc?.id} - ${i}`} className="flex flex-col space-y-3 text-sm">
+          {contactArr.map((data) => (
+            <div key={data.id} className="flex flex-col space-y-3 text-sm">
               <h2 className="text-xs text-gray-500">{data.title}</h2>
               <span className="border-b pb-1 whitespace-pre-wrap">
                 {data.content}

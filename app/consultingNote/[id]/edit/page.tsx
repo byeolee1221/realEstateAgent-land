@@ -104,7 +104,7 @@ const NoteEdit = () => {
           setNote(response.data);
         }
       } catch (error) {
-        console.log("consultingNote noteEdit GET에서 오류 발생", error);
+        console.error("consultingNote noteEdit GET에서 오류 발생", error);
         if (axios.isAxiosError(error)) {
           return toast("오류 발생", {
             description: error.response?.data,
@@ -191,7 +191,7 @@ const NoteEdit = () => {
         router.push(`/consultingNote/${response.data}`);
       }
     } catch (error) {
-      console.log("consultingNote noteEdit POST에서 오류 발생", error);
+      console.error("consultingNote noteEdit POST에서 오류 발생", error);
       if (axios.isAxiosError(error)) {
         return toast("오류 발생", {
           description: error.response?.data,

@@ -102,7 +102,7 @@ const MemoTable = (props: IProps) => {
           setMemo(response.data);
         }
       } catch (error) {
-        console.log("consultingMemo memoTable GET에서 오류 발생", error);
+        console.error("consultingMemo memoTable GET에서 오류 발생", error);
         if (axios.isAxiosError(error)) {
           setError(error.response?.data);
         }
