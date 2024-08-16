@@ -31,6 +31,15 @@ const TermsMenu = () => {
         >
           개인정보처리방침
         </Link>
+        <Link
+          href="/paidServiceTerms"
+          className={clsx(
+            "font-semibold text-sm",
+            pathname === "/paidServiceTerms" ? "text-blue-500" : ""
+          )}
+        >
+          유료서비스 이용약관
+        </Link>
       </div>
     </>
   )
