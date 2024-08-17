@@ -33,7 +33,7 @@ export const getCount = async (
   }
 };
 
-// 유저의 구독상태 가져오기
+// 유저의 결제정보 가져오기
 export const userPayment = async (
   title: string,
   apiUrl: string,
@@ -75,4 +75,13 @@ export const getPost = async <T extends "상담노트" | "중개메모">(
       });
     }
   }
+};
+
+// 날짜 포맷 (며칠을 더해야 하는 날짜라면 미리 세팅해서 보낼 것)
+export const formatDate = (beforeDate: Date) => {
+  const year = beforeDate.getFullYear();
+  const month = String(beforeDate.getMonth() + 1).padStart(2, "0");
+  const date = String(beforeDate.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${date}`;
 };

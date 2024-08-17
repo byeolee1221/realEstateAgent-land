@@ -1,5 +1,6 @@
 import { db } from "@/app/firebase";
 import { authOptions } from "@/lib/auth";
+import { calculateRefundAmount } from "@/lib/subscriptionUtils";
 import axios from "axios";
 import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
@@ -20,15 +21,16 @@ export async function POST(req: Request) {
     }
 
     try {
+      const refundAmount = await calculateRefundAmount();
       const response = await axios.post(
         "https://open-api.kakaopay.com/online/v1/payment/cancel",
         {
           cid: "TC0ONETIME",
           tid,
-          cancel_amount: 10000,
+          cancel_amount: refundAmount?.amount,
           cancel_tax_free_amount: 0,
-          cancel_vat_amount: 1000,
-          cancel_available_amount: 10000,
+          cancel_vat_amount: refundAmount?.vat,
+          cancel_available_amount: refundAmount?.amount,
         },
         {
           headers: {
@@ -39,8 +41,6 @@ export async function POST(req: Request) {
       );
 
       if (response.status === 200) {
-        console.log("취소 완료");
-
         const paymentSnapshot = query(collection(db, "subscription"), where("userEmail", "==", session.user?.email));
         const querySnapshot = await getDocs(paymentSnapshot);
         let docId: string = "";

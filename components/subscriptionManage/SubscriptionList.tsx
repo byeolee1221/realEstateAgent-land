@@ -9,6 +9,7 @@ interface ISubscription {
   approvedAt: Date;
   userEmail: string;
   userName: string;
+  userImage: string;
   id: string;
 }
 
@@ -80,6 +81,7 @@ const SubscriptionList = () => {
                   <SubscriptionInfo
                     userEmail={data.userEmail}
                     userName={data.userName}
+                    userImage={data.userImage}
                     status={status}
                   />
                   <TableCell className="text-right">{status}</TableCell>

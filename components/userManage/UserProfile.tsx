@@ -66,7 +66,7 @@ const UserProfile = (props: IProps) => {
             <div className="flex flex-col items-center space-y-2">
               {props.image ? (
                 <>
-                  <img src={`${props.image}`} alt="유저프로필" className="w-14 h-14 rounded-full" />
+                  <img src={props.image} alt="유저프로필" className="w-14 h-14 rounded-full" />
                   <h1 className="font-semibold">{props.name}</h1>
                 </>
               ) : (

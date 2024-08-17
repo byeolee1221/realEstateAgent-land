@@ -9,53 +9,85 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { TableCell } from "../ui/table";
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { getPaymentDate, getTid } from "@/lib/subscriptionUtils";
+import { calculateRefundAmount, getPaymentDate, getTid } from "@/lib/subscriptionUtils";
+import { Skeleton } from "../ui/skeleton";
 
 interface IProps {
   userEmail: string;
   userName: string;
+  userImage: string;
   status: string;
 }
 
 interface IPayment {
   itemName: string;
   amount: number;
+  canceledAt: Date | null;
+  cancelAmount: number;
+  cancelVat: number;
+  cardInfo: string | undefined;
+  payMethod: string;
+}
+
+interface IAvailableCancel {
+  amount: number;
+  vat: number;
 }
 
 const SubscriptionInfo = (props: IProps) => {
   const [userPayment, setUserPayment] = useState<IPayment>();
   const [approvedAt, setApprovedAt] = useState<string | undefined>("");
+  const [availableCancel, setAvailableCancel] = useState<IAvailableCancel>();
   const [error, setError] = useState("");
 
   const userInfoArr = [
     { id: 1, title: "구독시작일", value: approvedAt },
     { id: 2, title: "구독아이템", value: userPayment?.itemName },
+    {
+      id: 3,
+      title: "구독취소일",
+      value: `${userPayment?.canceledAt ? userPayment.cancelVat : "해당없음"}`,
+    },
+    { id: 4, title: "구독취소금액", value: userPayment?.cancelAmount.toLocaleString("ko-KR") },
+    { id: 5, title: "구독취소부가세", value: userPayment?.cancelVat.toLocaleString("ko-KR") },
+    { id: 6, title: "취소가능금액", value: availableCancel?.amount.toLocaleString("ko-KR") },
+    { id: 7, title: "취소가능부가세", value: availableCancel?.vat.toLocaleString("ko-KR") },
+    {
+      id: 8,
+      title: "카드사 정보",
+      value: `${userPayment?.cardInfo ? userPayment?.cardInfo : "정보 없음"}`,
+    },
+    { id: 9, title: "결제방식", value: userPayment?.payMethod },
   ];
 
   // 유저 결제정보 가져오기
-  useEffect(() => {
-    const getUserPayment = async () => {
-      const tid = await getTid();
-      try {
-        const response = await axios.post("/api/kakaoPay/userPayment", {
-          tid,
-        });
+  const getUserPayment = useCallback(async () => {
+    const tid = await getTid();
+    try {
+      const response = await axios.post("/api/kakaoPay/userPayment", {
+        tid,
+      });
 
-        if (response.status === 200) {
-          setUserPayment(response.data);
-        }
-      } catch (error) {
-        console.error("subscriptionInfo getUserPayment에서 오류 발생", error);
-        if (axios.isAxiosError(error)) {
-          setError(error.response?.data);
-        }
+      if (response.status === 200) {
+        setUserPayment(response.data);
       }
-    };
 
-    getUserPayment();
+      // 취소가능금액 조회
+      const refundInfo = await calculateRefundAmount();
+      setAvailableCancel(refundInfo);
+    } catch (error) {
+      console.error("subscriptionInfo getUserPayment에서 오류 발생", error);
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data);
+      }
+    }
   }, []);
+
+  useEffect(() => {
+    getUserPayment();
+  }, [getUserPayment]);
 
   // 유저 결제일(포맷변경) 가져오기
   useEffect(() => {
@@ -84,24 +116,29 @@ const SubscriptionInfo = (props: IProps) => {
         {!error ? (
           <div className="flex flex-col space-y-6">
             <div className="flex flex-col items-center space-y-2">
-              <Image
-                src="/user.png"
-                alt="프로필"
-                width={50}
-                height={50}
-                className="bg-slate-300 rounded-full p-2"
-              />
+              {props.userImage ? (
+                <img src={props.userImage} alt="프로필" className="w-14 h-14 rounded-full" />
+              ) : (
+                <Image
+                  src="/user.png"
+                  alt="프로필"
+                  width={50}
+                  height={50}
+                  className="bg-slate-300 rounded-full p-2"
+                />
+              )}
               <h1 className="font-semibold">{props.userName}</h1>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col space-y-2">
               {userInfoArr.map((data) => (
-                <div
-                  key={data.id}
-                  className="flex flex-col space-y-1 bg-slate-100 rounded-md px-5 py-2 text-center shadow-sm"
-                >
-                  <h2 className="font-semibold">{data.title}</h2>
-                  <span className="text-sm">{data.value}</span>
-                </div>
+                <ul key={data.id} className="flex space-x-2 items-center list-disc pl-5">
+                  <li className="font-semibold">{data.title}</li>
+                  {data.value ? (
+                    <span className="text-sm">{data.value}</span>
+                  ) : (
+                    <Skeleton className="h-4 w-40" />
+                  )}
+                </ul>
               ))}
             </div>
           </div>
@@ -120,4 +157,4 @@ const SubscriptionInfo = (props: IProps) => {
   );
 };
 
-export default SubscriptionInfo;
+export default memo(SubscriptionInfo);

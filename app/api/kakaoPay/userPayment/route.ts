@@ -35,11 +35,19 @@ export async function POST(req: Request) {
       );
 
       if (response.status === 200) {
+        const data = response.data;
         const paymentObj = {
-          status: response.data.status,
-          itemName: response.data.item_name,
-          approvedAt: response.data.approved_at,
-          amount: response.data.amount.total,
+          status: data.status,
+          itemName: data.item_name,
+          canceledAt: data.canceled_at,
+          amount: data.amount.total,
+          cancelAmount: data.canceled_amount.total,
+          approvedAt: data.approved_at,
+          cancelVat: data.canceled_amount.vat,
+          cancelAvailableAmount: data.cancel_available_amount.total,
+          cancelAvailableVat: data.cancel_available_amount.vat,
+          cardInfo: data.selected_card_info?.card_corp_name,
+          payMethod: data.payment_method_type
         };
         // console.log(paymentObj);
         return NextResponse.json(paymentObj, { status: 200 });

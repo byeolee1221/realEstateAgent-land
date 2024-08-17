@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
     const body = await req.json();
     const { sid } = body;
-    console.log(sid);
+    // console.log(sid);
 
     if (!session) {
       return new NextResponse("로그인이 필요한 서비스입니다.", { status: 401 });
