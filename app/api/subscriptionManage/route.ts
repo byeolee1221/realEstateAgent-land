@@ -4,6 +4,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
+// 전체 유저의 구독정보
 export async function GET(req: Request) {
   try {
     const session = await getServerSession(authOptions);

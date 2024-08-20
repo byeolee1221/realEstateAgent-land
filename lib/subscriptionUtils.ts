@@ -173,10 +173,16 @@ export async function calculateRefundAmount() {
 // 2회차 이상 업데이트된 구독날짜 가져오기
 export async function getUpdateSubscription() {
   try {
-    const tid: string | undefined = await getTid();
+    const sid: string | undefined = await getSid();
 
+    const getDate = await axios.post("/api/subscriptionManage/updateUser", {
+      sid
+    });
+
+    const updateApprovedAt = getDate.data;
     
+    return updateApprovedAt;
   } catch (error) {
-    
+    console.error("업데이트 구독날짜 전달 유틸리티 함수에서 오류 발생", error);
   }
 }

@@ -2,6 +2,8 @@
 
 import PlanCancel from "@/components/subscription/PlanCancel";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getSid, getTid } from "@/lib/subscriptionUtils";
+import { formatDate } from "@/lib/utils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -23,8 +25,8 @@ const MySubscription = () => {
 
   const [error, setError] = useState("");
   const [statusMsg, setStatusMsg] = useState("");
-  const [tid, setTid] = useState("");
-  const [sid, setSid] = useState("");
+  const [tid, setTid] = useState<string | undefined>("");
+  const [sid, setSid] = useState<string | undefined>("");
   const [payment, setPayment] = useState<IPayment>();
   const [paymentDate, setPaymentDate] = useState<IPaymentDate>();
   const [isLoading, setLoading] = useState(false);
@@ -33,9 +35,7 @@ const MySubscription = () => {
 
   // 현재시각 형식 맞추는 코드
   const currentDate = new Date();
-  const formattedCurrentDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-    .toString()
-    .padStart(2, "0")}-${currentDate.getDate().toString().padStart(2, "0")}`;
+  const formattedCurrentDate = formatDate(currentDate);
 
   // 조건부 코드
   useEffect(() => {
@@ -44,29 +44,30 @@ const MySubscription = () => {
       return;
     }
 
-    if (payment?.status === "SUCCESS_PAYMENT") {
+    if (payment.status === "SUCCESS_PAYMENT") {
       setStatusMsg("현재 스탠다드플랜을 구독중입니다.");
-    } else if (payment?.status === "FAIL_PAYMENT" || payment?.status === "CANCEL_PAYMENT") {
+    } else if (payment.status === "FAIL_PAYMENT" || payment.status === "CANCEL_PAYMENT") {
       setStatusMsg("구독중인 상품이 없습니다.");
     }
   }, [payment]);
 
   // DB에서 tid, sid 값 가져오기
   useEffect(() => {
-    const getTid = async () => {
+    const getData = async () => {
       try {
-        const response = await axios.get("/api/kakaoPay/approve");
+        const [tid, sid] = await Promise.all([
+          getTid(),
+          getSid()
+        ]);
 
-        if (response.status === 200) {
-          setTid(response.data.tid);
-          setSid(response.data.sid);
-        }
+        setTid(tid);
+        setSid(sid);
       } catch (error) {
         console.error("mySubscription 구독정보 GET에서 오류 발생", error);
       }
     };
 
-    getTid();
+    getData();
   }, []);
 
   // 구독 결제일 정보 가져오기
@@ -152,7 +153,7 @@ const MySubscription = () => {
             {session ? `${session.user?.name}님 구독관리` : "내 구독관리"}
           </h2>
           <span className="text-sm">
-            {payment?.itemName === "중개랜드 스탠다드구독" && <p>{statusMsg}</p>}
+            {statusMsg}
           </span>
         </div>
       </div>

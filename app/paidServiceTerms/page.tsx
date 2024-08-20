@@ -248,10 +248,9 @@ const PaidServiceTerms = () => {
             </p>
             <div className="flex flex-col space-y-2 indent-2 list-decimal">
               <li>
-                해당 유료서비스가 정기결제형 유료서비스인 경우 해지일로부터 이용일수에 해당하는
-                금액과 총 남은 유료서비스 이용으로부터 얻은 이익 및 환불수수료(10% 또는 1,000원 중
-                큰 금액)를 제외한 금액 환불. (단, 유료서비스 이용 개시일로부터 7일 이내에 해지를
-                요구하는 경우 이용일수에 해당하는 금액만을 제외하고 환불)
+                해당 유료서비스가 정기결제형 유료서비스인 경우 결제 후 이용일수가 없을 시, 결제 후
+                7일 이내 계약해제, 해지를 하면 전액환불되며, 결제 후 7일 이후 계약해제, 해지를 하면
+                결제금액의 90%만 환불이 가능합니다.
               </li>
             </div>
             <p>
@@ -300,9 +299,7 @@ const PaidServiceTerms = () => {
           </div>
           <h2 className="text-lg font-bold">부칙</h2>
           <div className="text-sm flex flex-col space-y-2">
-            <p>
-              본 약관은 서비스 개시일부터 적용됩니다.
-            </p>
+            <p>본 약관은 서비스 개시일부터 적용됩니다.</p>
           </div>
         </div>
       </div>

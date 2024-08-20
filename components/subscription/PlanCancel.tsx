@@ -13,7 +13,7 @@ import {
 import { useRouter } from "next/navigation";
 
 interface IProps {
-  tid: string;
+  tid: string | undefined;
 }
 
 const PlanCancel = (props: IProps) => {

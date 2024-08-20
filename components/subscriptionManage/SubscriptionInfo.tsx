@@ -11,7 +11,7 @@ import {
 import { TableCell } from "../ui/table";
 import { memo, useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { calculateRefundAmount, getPaymentDate, getTid } from "@/lib/subscriptionUtils";
+import { calculateRefundAmount, getPaymentDate, getTid, getUpdateSubscription } from "@/lib/subscriptionUtils";
 import { Skeleton } from "../ui/skeleton";
 
 interface IProps {
@@ -39,27 +39,29 @@ interface IAvailableCancel {
 const SubscriptionInfo = (props: IProps) => {
   const [userPayment, setUserPayment] = useState<IPayment>();
   const [approvedAt, setApprovedAt] = useState<string | undefined>("");
+  const [updateApprovedAt, setUpdateApprovedAt] = useState<string | undefined>("");
   const [availableCancel, setAvailableCancel] = useState<IAvailableCancel>();
   const [error, setError] = useState("");
 
   const userInfoArr = [
-    { id: 1, title: "구독시작일", value: approvedAt },
-    { id: 2, title: "구독아이템", value: userPayment?.itemName },
+    { id: 1, title: "구독 시작일", value: approvedAt },
+    { id: 2, title: "구독 업데이트일", value: updateApprovedAt },
+    { id: 3, title: "구독아이템", value: userPayment?.itemName },
     {
-      id: 3,
+      id: 4,
       title: "구독취소일",
       value: `${userPayment?.canceledAt ? userPayment.cancelVat : "해당없음"}`,
     },
-    { id: 4, title: "구독취소금액", value: userPayment?.cancelAmount.toLocaleString("ko-KR") },
-    { id: 5, title: "구독취소부가세", value: userPayment?.cancelVat.toLocaleString("ko-KR") },
-    { id: 6, title: "취소가능금액", value: availableCancel?.amount.toLocaleString("ko-KR") },
-    { id: 7, title: "취소가능부가세", value: availableCancel?.vat.toLocaleString("ko-KR") },
+    { id: 5, title: "구독 취소금액", value: userPayment?.cancelAmount.toLocaleString("ko-KR") },
+    { id: 6, title: "구독 취소부가세", value: userPayment?.cancelVat.toLocaleString("ko-KR") },
+    { id: 7, title: "취소가능금액", value: availableCancel?.amount.toLocaleString("ko-KR") },
+    { id: 8, title: "취소가능부가세", value: availableCancel?.vat.toLocaleString("ko-KR") },
     {
-      id: 8,
+      id: 9,
       title: "카드사 정보",
       value: `${userPayment?.cardInfo ? userPayment?.cardInfo : "정보 없음"}`,
     },
-    { id: 9, title: "결제방식", value: userPayment?.payMethod },
+    { id: 10, title: "결제방식", value: userPayment?.payMethod },
   ];
 
   // 유저 결제정보 가져오기
@@ -93,14 +95,18 @@ const SubscriptionInfo = (props: IProps) => {
   useEffect(() => {
     const getApprovedDate = async () => {
       try {
-        const approvedDate = await getPaymentDate();
+        const [approvedDate, updateDate] = await Promise.all([
+          getPaymentDate(),
+          getUpdateSubscription()
+        ])
 
         setApprovedAt(approvedDate?.formattedApprovedDate);
+        setUpdateApprovedAt(updateDate);
       } catch (error) {
         console.error("subscriptionInfo getApprovedDate에서 오류 발생", error);
       }
     };
-
+    
     getApprovedDate();
   }, []);
 
