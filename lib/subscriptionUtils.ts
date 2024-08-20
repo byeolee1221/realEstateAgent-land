@@ -54,16 +54,15 @@ export async function getPaymentDate() {
     }
 
     const approvedDate = new Date(paymentApproveDate);
+
     // 결제일 포맷 변경
-    const formattedApprovedDate = `${approvedDate.getFullYear()}-${(approvedDate.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}-${approvedDate.getDate().toString().padStart(2, "0")}`;
+    const formattedApprovedDate = formatDate(approvedDate);
 
     // 다음 결제일
     const nextPaymentDate = `${approvedDate.getFullYear()}-${(approvedDate.getMonth() + 2)
       .toString()
       .padStart(2, "0")}-${approvedDate.getDate().toString().padStart(2, "0")}`;
-
+      
     return { formattedApprovedDate, nextPaymentDate };
   } catch (error) {
     console.error("다음 결제일 받아오는 유틸리티 함수에서 오류 발생", error);
@@ -171,3 +170,13 @@ export async function calculateRefundAmount() {
   }
 }
 
+// 2회차 이상 업데이트된 구독날짜 가져오기
+export async function getUpdateSubscription() {
+  try {
+    const tid: string | undefined = await getTid();
+
+    
+  } catch (error) {
+    
+  }
+}
