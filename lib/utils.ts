@@ -78,10 +78,14 @@ export const getPost = async <T extends "상담노트" | "중개메모">(
 };
 
 // 날짜 포맷 (며칠을 더해야 하는 날짜라면 미리 세팅해서 보낼 것)
-export const formatDate = (beforeDate: Date) => {
+export const formatDate = (beforeDate: Date, addMonths: number = 0) => {
   const year = beforeDate.getFullYear();
-  const month = String(beforeDate.getMonth() + 1).padStart(2, "0");
+  const month = beforeDate.getMonth() + 1 + addMonths;  // 현재 월에 추가할 개월 수를 더함
+  const adjustedYear = month > 12 ? year + 1 : year;  // 12월을 넘어가면 연도 증가
+  const adjustedMonth = month > 12 ? month - 12 : month;  // 12월을 넘어가면 1월로 조정
+
+  const formattedMonth = String(adjustedMonth).padStart(2, "0");
   const date = String(beforeDate.getDate()).padStart(2, "0");
 
-  return `${year}-${month}-${date}`;
+  return `${adjustedYear}-${formattedMonth}-${date}`;
 };

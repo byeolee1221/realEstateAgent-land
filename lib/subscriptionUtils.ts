@@ -59,9 +59,7 @@ export async function getPaymentDate() {
     const formattedApprovedDate = formatDate(approvedDate);
 
     // 다음 결제일
-    const nextPaymentDate = `${approvedDate.getFullYear()}-${(approvedDate.getMonth() + 2)
-      .toString()
-      .padStart(2, "0")}-${approvedDate.getDate().toString().padStart(2, "0")}`;
+    const nextPaymentDate = formatDate(approvedDate, 2);
       
     return { formattedApprovedDate, nextPaymentDate };
   } catch (error) {
@@ -95,10 +93,15 @@ export async function getSubscriptionStatus() {
   }
 }
 
+export interface RefundAmount {
+  amount: number;
+  vat: number;
+}
+
 // 구독 후 서비스 이용하지 않은 상태에서의 환불가능금액 계산
-export async function calculateRefundAmount() {
+export async function calculateRefundAmount(): Promise<RefundAmount | undefined> {
   try {
-    let refundAmount = {
+    const refundAmount: RefundAmount = {
       amount: 0,
       vat: 0
     };
@@ -141,17 +144,15 @@ export async function calculateRefundAmount() {
     
     // 구독 당일 포함하여 7일 후 날짜
     const approvedDate = new Date(cancelAvailableInfo.approvedAt);
-    approvedDate.setDate(approvedDate.getDate() + 6);
 
-    const availableRefundDate = formatDate(approvedDate);
+    const availableRefundDate = formatDate(approvedDate, 7);
 
     // 현재 날짜
     const currentDate = formatDate(new Date());
 
     if (count.note > 1 || count.memo > 5) {
       // 구독 후 서비스 이용하여 환불불가
-      refundAmount.amount = 0;
-      refundAmount.vat = 0;
+      return refundAmount;
     } else {
       if (currentDate <= availableRefundDate) {
         // 7일 이내 전액 환불
@@ -167,6 +168,7 @@ export async function calculateRefundAmount() {
     return refundAmount;
   } catch (error) {
     console.error("환불가능금액 계산 유틸리티 함수에서 오류 발생", error);
+    return undefined;
   }
 }
 
