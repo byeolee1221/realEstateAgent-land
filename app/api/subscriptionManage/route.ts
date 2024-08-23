@@ -1,5 +1,6 @@
 import { db } from "@/app/firebase";
 import { authOptions } from "@/lib/auth";
+import { formatDate } from "@/lib/utils";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
@@ -38,14 +39,9 @@ export async function GET(req: Request) {
       subscriptionData.id = doc.id;
 
       const approvedAt = new Date(subscriptionData.approved_at);
-      const formatDate = (date: Date) => {
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const day = date.getDate().toString().padStart(2, "0");
-        return `${year}-${month}-${day}`;
-      }
-
-      subscriptionData.approvedAt = formatDate(approvedAt);
+      const formatApprovedAt = formatDate(approvedAt);
+      
+      subscriptionData.approvedAt = formatApprovedAt;
       matchData.push(subscriptionData);
     });
 

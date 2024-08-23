@@ -1,5 +1,6 @@
 import { db } from "@/app/firebase";
 import { authOptions } from "@/lib/auth";
+import { formatDate } from "@/lib/utils";
 import { collection, deleteDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
@@ -36,14 +37,9 @@ export async function GET(req: Request) {
       contactData.id = docSnap.id;
 
       const createdAt = new Date(contactData.createdAt);
-      const formatDate = (date: Date) => {
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const day = date.getDate().toString().padStart(2, "0");
-        return `${year}-${month}-${day}`;
-      }
-
-      contactData.createdAt = formatDate(createdAt);
+      const formatCreatedAt = formatDate(createdAt);
+      
+      contactData.createdAt = formatCreatedAt;
       return NextResponse.json(contactData, { status: 200 });
     } else {
       return new NextResponse("해당 문의가 존재하지 않습니다.", { status: 404 });

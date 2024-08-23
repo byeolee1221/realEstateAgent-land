@@ -1,5 +1,6 @@
 import { db } from "@/app/firebase";
 import { authOptions } from "@/lib/auth";
+import { formatDate } from "@/lib/utils";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
@@ -66,14 +67,9 @@ export async function GET(req: Request) {
       opinionData.id = doc.id;
 
       const createdAt = new Date(opinionData.createdAt);
-      const formatDate = (date: Date) => {
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const day = date.getDate().toString().padStart(2, "0");
-        return `${year}-${month}-${day}`;
-      }
+      const formatCreatedAt = formatDate(createdAt);
 
-      opinionData.createdAt = formatDate(createdAt);
+      opinionData.createdAt = formatCreatedAt;
       matchData.push(opinionData);
     });
 
