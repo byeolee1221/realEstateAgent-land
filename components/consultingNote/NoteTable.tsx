@@ -6,6 +6,7 @@ import axios from "axios";
 import SignInBtn from "../SignInBtn";
 import SubscribeAlert from "./SubscribeAlert";
 import { getPaymentDate, getSubscriptionStatus } from "@/lib/subscriptionUtils";
+import { formatDate } from "@/lib/utils";
 
 interface INoteList {
   customerName: string;
@@ -45,9 +46,7 @@ const NoteTable = (props: IProps) => {
   // 다음 결제일과 현재 날짜가 같아지면 유료서비스 종료
   useEffect(() => {
     const currentDate = new Date();
-    const formattedCurrentDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}-${currentDate.getDate().toString().padStart(2, "0")}`;
+    const formattedCurrentDate = formatDate(currentDate);
 
     if (formattedCurrentDate === nextPayment) {
       setEndBenefit(true);
