@@ -74,7 +74,7 @@ const NoteTable = (props: IProps) => {
 
       fetchSubscriptionData();
     }
-  }, []);
+  }, [session]);
 
   // 무료사용횟수
   useEffect(() => {
@@ -105,7 +105,7 @@ const NoteTable = (props: IProps) => {
     if (session) {
       getNoteList();
     }
-  }, []);
+  }, [session]);
 
   // 무료사용횟수 메세지 추가
   useEffect(() => {
