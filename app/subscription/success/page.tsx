@@ -22,14 +22,15 @@ const SubscriptionSuccess = () => {
         });
 
         if (response.status === 200) {
-          console.log("정기결제 승인 완료");
-
           router.push("/subscription/success/approve");
         }
       } catch (error) {
-        console.error("approve post에서 오류 발생", error);
+        console.error("approve post에서 API 오류 발생", error);
         if (axios.isAxiosError(error)) {
           alert(error.response?.data);
+        } else {
+          console.error("approve post에서 서버 오류 발생", error);
+          alert("서버에서 오류가 발생하여 결제가 되지 않았습니다. 잠시 후 다시 시도해주세요.");
         }
       }
     }

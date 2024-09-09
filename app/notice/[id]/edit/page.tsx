@@ -27,7 +27,7 @@ const NoticeEdit = () => {
           setNotice(response.data);
         }
       } catch (error) {
-        console.error("notice noticeEdit GET에서 오류 발생", error);
+        console.error("notice noticeEdit GET에서 API 오류 발생", error);
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 401 || error.response?.status === 403) {
             router.push("/");
@@ -35,6 +35,11 @@ const NoticeEdit = () => {
   
           return toast("오류 발생", {
             description: error.response?.data,
+          });
+        } else {
+          console.error("notice noticeEdit GET에서 서버 오류 발생", error);
+          return toast("서버 오류 발생", {
+            description: "서버에서 오류가 발생하였으니 잠시 후 새로고침 해주세요.",
           });
         }
       }
@@ -74,10 +79,15 @@ const NoticeEdit = () => {
         router.push(`/notice/${response.data}`);
       }
     } catch (error) {
-      console.error("notice noticeEdit POST에서 오류 발생", error);
+      console.error("notice noticeEdit POST에서 API 오류 발생", error);
       if (axios.isAxiosError(error)) {
         return toast("오류 발생", {
           description: error.response?.data,
+        });
+      } else {
+        console.error("notice noticeEdit POST에서 서버 오류 발생", error);
+        return toast("서버 오류 발생", {
+          description: "서버에서 오류가 발생하여 공지사항을 올릴 수 없습니다.",
         });
       }
     }

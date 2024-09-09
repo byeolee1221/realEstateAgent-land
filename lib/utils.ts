@@ -24,12 +24,13 @@ export const getCount = async (
       setFreeUse(response.data);
     }
   } catch (error) {
-    console.error(`${title} getCount에서 오류 발생`, error);
+    console.error(`${title} getCount에서 API 오류 발생`, error);
     if (axios.isAxiosError(error)) {
       return toast("오류 발생", {
         description: error.response?.data,
       });
     } else {
+      console.error(`${title} getCount에서 서버 오류 발생`, error);
       return toast("서버 오류 발생", {
         description: "서버에서 오류가 발생하였으니 잠시 후 새로고침 해주세요.",
       });
@@ -53,12 +54,13 @@ export const userPayment = async (
       setSubscribe(response.data);
     }
   } catch (error) {
-    console.error(`${title} userPayment POST에서 오류 발생`, error);
+    console.error(`${title} userPayment POST에서 API 오류 발생`, error);
     if (axios.isAxiosError(error)) {
       return toast("오류 발생", {
         description: error.response?.data,
       });
     } else {
+      console.error(`${title} userPayment POST에서 서버 오류 발생`, error);
       return toast("서버 오류 발생", {
         description: "서버에서 오류가 발생하였으니 잠시 후 새로고침 해주세요.",
       });
@@ -81,12 +83,13 @@ export const getPost = async <T extends "상담노트" | "중개메모">(
       setPost(response.data);
     }
   } catch (error) {
-    console.error(`${title} getPost GET에서 오류 발생`, error);
+    console.error(`${title} getPost GET에서 API 오류 발생`, error);
     if (axios.isAxiosError(error)) {
       return toast("오류 발생", {
         description: error.response?.data,
       });
     } else {
+      console.error(`${title} getPost GET에서 서버 오류 발생`, error);
       return toast("서버 오류 발생", {
         description: "서버에서 오류가 발생하였으니 잠시 후 새로고침 해주세요.",
       });

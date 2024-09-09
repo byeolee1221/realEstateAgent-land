@@ -1,6 +1,5 @@
 "use client"
 
-import NavBar from "@/components/navBar/NavBar";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useForm } from "react-hook-form";

@@ -100,9 +100,12 @@ const MySubscription = () => {
           setPayment(response.data);
         }
       } catch (error) {
-        console.error("MySubscription POST에서 오류 발생", error);
+        console.error("MySubscription POST에서 API 오류 발생", error);
         if (axios.isAxiosError(error)) {
           setError(error.response?.data);
+        } else {
+          console.error("MySubscription POST에서 서버 오류 발생", error);
+          setError("서버에서 오류가 발생하였으니 잠시 후 새로고침 해주세요.");
         }
       } finally {
         setLoading(false);
