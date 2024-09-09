@@ -13,6 +13,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
+import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 
 const SignOut = () => {
   const onSignOut = () => {
@@ -24,20 +25,7 @@ const SignOut = () => {
       <AlertDialogTrigger asChild>
         <button className="w-full">
           <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6 mr-2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
-              />
-            </svg>
+            <ArrowLeftStartOnRectangleIcon className="w-6 h-6 mr-2" />
             <span>로그아웃</span>
           </DropdownMenuItem>
         </button>
