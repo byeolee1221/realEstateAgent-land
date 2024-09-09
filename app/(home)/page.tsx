@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <NavBar>
       <div className="flex flex-col space-y-6">
-        <div className="flex flex-col space-y-4 bg-[url('/home_contract.jpg')] bg-center bg-cover pt-20 pb-10">
+        <div className="flex flex-col space-y-4 bg-[url('/home_contract.webp')] bg-center bg-cover pt-20 pb-10">
           <div className="flex flex-col space-y-2 px-4">
             <h1 className="text-4xl font-semibold">
               <span className="text-[#2ec4b6]">효율적인 </span>

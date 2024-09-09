@@ -34,10 +34,15 @@ const NoticeDelete = (props: IProps) => {
         router.push("/notice");
       }
     } catch (error) {
-      console.error("notice noticeDelete DELETE에서 오류 발생", error);
+      console.error("notice noticeDelete DELETE에서 API 오류 발생", error);
       if (axios.isAxiosError(error)) {
         return toast("오류 발생", {
           description: error.response?.data,
+        });
+      } else {
+        console.error("notice noticeDelete DELETE에서 서버 오류 발생", error);
+        return toast("서버 오류 발생", {
+          description: "서버에서 오류가 발생하여 공지사항을 삭제할 수 없습니다.",
         });
       }
     }
