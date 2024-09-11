@@ -29,9 +29,12 @@ const SubscriptionList = () => {
           setSubscription(response.data);
         }
       } catch (error) {
-        console.error("subscriptionList 클라이언트에서 오류 발생", error);
+        console.error("subscriptionList 클라이언트에서 API 오류 발생", error);
         if (axios.isAxiosError(error)) {
           setError(error.response?.data);
+        } else {
+          console.error("subscriptionList 클라이언트에서 서버 오류 발생", error);
+          setError("서버에서 오류가 발생하여 구독정보를 가져오지 못했습니다. 잠시 후 다시 시도해주세요.");
         }
       }
     };

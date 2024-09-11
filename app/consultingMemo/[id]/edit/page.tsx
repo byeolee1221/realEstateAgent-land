@@ -169,7 +169,7 @@ const MemoEdit = () => {
       } else {
         console.error("consultingMemo memoEdit POST에서 서버 오류 발생", error);
         return toast("서버 오류 발생", {
-          description: "서버에서 오류가 발생하였으니 잠시 후 새로고침 해주세요.",
+          description: "서버에서 오류가 발생하여 수정되지 않았습니다. 잠시 후 다시 시도해주세요.",
         });
       }
     }

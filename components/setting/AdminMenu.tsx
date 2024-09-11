@@ -24,7 +24,13 @@ const AdminMenu = () => {
             setAdmin(response.data);
           }
         } catch (error) {
-          console.error("setting GET에서 오류 발생", error);
+          if (axios.isAxiosError(error)) {
+            console.error("setting GET에서 API 오류 발생", error);
+            alert("API 오류가 발생하였으니 확인해주세요.");
+          } else {
+            console.error("setting GET에서 서버 오류 발생", error);
+            alert("서버 오류가 발생하였으니 확인해주세요.");
+          }
         }
       };
 
@@ -32,32 +38,26 @@ const AdminMenu = () => {
     }
   }, []);
 
+  const menuArr = [
+    { href: "/userManage", icon: UsersIcon, title: "가입한 회원관리" },
+    { href: "/notice/write", icon: InformationCircleIcon, title: "공지사항 등록" },
+    { href: "/adminContact", icon: ChatBubbleLeftEllipsisIcon, title: "문의사항 확인" },
+  ];
+
   return (
     <>
       {isAdmin ? (
         <div className="bg-slate-100 flex flex-col rounded-md px-4 py-5 space-y-3 text-sm shadow-sm">
           <h2 className="font-semibold text-sm">관리자 메뉴</h2>
-          <div className="flex items-center justify-between border-b pb-2 w-full">
-            <Link href="/userManage" className="flex items-center space-x-2 w-full">
-              <UsersIcon className="w-5 h-5" />
-              <span>가입한 회원관리</span>
-            </Link>
-            <ChevronRightIcon className="w-6 h-6" />
-          </div>
-          <div className="flex items-center justify-between border-b pb-2 w-full">
-            <Link href="/notice/write" className="flex items-center space-x-2 w-full">
-              <InformationCircleIcon className="w-5 h-5" />
-              <span>공지사항 등록</span>
-            </Link>
-            <ChevronRightIcon className="w-6 h-6" />
-          </div>
-          <div className="flex items-center justify-between border-b pb-2 w-full">
-            <Link href="/adminContact" className="flex items-center space-x-2 w-full">
-              <ChatBubbleLeftEllipsisIcon className="w-5 h-5" />
-              <span>문의사항 확인</span>
-            </Link>
-            <ChevronRightIcon className="w-6 h-6" />
-          </div>
+          {menuArr.map((menu, i) => (
+            <div key={i} className="flex items-center justify-between border-b pb-2 w-full">
+              <Link href={menu.href} className="flex items-center space-x-2 w-full">
+                <menu.icon className="w-5 h-5" />
+                <span>{menu.title}</span>
+              </Link>
+              <ChevronRightIcon className="w-6 h-6" />
+            </div>
+          ))}
           <div className="flex items-center justify-between pb-2 w-full">
             <Link href="/subscriptionManage" className="flex items-center space-x-2 w-full">
               <CreditCardIcon className="w-5 h-5" />

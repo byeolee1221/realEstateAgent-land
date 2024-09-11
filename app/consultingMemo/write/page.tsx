@@ -23,9 +23,7 @@ const MemoWrite = () => {
     });
     window.kakao.maps.event.addListener(marker, "click", function () {
       infoWindow.setContent(
-        '<div style="padding:5px; font-size:12px;">' +
-          place.place_name +
-          "</div>"
+        '<div style="padding:5px; font-size:12px;">' + place.place_name + "</div>"
       );
       infoWindow.open(map, marker);
     });
@@ -50,16 +48,10 @@ const MemoWrite = () => {
         setMap(createdMap);
 
         const mapTypeControl = new window.kakao.maps.MapTypeControl();
-        createdMap.addControl(
-          mapTypeControl,
-          window.kakao.maps.ControlPosition.TOPRIGHT
-        );
+        createdMap.addControl(mapTypeControl, window.kakao.maps.ControlPosition.TOPRIGHT);
 
         const zoomControl = new window.kakao.maps.ZoomControl();
-        createdMap.addControl(
-          zoomControl,
-          window.kakao.maps.ControlPosition.RIGHT
-        );
+        createdMap.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
 
         function setDraggable(draggable: any) {
           createdMap.setDraggable(draggable);
@@ -103,10 +95,7 @@ const MemoWrite = () => {
       ps.keywordSearch(form.watch("location"), (result: any, status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const firstResult = result[0];
-          const moveLatLng = new window.kakao.maps.LatLng(
-            firstResult.y,
-            firstResult.x
-          );
+          const moveLatLng = new window.kakao.maps.LatLng(firstResult.y, firstResult.x);
           map.setCenter(moveLatLng);
           displayMarker(firstResult);
         } else {
@@ -131,10 +120,15 @@ const MemoWrite = () => {
         router.push(`/consultingMemo/${response.data}`);
       }
     } catch (error) {
-      console.error("consultingMemo write POST에서 오류 발생", error);
+      console.error("consultingMemo write POST에서 API 오류 발생", error);
       if (axios.isAxiosError(error)) {
         return toast("오류 발생", {
           description: error.response?.data,
+        });
+      } else {
+        console.error("consultingMemo write POST에서 서버 오류 발생", error);
+        return toast("오류 발생", {
+          description: "서버에서 오류가 발생하여 등록되지 않았습니다. 잠시 후 다시 시도해주세요.",
         });
       }
     }
@@ -150,10 +144,7 @@ const MemoWrite = () => {
         <Image src="/write.png" alt="게시" width={30} height={30} />
         <h2 className="text-lg font-semibold">메모 작성하기</h2>
       </div>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col space-y-3 text-sm"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-3 text-sm">
         <div className="flex flex-col space-y-1">
           <label htmlFor="title" className="text-xs text-gray-500">
             제목
@@ -189,10 +180,7 @@ const MemoWrite = () => {
               placeholder="장소 또는 주소 검색"
               className="focus:outline-none focus:border-green-500 bg-transparent w-[80%]"
             />
-            <button
-              onClick={onSearch}
-              className="border p-1 shadow-sm rounded-sm"
-            >
+            <button onClick={onSearch} className="border p-1 shadow-sm rounded-sm">
               검색
             </button>
           </div>
