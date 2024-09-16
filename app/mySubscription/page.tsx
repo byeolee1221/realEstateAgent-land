@@ -139,7 +139,7 @@ const MySubscription = () => {
         regularPayment();
       }
     }
-  }, [sid]);
+  }, [sid, formattedCurrentDate]);
 
   const dataArr = [
     { id: 1, title: "구독일", data: lastPaymentDate },
