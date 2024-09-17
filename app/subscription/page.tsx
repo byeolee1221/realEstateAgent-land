@@ -2,15 +2,15 @@
 
 import PaymentApprove from "@/components/subscription/PaymentApprove";
 import PaymentInfo from "@/components/subscription/PaymentInfo";
+import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getApproveState } from "@/lib/selectorState";
+import { useAtomValue } from "jotai";
+import { approveAtom } from "@/lib/atomState";
 import { getTid } from "@/lib/subscriptionUtils";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
 import { toast } from "sonner";
 
 interface ISubscribe {
@@ -20,7 +20,7 @@ interface ISubscribe {
 
 const Subscription = () => {
   const { data: session } = useSession();
-  const approve = useRecoilValue(getApproveState);
+  const approve = useAtomValue(approveAtom);
   const [subscribe, setSubscribe] = useState<ISubscribe>();
   const [isLoading, setLoading] = useState(false);
 
@@ -89,7 +89,7 @@ const Subscription = () => {
       setLoading(false);
     }
   }, [subscribe, session]);
-
+  
   return (
     <div className="px-4 flex flex-col space-y-6">
       <div className="flex items-center space-x-2 bg-slate-100 w-fit p-2 rounded-md shadow-sm px-5">

@@ -13,7 +13,11 @@ import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { signIn } from "next-auth/react";
 import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/outline";
 
-const SignIn = () => {
+interface IProps {
+  isDesktop?: boolean;
+}
+
+const SignIn = ({ isDesktop }: IProps) => {
   const onSignIn = () => {
     signIn("google");
   };
@@ -21,10 +25,14 @@ const SignIn = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <ArrowLeftEndOnRectangleIcon className="w-6 h-6 mr-2" />
-          <span>로그인</span>
-        </DropdownMenuItem>
+        {!isDesktop ? (
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <ArrowLeftEndOnRectangleIcon className="w-6 h-6 mr-2" />
+            <span>로그인</span>
+          </DropdownMenuItem>
+        ) : (
+          <button className="text-lg font-bold">로그인</button>
+        )}
       </DialogTrigger>
       <DialogContent className="w-[90%] rounded-xl">
         <DialogHeader>

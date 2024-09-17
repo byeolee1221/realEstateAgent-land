@@ -1,6 +1,5 @@
-import { atom } from "recoil";
+import { atom } from "jotai";
 
-export const approveState = atom({
-  key: "approveState",
-  default: false
-});
+export const approveAtom = atom(false);
+
+export const widthAtom = atom(0);

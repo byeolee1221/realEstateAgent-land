@@ -17,7 +17,7 @@ const MemoDescription = () => {
           더 알아보기
         </button>
       </DialogTrigger>
-      <DialogContent className="w-[90%] rounded-lg h-3/5 overflow-auto">
+      <DialogContent className="w-[90%] rounded-lg overflow-auto">
         <DialogHeader className="text-start border-b pb-2">
           <DialogTitle>중개메모 설명</DialogTitle>
           <DialogDescription>중개메모에서 제공하는 기능은 다음과 같습니다.</DialogDescription>

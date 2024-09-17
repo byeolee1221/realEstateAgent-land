@@ -21,7 +21,7 @@ const Merit = () => {
   ];
   
   return (
-    <div className="grid grid-cols-1 gap-5 px-4">
+    <div className="grid grid-cols-1 gap-5 px-4 lg:grid-cols-3 lg:px-0">
       {meritArr.map((item) => (
         <div key={item.id} className="flex flex-col space-y-5 rounded-xl bg-slate-200 px-4 py-7 shadow-sm">
           <h2 className="text-2xl font-semibold">{item.title}</h2>

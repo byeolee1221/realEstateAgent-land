@@ -2,13 +2,18 @@
 
 import Image from "next/image";
 import DescriptionContact from "./DescriptionContact";
+import { useAtomValue } from "jotai";
+import { widthAtom } from "@/lib/atomState";
 
 const DescriptionThree = () => {
+  const width = useAtomValue(widthAtom);
+  const isDesktop = width >= 1280;
+
   return (
-    <div className="flex flex-col space-y-5 rounded-xl shadow-sm bg-yellow-100 pl-4 pr-10 pb-5">
+    <div className="flex flex-col space-y-5 rounded-xl shadow-sm bg-yellow-100 pl-4 pr-10 pb-5 lg:px-20">
       <div className="flex items-center space-x-2 pt-5">
-        <Image src="/icon.png" alt="그외" width={30} height={30} />
-        <h2 className="text-xl font-semibold">그 외에도..</h2>
+        <Image src="/icon.png" alt="그외" width={!isDesktop ? 30 : 40} height={!isDesktop ? 30 : 40} />
+        <h2 className="text-xl font-semibold lg:text-4xl">그 외에도..</h2>
       </div>
       <p>
         공인중개사의 업무편의성 증대를 위해 여러 기능을 추가할 예정입니다.

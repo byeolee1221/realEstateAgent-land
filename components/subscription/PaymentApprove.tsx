@@ -1,10 +1,10 @@
 
-import { useRecoilState } from "recoil";
+import { useAtom } from "jotai";
+import { approveAtom } from "@/lib/atomState";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
-import { approveState } from "@/lib/atomState";
 
 const PaymentApprove = () => {
-  const [approve, setApprove] = useRecoilState(approveState);
+  const [approve, setApprove] = useAtom(approveAtom);
 
   const onApprove = () => {
     setApprove((prevState) => !prevState);

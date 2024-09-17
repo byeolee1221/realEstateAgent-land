@@ -22,7 +22,7 @@ const TopMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button>
+        <button className="lg:hidden">
           <Bars2Icon className="w-6 h-6" />
         </button>
       </DropdownMenuTrigger>

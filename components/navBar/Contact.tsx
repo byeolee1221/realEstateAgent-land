@@ -6,14 +6,20 @@ import { DropdownMenuItem } from "../ui/dropdown-menu";
 import ContactContent from "../ContactContent";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 
-const Contact = () => {
+interface IProps {
+  isDesktop?: boolean;
+}
+
+const Contact = ({isDesktop}: IProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+        {!isDesktop ? (<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <EnvelopeIcon className="w-6 h-6 mr-2" />
           <span>문의하기</span>
-        </DropdownMenuItem>
+        </DropdownMenuItem>) : (
+            <button className="text-lg font-bold">문의하기</button>
+        )}
       </DialogTrigger>
       <ContactContent />
     </Dialog>

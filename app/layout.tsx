@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { NextAuthProvider } from "@/lib/nextauthProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import JotaiProvider from "@/components/jotaiProvider";
 
 declare global {
   interface Window {
@@ -35,10 +36,15 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={cn("min-h-screen text-gray-900", notoSansKR.className)}>
-        <ThemeProvider attribute="class" defaultTheme="class" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="class"
+          enableSystem
+          disableTransitionOnChange
+        >
           <NextAuthProvider>
-            {children}
-            <Toaster /> 
+            <JotaiProvider>{children}</JotaiProvider>
+            <Toaster />
           </NextAuthProvider>
         </ThemeProvider>
       </body>

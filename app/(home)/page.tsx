@@ -7,14 +7,14 @@ import Image from "next/image";
 const Home = () => {
   return (
     <NavBar>
-      <div className="flex flex-col space-y-6">
-        <div className="flex flex-col space-y-4 bg-[url('/home_contract.webp')] bg-center bg-cover pt-20 pb-10">
-          <div className="flex flex-col space-y-2 px-4">
-            <h1 className="text-4xl font-semibold">
+      <div className="flex flex-col space-y-6 lg:mb-10">
+        <div className="flex flex-col space-y-4 bg-[url('/home_contract.webp')] bg-center bg-cover pt-20 pb-10 lg:pt-8 lg:pb-8 lg:rounded-md">
+          <div className="flex flex-col space-y-2 px-4 lg:px-8 lg:py-4">
+            <h1 className="text-4xl font-semibold lg:text-white lg:text-6xl">
               <span className="text-[#2ec4b6]">효율적인 </span>
               중개업무
             </h1>
-            <p className="text-3xl font-semibold">중개랜드에선 가능합니다.</p>
+            <p className="text-3xl font-semibold lg:text-white lg:text-4xl">중개랜드에선 가능합니다.</p>
           </div>
           <Tabs defaultValue="상담노트" className="w-[95%] m-auto">
             <TabsList className="grid w-full grid-cols-2">

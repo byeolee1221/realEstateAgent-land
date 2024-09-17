@@ -15,7 +15,11 @@ import {
 import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 
-const SignOut = () => {
+interface IProps {
+  isDesktop?: boolean;
+}
+
+const SignOut = ({ isDesktop }: IProps) => {
   const onSignOut = () => {
     signOut();
   };
@@ -23,12 +27,16 @@ const SignOut = () => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <button className="w-full">
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <ArrowLeftStartOnRectangleIcon className="w-6 h-6 mr-2" />
-            <span>로그아웃</span>
-          </DropdownMenuItem>
-        </button>
+        {!isDesktop ? (
+          <button className="w-full">
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <ArrowLeftStartOnRectangleIcon className="w-6 h-6 mr-2" />
+              <span>로그아웃</span>
+            </DropdownMenuItem>
+          </button>
+        ) : (
+          <button className="w-full">로그아웃</button>
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent className="w-[95%] rounded-xl">
         <AlertDialogHeader className="text-left">
