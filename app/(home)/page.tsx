@@ -7,7 +7,7 @@ import Image from "next/image";
 const Home = () => {
   return (
     <NavBar>
-      <div className="flex flex-col space-y-6 lg:mb-10">
+      <div className="flex flex-col space-y-6 mt-10 lg:mb-10 lg:mt-0">
         <div className="flex flex-col space-y-4 bg-[url('/home_contract.webp')] bg-center bg-cover pt-20 pb-10 lg:pt-8 lg:pb-8 lg:rounded-md">
           <div className="flex flex-col space-y-2 px-4 lg:px-8 lg:py-4">
             <h1 className="text-4xl font-semibold lg:text-white lg:text-6xl">

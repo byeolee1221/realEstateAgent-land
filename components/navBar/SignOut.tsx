@@ -35,7 +35,7 @@ const SignOut = ({ isDesktop }: IProps) => {
             </DropdownMenuItem>
           </button>
         ) : (
-          <button className="w-full">로그아웃</button>
+          <button className="text-lg font-bold">로그아웃</button>
         )}
       </AlertDialogTrigger>
       <AlertDialogContent className="w-[95%] rounded-xl">

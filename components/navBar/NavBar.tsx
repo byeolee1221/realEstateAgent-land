@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import TopMenu from "./TopMenu";
 import { Cog6ToothIcon, HomeIcon, PencilIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import TopMenuDesktop from "./TopMenuDesktop";
@@ -20,17 +20,15 @@ const NavBar = ({ children }: INavBar) => {
 
   const [width, setWidth] = useAtom(widthAtom);
   const isDesktop = width >= 1280;
-  
+
   useEffect(() => {
     const handleScroll = () => {
       const navbar = document.getElementById("navbar");
-      
-        if (window.scrollY > 0) {
-          navbar?.classList.add("lg:shadow-xl");
-        } else {
-          navbar?.classList.remove("lg:shadow-xl");
-        }
-      
+      if (window.scrollY > 0) {
+        navbar?.classList.add("lg:shadow-xl");
+      } else {
+        navbar?.classList.remove("lg:shadow-xl");
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -41,15 +39,15 @@ const NavBar = ({ children }: INavBar) => {
   }, []);
 
   useEffect(() => {
-    const handlesResize = () => {
+    const handleResize = () => {
       setWidth(window.innerWidth);
     };
 
-    window.addEventListener("resize", handlesResize);
+    window.addEventListener("resize", handleResize);
 
     setWidth(window.innerWidth);
 
-    return () => window.removeEventListener("resize", handlesResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [setWidth]);
 
   const NavLinkArr = [
