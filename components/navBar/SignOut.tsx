@@ -28,12 +28,10 @@ const SignOut = ({ isDesktop }: IProps) => {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         {!isDesktop ? (
-          <button className="w-full">
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <ArrowLeftStartOnRectangleIcon className="w-6 h-6 mr-2" />
-              <span>로그아웃</span>
-            </DropdownMenuItem>
-          </button>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <ArrowLeftStartOnRectangleIcon className="w-6 h-6 mr-2" />
+            <span>로그아웃</span>
+          </DropdownMenuItem>
         ) : (
           <button className="text-lg font-bold">로그아웃</button>
         )}

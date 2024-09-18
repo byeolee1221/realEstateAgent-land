@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { NextAuthProvider } from "@/lib/nextauthProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import JotaiProvider from "@/components/jotaiProvider";
+import JotaiProvider from "@/components/JotaiProvider";
 
 declare global {
   interface Window {

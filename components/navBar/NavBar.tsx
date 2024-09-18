@@ -69,22 +69,24 @@ const NavBar = ({ children }: INavBar) => {
         {!isDesktop ? <TopMenu /> : <TopMenuDesktop isDesktop={isDesktop} />}
       </div>
       <div className="mb-24 lg:mt-36 lg:w-[70%] lg:m-auto">{children}</div>
-      <nav className="border-t bottom-0 py-5 flex justify-around items-center w-full fixed z-20 bg-white lg:hidden">
-        <Link href="/" className="flex flex-col items-center">
-          <HomeIcon className={cn("w-6 h-6", pathname === "/" ? "text-blue-500" : "")} />
-          <span className={cn("text-xs", pathname === "/" ? "text-blue-500" : "")}>홈</span>
-        </Link>
-        {NavLinkArr.map((nav, i) => (
-          <Link key={i} href={nav.href} className="flex flex-col items-center">
-            <nav.icon
-              className={cn("w-6 h-6", pathname.includes(nav.href) ? "text-blue-500" : "")}
-            />
-            <span className={cn("text-xs", pathname.includes(nav.href) ? "text-blue-500" : "")}>
-              {nav.title}
-            </span>
+      {!isDesktop && (
+        <nav className="border-t bottom-0 py-5 flex justify-around items-center w-full fixed z-20 bg-white">
+          <Link href="/" className="flex flex-col items-center">
+            <HomeIcon className={cn("w-6 h-6", pathname === "/" ? "text-blue-500" : "")} />
+            <span className={cn("text-xs", pathname === "/" ? "text-blue-500" : "")}>홈</span>
           </Link>
-        ))}
-      </nav>
+          {NavLinkArr.map((nav, i) => (
+            <Link key={i} href={nav.href} className="flex flex-col items-center">
+              <nav.icon
+                className={cn("w-6 h-6", pathname.includes(nav.href) ? "text-blue-500" : "")}
+              />
+              <span className={cn("text-xs", pathname.includes(nav.href) ? "text-blue-500" : "")}>
+                {nav.title}
+              </span>
+            </Link>
+          ))}
+        </nav>
+      )}
     </div>
   );
 };

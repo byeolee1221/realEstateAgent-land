@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useSession } from "next-auth/react";
 import {
@@ -22,9 +22,7 @@ const TopMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="lg:hidden">
-          <Bars2Icon className="w-6 h-6" />
-        </button>
+        <Bars2Icon className="w-6 h-6" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>메뉴</DropdownMenuLabel>
