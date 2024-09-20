@@ -20,8 +20,8 @@ const SiteMenuDesktop = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <span className="text-lg font-bold">메뉴</span>
+      <DropdownMenuTrigger asChild>
+        <button className="text-lg font-bold">메뉴</button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>메뉴</DropdownMenuLabel>
