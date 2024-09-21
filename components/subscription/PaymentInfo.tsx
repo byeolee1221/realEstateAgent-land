@@ -6,7 +6,7 @@ const PaymentInfo = () => {
   ];
 
   return (
-    <div className="flex flex-col space-y-2 px-4 w-full">
+    <div className="flex flex-col space-y-2 px-4 w-full lg:w-[30%]">
       <div className="flex items-center space-x-2">
         <h1 className="text-lg font-semibold">정기구독 전 확인해주세요!</h1>
       </div>
