@@ -33,7 +33,7 @@ const ConsultingMemo = () => {
   }, []);
 
   return (
-    <div className="px-4 flex flex-col space-y-6">
+    <div className="px-4 flex flex-col space-y-6 lg:px-0">
       <div className="flex items-center space-x-2 bg-slate-100 w-fit p-2 rounded-md shadow-sm">
         <Image src="/memo2.png" alt="게시" width={30} height={30} />
         {session ? (
