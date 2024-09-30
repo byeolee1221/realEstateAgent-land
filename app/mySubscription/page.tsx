@@ -43,7 +43,7 @@ const MySubscription = () => {
       setStatusMsg("구독정보를 불러오고 있습니다.");
       return;
     }
-
+    
     if (payment.status === "SUCCESS_PAYMENT") {
       setStatusMsg("현재 스탠다드플랜을 구독중입니다.");
     } else if (payment.status === "FAIL_PAYMENT" || payment.status === "CANCEL_PAYMENT") {
@@ -69,7 +69,7 @@ const MySubscription = () => {
 
     getData();
   }, []);
-
+  
   // 구독 결제일 정보 가져오기
   useEffect(() => {
     const getApprovedDate = async () => {
@@ -103,10 +103,7 @@ const MySubscription = () => {
         console.error("MySubscription POST에서 API 오류 발생", error);
         if (axios.isAxiosError(error)) {
           setError(error.response?.data);
-        } else {
-          console.error("MySubscription POST에서 서버 오류 발생", error);
-          setError("서버에서 오류가 발생하였으니 잠시 후 새로고침 해주세요.");
-        }
+        } 
       } finally {
         setLoading(false);
       }
@@ -140,13 +137,13 @@ const MySubscription = () => {
       }
     }
   }, [sid, formattedCurrentDate]);
-
+  
   const dataArr = [
     { id: 1, title: "구독일", data: lastPaymentDate },
     { id: 2, title: "정기결제 금액", data: `${payment?.amount.toLocaleString("ko-KR")}원` },
     { id: 3, title: "다음 결제일", data: paymentDate?.formattedNextDate },
   ];
-
+  
   return (
     <div className="px-4 flex flex-col space-y-6">
       <div className="flex items-center space-x-2 bg-slate-100 w-fit p-2 rounded-md shadow-sm">

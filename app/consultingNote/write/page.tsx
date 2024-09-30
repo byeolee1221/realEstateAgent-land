@@ -146,12 +146,7 @@ const Write = () => {
         return toast("오류 발생", {
           description: error.response?.data,
         });
-      } else {
-        console.error("consultingNote write POST에서 서버 오류 발생", error);
-        return toast("서버 오류 발생", {
-          description: "서버에서 오류가 발생하여 등록되지 않았습니다. 잠시 후 다시 시도해주세요.",
-        });
-      }
+      } 
     }
   };
 

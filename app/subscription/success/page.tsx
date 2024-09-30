@@ -4,6 +4,7 @@ import axios from "axios";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 // 정기결제 ready 통과 후 표출 페이지
 
@@ -27,11 +28,10 @@ const SubscriptionSuccess = () => {
       } catch (error) {
         console.error("approve post에서 API 오류 발생", error);
         if (axios.isAxiosError(error)) {
-          alert(error.response?.data);
-        } else {
-          console.error("approve post에서 서버 오류 발생", error);
-          alert("서버에서 오류가 발생하여 결제가 되지 않았습니다. 잠시 후 다시 시도해주세요.");
-        }
+          return toast("오류 발생", {
+            description: error.response?.data,
+          });
+        } 
       }
     }
 

@@ -32,10 +32,7 @@ const PlanCancel = (props: IProps) => {
       console.error("PlanCancel POST에서 API 오류 발생", error);
       if (axios.isAxiosError(error)) {
         alert(error.response?.data);
-      } else {
-        console.error("PlanCancel POST에서 서버 오류 발생", error);
-        alert("서버에서 오류가 발생하여 해지되지 않았습니다. 잠시 후 다시 시도해주세요.");
-      }
+      } 
     }
   }
 

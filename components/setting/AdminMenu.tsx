@@ -27,10 +27,7 @@ const AdminMenu = () => {
           if (axios.isAxiosError(error)) {
             console.error("setting GET에서 API 오류 발생", error);
             alert("API 오류가 발생하였으니 확인해주세요.");
-          } else {
-            console.error("setting GET에서 서버 오류 발생", error);
-            alert("서버 오류가 발생하였으니 확인해주세요.");
-          }
+          } 
         }
       };
 
