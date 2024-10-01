@@ -29,7 +29,7 @@ const SiteMenuDesktop = () => {
         <DropdownMenuGroup>
           {LinkArr.map((item, i) => (
             <DropdownMenuItem key={i}>
-              <Link href={item.href} className="flex">
+              <Link href={item.href} className="flex w-full">
                 <item.icon className="w-6 h-6 mr-2" />
                 {item.title}
               </Link>

@@ -8,6 +8,7 @@ import SubscribeAlert from "../consultingNote/SubscribeAlert";
 import { getPaymentDate, getSubscriptionStatus } from "@/lib/subscriptionUtils";
 import { formatDate } from "@/lib/utils";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import { Skeleton } from "../ui/skeleton";
 
 interface IMemoList {
   title: string;
@@ -30,6 +31,7 @@ const MemoTable = (props: IProps) => {
   const [error, setError] = useState("");
   const [countZero, setCountZero] = useState(false);
   const [freeUseMsg, setFreeUseMsg] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const alertArr = [
     "무료체험은 계정당 5회에 한정됩니다.",
@@ -89,6 +91,7 @@ const MemoTable = (props: IProps) => {
   useEffect(() => {
     const getMemoList = async () => {
       try {
+        setLoading(true);
         const response = await axios.get("/api/consultingMemo/memoList");
 
         if (response.status === 200) {
@@ -99,6 +102,8 @@ const MemoTable = (props: IProps) => {
         if (axios.isAxiosError(error)) {
           setError(error.response?.data);
         }
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -131,28 +136,32 @@ const MemoTable = (props: IProps) => {
       <div className="flex flex-col space-y-4 lg:w-full">
         <div className="border rounded-sm lg:flex lg:justify-center">
           {session ? (
-            <Table>
-              <TableHeader>
-                <TableRow className="text-sm tracking-tighter">
-                  <TableHead>번호</TableHead>
-                  <TableHead>제목</TableHead>
-                  <TableHead className="text-right">업데이트일</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {memo.map((data, i) => (
-                  <TableRow key={data.id}>
-                    <TableCell>{i + 1}</TableCell>
-                    <Link href={`/consultingMemo/${data.id}`} legacyBehavior={true}>
-                      <TableCell className="tracking-tighter cursor-pointer">
-                        {data.title}
-                      </TableCell>
-                    </Link>
-                    <TableCell className="text-right">{data.createdAt}</TableCell>
+            !isLoading ? (
+              <Table>
+                <TableHeader>
+                  <TableRow className="text-sm tracking-tighter">
+                    <TableHead>번호</TableHead>
+                    <TableHead>제목</TableHead>
+                    <TableHead className="text-right">업데이트일</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {memo.map((data, i) => (
+                    <TableRow key={data.id}>
+                      <TableCell>{i + 1}</TableCell>
+                      <Link href={`/consultingMemo/${data.id}`} legacyBehavior={true}>
+                        <TableCell className="tracking-tighter cursor-pointer">
+                          {data.title}
+                        </TableCell>
+                      </Link>
+                      <TableCell className="text-right">{data.createdAt}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <Skeleton className="w-full h-56 bg-slate-100" />
+            )
           ) : (
             <div className="flex flex-col items-center justify-center text-center text-sm p-2">
               <p>로그인이 필요한 서비스입니다.</p>

@@ -19,7 +19,7 @@ const NavBar = ({ children }: INavBar) => {
   const pathname = usePathname();
 
   const [width, setWidth] = useAtom(widthAtom);
-  const isDesktop = width >= 1280;
+  const isDesktop = width >= 1024;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,7 +60,7 @@ const NavBar = ({ children }: INavBar) => {
     <div className="flex flex-col w-full">
       <div
         id="navbar"
-        className="flex items-center justify-between w-full px-5 py-4 z-20 top-0 fixed bg-white transition-all duration-300 lg:w-[70%] lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:rounded-xl lg:px-10 lg:py-8 lg:mt-4"
+        className="flex items-center justify-between w-full px-5 py-4 z-20 top-0 fixed bg-white transition-all duration-300 lg:px-10 xl:w-[70%] xl:left-1/2 xl:transform xl:-translate-x-1/2 xl:rounded-xl xl:px-10 xl:py-8 xl:mt-4"
       >
         <Link href="/" className="flex items-center space-x-2">
           <Image src="/icon.png" alt="로고" width={30} height={30} />
@@ -68,7 +68,7 @@ const NavBar = ({ children }: INavBar) => {
         </Link>
         {!isDesktop ? <TopMenu /> : <TopMenuDesktop isDesktop={isDesktop} />}
       </div>
-      <div className="mb-24 lg:mt-36 lg:w-[70%] lg:m-auto">{children}</div>
+      <div className="mb-24 lg:mt-20 lg:w-[95%] lg:m-auto xl:mt-36 xl:w-[70%]">{children}</div>
       {!isDesktop && (
         <nav className="border-t bottom-0 py-5 flex justify-around items-center w-full fixed z-20 bg-white">
           <Link href="/" className="flex flex-col items-center">

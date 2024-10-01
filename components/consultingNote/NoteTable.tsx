@@ -8,6 +8,7 @@ import SubscribeAlert from "./SubscribeAlert";
 import { getPaymentDate, getSubscriptionStatus } from "@/lib/subscriptionUtils";
 import { formatDate } from "@/lib/utils";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import { Skeleton } from "../ui/skeleton";
 
 interface INoteList {
   customerName: string;
@@ -31,6 +32,7 @@ const NoteTable = (props: IProps) => {
   const [error, setError] = useState("");
   const [countZero, setCountZero] = useState(false);
   const [freeUseMsg, setFreeUseMsg] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const alertArr = [
     "무료체험은 계정당 1회에 한정됩니다.",
@@ -40,7 +42,7 @@ const NoteTable = (props: IProps) => {
     "삭제는 각 노트의 세부페이지에서 가능합니다.",
     "노트는 본인외에는 확인할 수 없습니다.",
   ];
-  
+
   // 구독해지 및 다음 결제일
   const subscriptionCancel = subscriptionStatus === "CANCEL_PAYMENT" && nextPayment !== "";
 
@@ -90,6 +92,7 @@ const NoteTable = (props: IProps) => {
   useEffect(() => {
     const getNoteList = async () => {
       try {
+        setLoading(true);
         const response = await axios.get("/api/consultingNote/noteList");
 
         if (response.status === 200) {
@@ -100,6 +103,8 @@ const NoteTable = (props: IProps) => {
         if (axios.isAxiosError(error)) {
           setError(error.response?.data);
         }
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -132,28 +137,32 @@ const NoteTable = (props: IProps) => {
       <div className="flex flex-col space-y-4 lg:w-full">
         <div className="border rounded-sm lg:flex lg:justify-center">
           {session ? (
-            <Table>
-              <TableHeader>
-                <TableRow className="text-sm tracking-tighter">
-                  <TableHead>번호</TableHead>
-                  <TableHead>요약정보</TableHead>
-                  <TableHead className="text-right">업데이트일</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {note.map((data, i) => (
-                  <TableRow key={data.id}>
-                    <TableCell>{i + 1}</TableCell>
-                    <Link href={`/consultingNote/${data.id}`} legacyBehavior={true}>
-                      <TableCell className="tracking-tighter cursor-pointer">
-                        {data.customerName} / {data.purposeUse} / {data.kind} {data.transactionType}
-                      </TableCell>
-                    </Link>
-                    <TableCell className="text-right">{data.date}</TableCell>
+            !isLoading ? (
+              <Table>
+                <TableHeader>
+                  <TableRow className="text-sm tracking-tighter">
+                    <TableHead>번호</TableHead>
+                    <TableHead>요약정보</TableHead>
+                    <TableHead className="text-right">업데이트일</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {note.map((data, i) => (
+                    <TableRow key={data.id}>
+                      <TableCell>{i + 1}</TableCell>
+                      <Link href={`/consultingNote/${data.id}`} legacyBehavior={true}>
+                        <TableCell className="tracking-tighter cursor-pointer">
+                          {data.customerName} / {data.purposeUse} / {data.kind} {data.transactionType}
+                        </TableCell>
+                      </Link>
+                      <TableCell className="text-right">{data.date}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <Skeleton className="w-full h-56 bg-slate-100" />
+            )
           ) : (
             <div className="flex flex-col items-center justify-center text-center text-sm p-2">
               <p>로그인이 필요한 서비스입니다.</p>
@@ -178,13 +187,13 @@ const NoteTable = (props: IProps) => {
           </div>
         )}
       </div>
-      <div className="flex flex-col space-y-2 bg-blue-100 px-4 py-5 rounded-lg lg:w-[40%] lg:h-60">
+      <div className="flex flex-col space-y-2 bg-blue-100 px-4 py-5 rounded-lg lg:w-[40%] lg:h-fit">
         <div className="flex items-center space-x-2">
           <h1 className="text-lg font-semibold">사용 전 확인해주세요!</h1>
         </div>
         {alertArr.map((item, i) => (
-          <div key={i} className="flex items-center space-x-2 ml-2 text-sm">
-            <CheckCircleIcon className="w-5 h-5 text-blue-500" />
+          <div key={i} className="flex items-center space-x-2 ml-2 text-sm lg:items-start  lg:text-base lg:break-keep">
+            <CheckCircleIcon className="w-5 h-5 text-blue-500 lg:w-6 lg:h-6" />
             <span className="tracking-tighter">{item}</span>
           </div>
         ))}

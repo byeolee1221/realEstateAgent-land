@@ -9,7 +9,7 @@ import { CheckCircleIcon } from "@heroicons/react/24/outline";
 
 const DescriptionOne = () => {
   const width = useAtomValue(widthAtom);
-  const isDesktop = width >= 1280;
+  const isDesktop = width >= 1024;
 
   const descriptionArr = [
     "상담한 고객정보 및 상담내용 업로드",
@@ -19,13 +19,13 @@ const DescriptionOne = () => {
 
   return (
     <div className="flex flex-col space-y-5 rounded-xl shadow-sm bg-blue-100 pl-4 pr-10 lg:px-20 pb-5 lg:flex-row lg:space-x-10">
-      <div className="flex flex-col space-y-5 lg:w-[60%] lg:pt-20 lg:mx-auto">
+      <div className="flex flex-col space-y-5 lg:pt-20 lg:mx-auto xl:w-[60%]">
         <div className="flex items-center space-x-2 pt-5">
           <Image src="/memo.png" alt="메모" width={!isDesktop ? 30 : 50} height={!isDesktop ? 30 : 50} />
-          <h2 className="text-xl font-semibold lg:text-6xl">상담노트</h2>
+          <h2 className="text-xl font-semibold lg:text-3xl xl:text-6xl">상담노트</h2>
         </div>
-        <h2 className="text-lg lg:text-3xl">고객과의 상담내역을 편리하게 관리해 보세요!</h2>
-        <p>
+        <h2 className="text-lg lg:text-3xl lg:break-keep">고객과의 상담내역을 편리하게 관리해 보세요!</h2>
+        <p className="lg:break-keep">
           더 이상 양이 늘어나서 정리해야 할 걱정이 없습니다. 가장 심플하면서도 필요한 요소는 모두 갖춘
           상담노트 기능을 통해 업무의 효율성을 증대시켜 보세요.
         </p>
