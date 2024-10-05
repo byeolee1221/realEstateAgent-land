@@ -133,9 +133,9 @@ const NoteTable = (props: IProps) => {
   }, [props.freeUse, session]);
 
   return (
-    <div className="flex flex-col space-y-4 lg:flex-row lg:justify-between lg:space-x-4 lg:space-y-0">
-      <div className="flex flex-col space-y-4 lg:w-full">
-        <div className="border rounded-sm lg:flex lg:justify-center">
+    <div className="flex flex-col space-y-4 xl:flex-row xl:justify-between xl:space-x-4 xl:space-y-0">
+      <div className="flex flex-col space-y-4 xl:w-full">
+        <div className="border rounded-sm xl:flex xl:justify-center">
           {session ? (
             !isLoading ? (
               <Table>
@@ -187,14 +187,14 @@ const NoteTable = (props: IProps) => {
           </div>
         )}
       </div>
-      <div className="flex flex-col space-y-2 bg-blue-100 px-4 py-5 rounded-lg lg:w-[40%] lg:h-fit">
+      <div className="flex flex-col space-y-2 bg-blue-100 px-4 py-5 rounded-xl xl:w-[40%] xl:h-fit">
         <div className="flex items-center space-x-2">
-          <h1 className="text-lg font-semibold">사용 전 확인해주세요!</h1>
+          <h1 className="text-xl font-semibold">사용 전 확인해주세요!</h1>
         </div>
         {alertArr.map((item, i) => (
-          <div key={i} className="flex items-center space-x-2 ml-2 text-sm lg:items-start  lg:text-base lg:break-keep">
-            <CheckCircleIcon className="w-5 h-5 text-blue-500 lg:w-6 lg:h-6" />
-            <span className="tracking-tighter">{item}</span>
+          <div key={i} className="flex items-center space-x-2 text-sm w-full xl:items-start xl:text-base">
+            <CheckCircleIcon className="w-5 h-5 text-blue-500 xl:w-6 xl:h-6" />
+            <span className="tracking-tighter xl:break-keep">{item}</span>
           </div>
         ))}
       </div>

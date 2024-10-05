@@ -186,14 +186,14 @@ const MemoTable = (props: IProps) => {
           </div>
         )}
       </div>
-      <div className="flex flex-col space-y-2 bg-green-100 px-4 py-5 rounded-lg lg:w-[40%] lg:h-60">
+      <div className="flex flex-col space-y-2 bg-green-100 px-4 py-5 rounded-xl lg:w-[40%] lg:h-fit">
         <div className="flex items-center space-x-2">
           <h1 className="text-lg font-semibold">사용 전 확인해주세요!</h1>
         </div>
         {alertArr.map((item, i) => (
-          <div key={i} className="flex items-center space-x-2 ml-2 text-sm">
-            <CheckCircleIcon className="w-5 h-5 text-green-500" />
-            <span className="tracking-tighter">{item}</span>
+          <div key={i} className="flex items-center space-x-2 text-sm w-full lg:items-start xl:items-center">
+            <CheckCircleIcon className="w-5 h-5 text-green-500 overflow-visible lg:h-7" />
+            <span className="tracking-tighter lg:text-base lg:break-keep">{item}</span>
           </div>
         ))}
       </div>
