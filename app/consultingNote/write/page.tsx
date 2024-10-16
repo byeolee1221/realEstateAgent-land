@@ -14,6 +14,26 @@ const Write = () => {
   const router = useRouter();
 
   const [map, setMap] = useState<any>(null);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { isValid, isSubmitting, errors },
+  } = useForm<z.infer<typeof NoteSchema>>({
+    resolver: zodResolver(NoteSchema),
+    mode: "all",
+    defaultValues: {
+      customerName: "",
+      customerNumber: "",
+      purposeUse: "",
+      kind: "",
+      transactionType: "",
+      date: "",
+      content: "",
+      location: "",
+    },
+  });
 
   function displayMarker(place: any) {
     const infoWindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
@@ -23,9 +43,7 @@ const Write = () => {
     });
     window.kakao.maps.event.addListener(marker, "click", function () {
       infoWindow.setContent(
-        '<div style="padding:5px; font-size:12px;">' +
-          place.place_name +
-          "</div>"
+        '<div style="padding:5px; font-size:12px;">' + place.place_name + "</div>"
       );
       infoWindow.open(map, marker);
     });
@@ -50,16 +68,10 @@ const Write = () => {
         setMap(createdMap);
 
         const mapTypeControl = new window.kakao.maps.MapTypeControl();
-        createdMap.addControl(
-          mapTypeControl,
-          window.kakao.maps.ControlPosition.TOPRIGHT
-        );
+        createdMap.addControl(mapTypeControl, window.kakao.maps.ControlPosition.TOPRIGHT);
 
         const zoomControl = new window.kakao.maps.ZoomControl();
-        createdMap.addControl(
-          zoomControl,
-          window.kakao.maps.ControlPosition.RIGHT
-        );
+        createdMap.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
 
         function setDraggable(draggable: any) {
           createdMap.setDraggable(draggable);
@@ -89,39 +101,24 @@ const Write = () => {
     if (map) {
       const ps = new window.kakao.maps.services.Places();
 
-      ps.keywordSearch(form.watch("location"), (result: any, status: any) => {
+      ps.keywordSearch(watch("location"), (result: any, status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const firstResult = result[0];
-          const moveLatLng = new window.kakao.maps.LatLng(
-            firstResult.y,
-            firstResult.x
-          );
+          const moveLatLng = new window.kakao.maps.LatLng(firstResult.y, firstResult.x);
           map.setCenter(moveLatLng);
           displayMarker(firstResult);
         } else {
-          alert("검색 결과가 없습니다.");
+          return toast("카카오맵 오류", {
+            description: "검색 결과가 없습니다.",
+          });
         }
       });
     } else {
-      console.error("지도가 초기화되지 않았습니다.");
+      return toast("카카오맵 오류", {
+        description: "지도가 초기화되지 않았습니다.",
+      });
     }
   };
-
-  const form = useForm<z.infer<typeof NoteSchema>>({
-    resolver: zodResolver(NoteSchema),
-    defaultValues: {
-      customerName: "",
-      customerNumber: "",
-      purposeUse: "",
-      kind: "",
-      transactionType: "",
-      date: "",
-      content: "",
-      location: "",
-    },
-  });
-
-  const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof NoteSchema>) => {
     try {
@@ -137,7 +134,7 @@ const Write = () => {
       });
 
       if (response.status === 200) {
-        form.reset();
+        reset();
         router.push(`/consultingNote/${response.data}`);
       }
     } catch (error) {
@@ -146,7 +143,7 @@ const Write = () => {
         return toast("오류 발생", {
           description: error.response?.data,
         });
-      } 
+      }
     }
   };
 
@@ -154,101 +151,88 @@ const Write = () => {
     router.back();
   };
 
+  const inputArr = [
+    {
+      id: "customerName",
+      type: "text",
+      title: "고객명",
+      register: { ...register("customerName") },
+      error: errors.customerName,
+    },
+    {
+      id: "customerNumber",
+      type: "tel",
+      title: "고객연락처",
+      register: { ...register("customerNumber") },
+      error: errors.customerNumber,
+    },
+    {
+      id: "purposeUse",
+      type: "text",
+      title: "사용목적",
+      register: { ...register("purposeUse") },
+      error: errors.purposeUse,
+    },
+    {
+      id: "kind",
+      type: "text",
+      title: "중개대상물 종류",
+      placeholder: "예) 원룸 / 아파트 / 상가 등",
+      register: { ...register("kind") },
+      error: errors.kind,
+    },
+    {
+      id: "transactionType",
+      type: "text",
+      title: "거래유형",
+      placeholder: "예) 월세 / 전세 / 매매 등",
+      register: { ...register("transactionType") },
+      error: errors.transactionType,
+    },
+    {
+      id: "date",
+      type: "text",
+      title: "상담일자",
+      placeholder: "예) 2024-04-15",
+      register: { ...register("date") },
+      error: errors.date,
+    },
+  ];
+
   return (
     <div className="flex flex-col space-y-6 px-4">
       <div className="flex items-center space-x-2 bg-slate-100 w-1/2 p-2 rounded-md shadow-sm">
         <Image src="/write.png" alt="게시" width={30} height={30} />
         <h2 className="text-lg font-semibold">노트 작성하기</h2>
       </div>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col space-y-3 text-sm"
-      >
-        <div className="flex flex-col space-y-1">
-          <label htmlFor="customerName" className="text-xs text-gray-500">
-            고객명
-          </label>
-          <input
-            {...form.register("customerName")}
-            id="customerName"
-            type="text"
-            autoComplete="off"
-            className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-          />
-        </div>
-        <div className="flex flex-col space-y-1">
-          <label htmlFor="customerNumber" className="text-xs text-gray-500">
-            고객연락처
-          </label>
-          <input
-            {...form.register("customerNumber")}
-            id="customerNumber"
-            type="tel"
-            autoComplete="off"
-            className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-          />
-        </div>
-        <div className="flex flex-col space-y-1">
-          <label htmlFor="purposeUse" className="text-xs text-gray-500">
-            사용목적
-          </label>
-          <input
-            {...form.register("purposeUse")}
-            id="purposeUse"
-            type="text"
-            autoComplete="off"
-            className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-          />
-        </div>
-        <div className="flex flex-col space-y-1">
-          <label htmlFor="kind" className="text-xs text-gray-500">
-            중개대상물 종류
-          </label>
-          <input
-            {...form.register("kind")}
-            id="kind"
-            type="text"
-            autoComplete="off"
-            placeholder="예) 원룸 / 아파트 / 상가 등"
-            className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-          />
-        </div>
-        <div className="flex flex-col space-y-1">
-          <label htmlFor="transactionType" className="text-xs text-gray-500">
-            거래유형
-          </label>
-          <input
-            {...form.register("transactionType")}
-            id="transactionType"
-            type="text"
-            autoComplete="off"
-            placeholder="예) 월세 / 전세 / 매매 등"
-            className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-          />
-        </div>
-        <div className="flex flex-col space-y-1">
-          <label htmlFor="date" className="text-xs text-gray-500">
-            상담일자
-          </label>
-          <input
-            {...form.register("date")}
-            id="date"
-            type="text"
-            autoComplete="off"
-            placeholder="예) 2024-04-15"
-            className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-          />
-        </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-3 text-sm">
+        {inputArr.map((item) => (
+          <div key={item.id} className="flex flex-col space-y-1">
+            <label htmlFor={item.id} className="text-xs text-gray-500">
+              {item.title}
+            </label>
+            <input
+              {...item.register}
+              id={item.id}
+              type={item.type}
+              placeholder={item.placeholder}
+              autoComplete="off"
+              className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
+            />
+            {item.error && <span className="error-text-start">{item.error.message}</span>}
+          </div>
+        ))}
         <div className="flex flex-col space-y-1">
           <label htmlFor="content" className="text-xs text-gray-500">
             상담내용
           </label>
           <textarea
-            {...form.register("content")}
+            {...register("content")}
             id="content"
             rows={10}
             className="border p-1 focus:outline-none focus:border-blue-500 bg-transparent resize-none whitespace-pre-wrap"
           />
+          {errors.content && <span className="error-text-start">{errors.content.message}</span>}
         </div>
         <div className="flex flex-col space-y-1">
           <label htmlFor="locate" className="text-xs text-gray-500">
@@ -256,27 +240,25 @@ const Write = () => {
           </label>
           <div className="flex items-center justify-between border-b pb-0.5">
             <input
-              {...form.register("location")}
+              {...register("location")}
               id="locate"
               type="text"
               placeholder="장소 또는 주소 검색"
               className="focus:outline-none focus:border-blue-500 bg-transparent w-[80%]"
             />
-            <button
-              onClick={onSearch}
-              className="border p-1 shadow-sm rounded-sm"
-            >
+            <button onClick={onSearch} className="border p-1 shadow-sm rounded-sm">
               검색
             </button>
           </div>
         </div>
-        <div id="map" className="w-full h-72 border" />
+        <div id="map" className="w-full h-72 md:h-96 border" />
         <div className="flex items-center justify-end space-x-2">
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors"
+            className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white px-3 py-2 rounded-md transition-colors"
+            disabled={!isValid}
           >
-            {isLoading ? "게시중" : "게시하기"}
+            {isSubmitting ? "게시중" : "게시하기"}
           </button>
           <button
             onClick={onCancel}
