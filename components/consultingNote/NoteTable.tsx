@@ -192,7 +192,7 @@ const NoteTable = (props: IProps) => {
           <h1 className="text-xl font-semibold">사용 전 확인해주세요!</h1>
         </div>
         {alertArr.map((item, i) => (
-          <div key={i} className="flex items-center space-x-2 text-sm w-full xl:items-start xl:text-base">
+          <div key={i} className="flex items-center space-x-2 text-sm w-full xl:items-start">
             <CheckCircleIcon className="w-5 h-5 text-blue-500 xl:w-6 xl:h-6" />
             <span className="tracking-tighter xl:break-keep">{item}</span>
           </div>

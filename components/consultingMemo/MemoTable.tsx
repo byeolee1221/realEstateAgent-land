@@ -192,8 +192,8 @@ const MemoTable = (props: IProps) => {
         </div>
         {alertArr.map((item, i) => (
           <div key={i} className="flex items-center space-x-2 text-sm w-full lg:items-start xl:items-center">
-            <CheckCircleIcon className="w-5 h-5 text-green-500 overflow-visible lg:h-7" />
-            <span className="tracking-tighter lg:text-base lg:break-keep">{item}</span>
+            <CheckCircleIcon className="w-5 h-5 text-green-500 overflow-visible xl:w-6 xl:h-6" />
+            <span className="tracking-tighter">{item}</span>
           </div>
         ))}
       </div>
