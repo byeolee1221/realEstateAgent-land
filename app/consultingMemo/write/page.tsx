@@ -14,6 +14,21 @@ const MemoWrite = () => {
   const router = useRouter();
 
   const [map, setMap] = useState<any>(null);
+  const {
+    register,
+    reset,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<z.infer<typeof MemoSchema>>({
+    resolver: zodResolver(MemoSchema),
+    mode: "all",
+    defaultValues: {
+      title: "",
+      content: "",
+      location: "",
+    }
+  });
 
   function displayMarker(place: any) {
     const infoWindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
@@ -75,35 +90,28 @@ const MemoWrite = () => {
     kakaoMapScript.addEventListener("load", onKakaoApi);
   }, []);
 
-  const form = useForm<z.infer<typeof MemoSchema>>({
-    resolver: zodResolver(MemoSchema),
-    defaultValues: {
-      title: "",
-      content: "",
-      location: "",
-    },
-  });
-
-  const isLoading = form.formState.isSubmitting;
-
   const onSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (map) {
       const ps = new window.kakao.maps.services.Places();
 
-      ps.keywordSearch(form.watch("location"), (result: any, status: any) => {
+      ps.keywordSearch(watch("location"), (result: any, status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const firstResult = result[0];
           const moveLatLng = new window.kakao.maps.LatLng(firstResult.y, firstResult.x);
           map.setCenter(moveLatLng);
           displayMarker(firstResult);
         } else {
-          alert("검색 결과가 없습니다.");
+          return toast("카카오맵 오류", {
+            description: "검색 결과가 없습니다.",
+          });
         }
       });
     } else {
-      console.error("지도가 초기화되지 않았습니다.");
+      return toast("카카오맵 오류", {
+        description: "지도가 초기화되지 않았습니다.",
+      });
     }
   };
 
@@ -116,7 +124,7 @@ const MemoWrite = () => {
       });
 
       if (response.status === 200) {
-        form.reset();
+        reset();
         router.push(`/consultingMemo/${response.data}`);
       }
     } catch (error) {
@@ -125,7 +133,7 @@ const MemoWrite = () => {
         return toast("오류 발생", {
           description: error.response?.data,
         });
-      } 
+      }
     }
   };
 
@@ -139,29 +147,31 @@ const MemoWrite = () => {
         <Image src="/write.png" alt="게시" width={30} height={30} />
         <h2 className="text-lg font-semibold">메모 작성하기</h2>
       </div>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-3 text-sm">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-3 text-sm">
         <div className="flex flex-col space-y-1">
           <label htmlFor="title" className="text-xs text-gray-500">
             제목
           </label>
           <input
-            {...form.register("title")}
+            {...register("title")}
             autoComplete="off"
             id="title"
             type="text"
             className="border-b pb-1 focus:outline-none focus:border-green-500 bg-transparent"
           />
+          {errors.title && <span className="error-text-start">{errors.title.message}</span>}
         </div>
         <div className="flex flex-col space-y-1">
           <label htmlFor="content" className="text-xs text-gray-500">
             내용
           </label>
           <textarea
-            {...form.register("content")}
+            {...register("content")}
             id="content"
             rows={10}
             className="border p-1 focus:outline-none focus:border-green-500 bg-transparent resize-none whitespace-pre-wrap"
           />
+          {errors.content && <span className="error-text-start">{errors.content.message}</span>}
         </div>
         <div className="flex flex-col space-y-1">
           <label htmlFor="locate" className="text-xs text-gray-500">
@@ -169,7 +179,7 @@ const MemoWrite = () => {
           </label>
           <div className="flex items-center justify-between border-b pb-0.5">
             <input
-              {...form.register("location")}
+              {...register("location")}
               id="locate"
               type="text"
               placeholder="장소 또는 주소 검색"
@@ -179,14 +189,15 @@ const MemoWrite = () => {
               검색
             </button>
           </div>
-          <div id="map" className="w-full h-72 border" />
+          <div id="map" className="w-full h-72 md:h-96 border" />
         </div>
         <div className="flex items-center justify-end space-x-2">
           <button
             type="submit"
-            className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors"
+            className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white px-3 py-2 rounded-md transition-colors"
+            disabled={!isValid}
           >
-            게시하기
+            {isSubmitting ? "게시중" : "게시"}
           </button>
           <button
             onClick={onCancel}
