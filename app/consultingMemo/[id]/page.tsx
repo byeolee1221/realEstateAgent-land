@@ -120,7 +120,7 @@ const MemoDetail = () => {
       <div className="flex flex-col space-y-3 text-sm">
         <h2 className="text-xs text-gray-500">참고 위치정보</h2>
         <span className="border-b pb-1">{memo?.location}</span>
-        <div id="map" className="w-full h-72 border" />
+        <div id="map" className="w-full h-72 md:h-96 border" />
       </div>
       <div className="flex items-center justify-between space-x-2">
         {memo?.userEmail === session?.user?.email ? (

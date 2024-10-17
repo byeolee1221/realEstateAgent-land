@@ -109,12 +109,7 @@ const NoteEdit = () => {
           return toast("오류 발생", {
             description: error.response?.data,
           });
-        } else {
-          console.error("consultingNote noteEdit GET에서 서버 오류 발생", error);
-          return toast("서버 오류 발생", {
-            description: "서버에서 오류가 발생하였으니 잠시 후 새로고침 해주세요.",
-          });
-        }
+        } 
       }
     };
 

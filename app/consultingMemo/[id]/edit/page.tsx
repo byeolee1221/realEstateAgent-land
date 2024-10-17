@@ -19,6 +19,21 @@ const MemoEdit = () => {
 
   const [map, setMap] = useState<any>(null);
   const [memo, setMemo] = useState<IMemo>();
+  const {
+    register,
+    reset,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<z.infer<typeof MemoEditSchema>>({
+    resolver: zodResolver(MemoEditSchema),
+    mode: "all",
+    defaultValues: {
+      title: memo?.title,
+      content: memo?.content,
+      location: memo?.location,
+    }
+  });
 
   function displayMarker(place: any) {
     const infoWindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
@@ -95,11 +110,6 @@ const MemoEdit = () => {
           return toast("오류 발생", {
             description: error.response?.data,
           });
-        } else {
-          console.error("consultingNote noteEdit GET에서 서버오류 발생", error);
-          return toast("서버 오류 발생", {
-            description: "서버에서 오류가 발생하였으니 잠시 후 새로고침 해주세요.",
-          });
         }
       }
     };
@@ -113,39 +123,32 @@ const MemoEdit = () => {
     if (map) {
       const ps = new window.kakao.maps.services.Places();
 
-      ps.keywordSearch(form.watch("location"), (result: any, status: any) => {
+      ps.keywordSearch(watch("location"), (result: any, status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const firstResult = result[0];
           const moveLatLng = new window.kakao.maps.LatLng(firstResult.y, firstResult.x);
           map.setCenter(moveLatLng);
           displayMarker(firstResult);
         } else {
-          alert("검색 결과가 없습니다.");
+          return toast("카카오맵 오류", {
+            description: "검색 결과가 없습니다.",
+          });
         }
       });
     } else {
-      console.error("지도가 초기화되지 않았습니다.");
+      return toast("카카오맵 오류", {
+        description: "지도가 초기화되지 않았습니다.",
+      });
     }
   };
 
-  const form = useForm<z.infer<typeof MemoEditSchema>>({
-    resolver: zodResolver(MemoEditSchema),
-    defaultValues: {
-      title: memo?.title,
-      content: memo?.content,
-      location: memo?.location,
-    },
-  });
-
   useEffect(() => {
-    form.reset({
+    reset({
       title: memo?.title,
       content: memo?.content,
       location: memo?.location,
     });
-  }, [memo, form.reset]);
-
-  const isLoading = form.formState.isSubmitting;
+  }, [memo, reset]);
 
   const onSubmit = async (values: z.infer<typeof MemoEditSchema>) => {
     try {
@@ -157,7 +160,7 @@ const MemoEdit = () => {
       });
 
       if (response.status === 200) {
-        form.reset();
+        reset();
         router.push(`/consultingMemo/${response.data}`);
       }
     } catch (error) {
@@ -166,7 +169,7 @@ const MemoEdit = () => {
         return toast("오류 발생", {
           description: error.response?.data,
         });
-      } 
+      }
     }
   };
 
@@ -180,29 +183,31 @@ const MemoEdit = () => {
         <Image src="/write.png" alt="게시" width={30} height={30} />
         <h2 className="text-lg font-semibold">메모 수정하기</h2>
       </div>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-3 text-sm">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-3 text-sm">
         <div className="flex flex-col space-y-1">
           <label htmlFor="title" className="text-xs text-gray-500">
             제목
           </label>
           <input
-            {...form.register("title")}
+            {...register("title")}
             autoComplete="off"
             id="title"
             type="text"
             className="border-b pb-1 focus:outline-none focus:border-green-500 bg-transparent"
           />
+          {errors.title && <span className="error-text-start">{errors.title.message}</span>}
         </div>
         <div className="flex flex-col space-y-1">
           <label htmlFor="content" className="text-xs text-gray-500">
             내용
           </label>
           <textarea
-            {...form.register("content")}
+            {...register("content")}
             id="content"
             rows={10}
             className="border p-1 focus:outline-none focus:border-green-500 bg-transparent resize-none whitespace-pre-wrap"
           />
+          {errors.content && <span className="error-text-start">{errors.content.message}</span>}
         </div>
         <div className="flex flex-col space-y-1">
           <label htmlFor="locate" className="text-xs text-gray-500">
@@ -210,7 +215,7 @@ const MemoEdit = () => {
           </label>
           <div className="flex items-center justify-between border-b pb-0.5">
             <input
-              {...form.register("location")}
+              {...register("location")}
               id="locate"
               type="text"
               placeholder="장소 또는 주소 검색"
@@ -220,14 +225,14 @@ const MemoEdit = () => {
               검색
             </button>
           </div>
-          <div id="map" className="w-full h-72 border" />
+          <div id="map" className="w-full h-72 md:h-96 border" />
         </div>
         <div className="flex items-center justify-end space-x-2">
           <button
             type="submit"
             className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors"
           >
-            {isLoading ? "수정중" : "수정하기"}
+            {isSubmitting ? "수정중" : "수정하기"}
           </button>
           <button
             type="button"
