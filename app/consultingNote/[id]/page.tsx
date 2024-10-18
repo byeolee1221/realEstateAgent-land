@@ -130,7 +130,7 @@ const NoteDetail = () => {
       <div className="flex flex-col space-y-3 text-sm">
         <h2 className="text-xs text-gray-500">상담 매물 위치정보</h2>
         <span className="border-b pb-1">{note?.location}</span>
-        <div id="map" className="w-full h-72 border" />
+        <div id="map" className="w-full h-72 md:h-96 border" />
       </div>
       <div className="flex items-center justify-between space-x-2">
         {note?.userEmail === session?.user?.email ? (

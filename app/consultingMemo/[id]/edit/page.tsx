@@ -230,7 +230,8 @@ const MemoEdit = () => {
         <div className="flex items-center justify-end space-x-2">
           <button
             type="submit"
-            className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition-colors"
+            className="bg-green-500 hover:bg-green-600 disabled:bg-green-500 text-white px-3 py-2 rounded-md transition-colors"
+            disabled={isSubmitting}
           >
             {isSubmitting ? "수정중" : "수정하기"}
           </button>

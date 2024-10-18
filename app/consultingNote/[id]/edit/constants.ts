@@ -8,5 +8,5 @@ export const NoteEditSchema = z.object({
   transactionType: z.string().min(1, { message: "거래유형을 입력해주세요." }).regex(/([A-Za-zㄱ-ㅎ가-힣])/),
   date: z.string().date().min(1, { message: "상담일자를 입력해주세요." }).regex(/([0-9-])/),
   content: z.string().min(1, { message: "상담내용을 입력해주세요." }),
-  location: z.string().min(1, { message: "위치를 입력해주세요." }).regex(/([A-Za-zㄱ-ㅎ가-힣0-9])/),
+  location: z.string().min(1).regex(/([A-Za-zㄱ-ㅎ가-힣0-9])/),
 })

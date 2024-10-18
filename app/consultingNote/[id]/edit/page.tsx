@@ -19,7 +19,26 @@ const NoteEdit = () => {
 
   const [map, setMap] = useState<any>(null);
   const [note, setNote] = useState<INote>();
-  // console.log(note);
+  const {
+    register,
+    reset,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<z.infer<typeof NoteEditSchema>>({
+    resolver: zodResolver(NoteEditSchema),
+    mode: "all",
+    defaultValues: {
+      customerName: note?.customerName,
+      customerNumber: note?.customerNumber,
+      purposeUse: note?.purposeUse,
+      kind: note?.kind,
+      transactionType: note?.transactionType,
+      date: note?.date,
+      content: note?.content,
+      location: note?.location,
+    },
+  });
 
   function displayMarker(place: any) {
     const infoWindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
@@ -29,9 +48,7 @@ const NoteEdit = () => {
     });
     window.kakao.maps.event.addListener(marker, "click", function () {
       infoWindow.setContent(
-        '<div style="padding:5px; font-size:12px;">' +
-          place.place_name +
-          "</div>"
+        '<div style="padding:5px; font-size:12px;">' + place.place_name + "</div>"
       );
       infoWindow.open(map, marker);
     });
@@ -56,16 +73,10 @@ const NoteEdit = () => {
         setMap(createdMap);
 
         const mapTypeControl = new window.kakao.maps.MapTypeControl();
-        createdMap.addControl(
-          mapTypeControl,
-          window.kakao.maps.ControlPosition.TOPRIGHT
-        );
+        createdMap.addControl(mapTypeControl, window.kakao.maps.ControlPosition.TOPRIGHT);
 
         const zoomControl = new window.kakao.maps.ZoomControl();
-        createdMap.addControl(
-          zoomControl,
-          window.kakao.maps.ControlPosition.RIGHT
-        );
+        createdMap.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
 
         function setDraggable(draggable: any) {
           createdMap.setDraggable(draggable);
@@ -82,10 +93,7 @@ const NoteEdit = () => {
       ps.keywordSearch(note?.location, (result: any, status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const firstResult = result[0];
-          const moveLatLng = new window.kakao.maps.LatLng(
-            firstResult.y,
-            firstResult.x
-          );
+          const moveLatLng = new window.kakao.maps.LatLng(firstResult.y, firstResult.x);
           map.setCenter(moveLatLng);
           displayMarker(firstResult);
         }
@@ -96,9 +104,7 @@ const NoteEdit = () => {
   useEffect(() => {
     const getNote = async () => {
       try {
-        const response = await axios.get(
-          `/api/consultingNote/noteEdit?url=${pathname}`
-        );
+        const response = await axios.get(`/api/consultingNote/noteEdit?url=${pathname}`);
 
         if (response.status === 200) {
           setNote(response.data);
@@ -109,7 +115,7 @@ const NoteEdit = () => {
           return toast("오류 발생", {
             description: error.response?.data,
           });
-        } 
+        }
       }
     };
 
@@ -122,40 +128,27 @@ const NoteEdit = () => {
     if (map) {
       const ps = new window.kakao.maps.services.Places();
 
-      ps.keywordSearch(form.watch("location"), (result: any, status: any) => {
+      ps.keywordSearch(watch("location"), (result: any, status: any) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const firstResult = result[0];
-          const moveLatLng = new window.kakao.maps.LatLng(
-            firstResult.y,
-            firstResult.x
-          );
+          const moveLatLng = new window.kakao.maps.LatLng(firstResult.y, firstResult.x);
           map.setCenter(moveLatLng);
           displayMarker(firstResult);
         } else {
-          alert("검색 결과가 없습니다.");
+          return toast("카카오맵 오류", {
+            description: "검색 결과가 없습니다.",
+          });
         }
       });
     } else {
-      console.error("지도가 초기화되지 않았습니다.");
+      return toast("카카오맵 오류", {
+        description: "지도가 초기화되지 않았습니다.",
+      });
     }
   };
 
-  const form = useForm<z.infer<typeof NoteEditSchema>>({
-    resolver: zodResolver(NoteEditSchema),
-    defaultValues: {
-      customerName: note?.customerName,
-      customerNumber: note?.customerNumber,
-      purposeUse: note?.purposeUse,
-      kind: note?.kind,
-      transactionType: note?.transactionType,
-      date: note?.date,
-      content: note?.content,
-      location: note?.location,
-    },
-  });
-
   useEffect(() => {
-    form.reset({
+    reset({
       customerName: note?.customerName,
       customerNumber: note?.customerNumber,
       purposeUse: note?.purposeUse,
@@ -165,29 +158,24 @@ const NoteEdit = () => {
       content: note?.content,
       location: note?.location,
     });
-  }, [note, form.reset]);
-
-  const isLoading = form.formState.isSubmitting;
+  }, [note, reset]);
 
   const onSubmit = async (values: z.infer<typeof NoteEditSchema>) => {
     try {
-      const response = await axios.post(
-        `/api/consultingNote/noteEdit?url=${pathname}`,
-        {
-          currentUser: session?.user?.email,
-          customerName: values.customerName,
-          customerNumber: values.customerNumber,
-          purposeUse: values.purposeUse,
-          kind: values.kind,
-          transactionType: values.transactionType,
-          date: values.date,
-          content: values.content,
-          location: values.location,
-        }
-      );
+      const response = await axios.post(`/api/consultingNote/noteEdit?url=${pathname}`, {
+        currentUser: session?.user?.email,
+        customerName: values.customerName,
+        customerNumber: values.customerNumber,
+        purposeUse: values.purposeUse,
+        kind: values.kind,
+        transactionType: values.transactionType,
+        date: values.date,
+        content: values.content,
+        location: values.location,
+      });
 
       if (response.status === 200) {
-        form.reset();
+        reset();
         router.push(`/consultingNote/${response.data}`);
       }
     } catch (error) {
@@ -196,7 +184,7 @@ const NoteEdit = () => {
         return toast("오류 발생", {
           description: error.response?.data,
         });
-      } 
+      }
     }
   };
 
@@ -204,97 +192,82 @@ const NoteEdit = () => {
     router.back();
   };
 
+  const inputArr = [
+    {
+      id: "customerName",
+      type: "text",
+      title: "고객명",
+      register: { ...register("customerName") },
+      error: errors.customerName,
+    },
+    {
+      id: "customerNumber",
+      type: "tel",
+      title: "고객연락처",
+      register: { ...register("customerNumber") },
+      error: errors.customerNumber,
+    },
+    {
+      id: "purposeUse",
+      type: "text",
+      title: "사용목적",
+      register: { ...register("purposeUse") },
+      error: errors.purposeUse,
+    },
+    {
+      id: "kind",
+      type: "text",
+      title: "중개대상물 종류",
+      placeholder: "예) 원룸 / 아파트 / 상가 등",
+      register: { ...register("kind") },
+      error: errors.kind,
+    },
+    {
+      id: "transactionType",
+      type: "text",
+      title: "거래유형",
+      placeholder: "예) 월세 / 전세 / 매매 등",
+      register: { ...register("transactionType") },
+      error: errors.transactionType,
+    },
+    {
+      id: "date",
+      type: "text",
+      title: "상담일자",
+      placeholder: "예) 2024-04-15",
+      register: { ...register("date") },
+      error: errors.date,
+    },
+  ];
+
   return (
     <div className="flex flex-col space-y-6 px-4">
       <div className="flex items-center space-x-2 bg-slate-100 w-1/2 p-2 rounded-md shadow-sm">
         <Image src="/write.png" alt="게시" width={30} height={30} />
         <h2 className="text-lg font-semibold">노트 수정하기</h2>
       </div>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col space-y-3 text-sm"
-      >
-        <div className="flex flex-col space-y-1">
-          <label htmlFor="customerName" className="text-xs text-gray-500">
-            고객명
-          </label>
-          <input
-            {...form.register("customerName")}
-            autoComplete="off"
-            id="customerName"
-            type="text"
-            className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-          />
-        </div>
-        <div className="flex flex-col space-y-1">
-          <label htmlFor="customerNumber" className="text-xs text-gray-500">
-            고객연락처
-          </label>
-          <input
-            {...form.register("customerNumber")}
-            autoComplete="off"
-            id="customerNumber"
-            type="tel"
-            className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-          />
-        </div>
-        <div className="flex flex-col space-y-1">
-          <label htmlFor="purposeUse" className="text-xs text-gray-500">
-            사용목적
-          </label>
-          <input
-            {...form.register("purposeUse")}
-            autoComplete="off"
-            id="purposeUse"
-            type="text"
-            className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-          />
-        </div>
-        <div className="flex flex-col space-y-1">
-          <label htmlFor="kind" className="text-xs text-gray-500">
-            중개대상물 종류
-          </label>
-          <input
-            {...form.register("kind")}
-            autoComplete="off"
-            id="kind"
-            type="text"
-            placeholder="예) 원룸 / 아파트 / 상가 등"
-            className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-          />
-        </div>
-        <div className="flex flex-col space-y-1">
-          <label htmlFor="transactionType" className="text-xs text-gray-500">
-            거래유형
-          </label>
-          <input
-            {...form.register("transactionType")}
-            autoComplete="off"
-            id="transactionType"
-            type="text"
-            placeholder="예) 월세 / 전세 / 매매 등"
-            className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-          />
-        </div>
-        <div className="flex flex-col space-y-1">
-          <label htmlFor="date" className="text-xs text-gray-500">
-            상담일자
-          </label>
-          <input
-            {...form.register("date")}
-            autoComplete="off"
-            id="date"
-            type="text"
-            placeholder="예) 2024-04-15"
-            className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
-          />
-        </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-3 text-sm">
+        {inputArr.map((item) => (
+          <div className="flex flex-col space-y-1">
+            <label htmlFor={item.id} className="text-xs text-gray-500">
+              {item.title}
+            </label>
+            <input
+              {...item.register}
+              autoComplete="off"
+              id={item.id}
+              placeholder={item.placeholder}
+              type={item.type}
+              className="border-b pb-1 focus:outline-none focus:border-blue-500 bg-transparent"
+            />
+          </div>
+        ))}
         <div className="flex flex-col space-y-1">
           <label htmlFor="content" className="text-xs text-gray-500">
             상담내용
           </label>
           <textarea
-            {...form.register("content")}
+            {...register("content")}
             id="content"
             rows={10}
             className="border p-1 focus:outline-none focus:border-blue-500 bg-transparent resize-none"
@@ -306,27 +279,25 @@ const NoteEdit = () => {
           </label>
           <div className="flex items-center justify-between border-b pb-0.5">
             <input
-              {...form.register("location")}
+              {...register("location")}
               id="locate"
               type="text"
               placeholder="장소 또는 주소 검색"
               className="focus:outline-none focus:border-blue-500 bg-transparent w-[80%]"
             />
-            <button
-              onClick={onSearch}
-              className="border p-1 shadow-sm rounded-sm"
-            >
+            <button onClick={onSearch} className="border p-1 shadow-sm rounded-sm">
               검색
             </button>
           </div>
-          <div id="map" className="w-full h-72 border" />
+          <div id="map" className="w-full h-72 md:h-96 border" />
         </div>
         <div className="flex items-center justify-end space-x-2">
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors"
+            className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500 text-white px-3 py-2 rounded-md transition-colors"
+            disabled={isSubmitting}
           >
-            {isLoading ? "수정중" : "수정하기"}
+            {isSubmitting ? "수정중" : "수정하기"}
           </button>
           <button
             type="button"
