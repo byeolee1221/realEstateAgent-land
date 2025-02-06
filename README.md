@@ -48,7 +48,7 @@ $ npm run dev
 ## 화면 구성
 |메인페이지|상담노트페이지|
 |:---:|:---:|
-|<img src="/public/mainpage.png" width="400" height="400">|<img src="/public/notePageReadMe.png" width="400" height="400">|
+|<img src="/public/mainPage.png" width="400" height="400">|<img src="/public/notePageReadMe.png" width="400" height="400">|
 |중개메모페이지|설정페이지|
 |<img src="/public/memoPageReadMe.png" width="400" height="400">|<img src="/public/settingPage.png" width="400" height="400">|
 |내 구독관리페이지|공지사항페이지|
