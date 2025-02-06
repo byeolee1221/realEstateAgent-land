@@ -1,6 +1,6 @@
 # 공인중개사 업무효율화 플랫폼 중개랜드
 
-## 배포 웹사이트:
+## 배포 웹사이트: https://real-estate-agent-land.vercel.app/
 
 ## 프로젝트 소개
 

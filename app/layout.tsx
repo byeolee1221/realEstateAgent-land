@@ -19,12 +19,12 @@ export const metadata: Metadata = {
   title: "중개랜드",
   description: "함께하는 공인중개사 업무, 중개랜드입니다.",
   icons: { icon: "/icon.png", shortcut: "/icon.png" },
-  metadataBase: new URL("http://localhost:3000/"),
+  metadataBase: new URL("https://real-estate-agent-land.vercel.app/"),
   openGraph: {
     title: "중개랜드",
     description: "함께하는 공인중개사 업무, 중개랜드입니다.",
     images: "/icon.png",
-    url: "http://localhost:3000/",
+    url: "https://real-estate-agent-land.vercel.app/",
   },
 };
 
