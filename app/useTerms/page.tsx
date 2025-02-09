@@ -21,7 +21,7 @@ const UseTerms = () => {
               말합니다. 현재 중개랜드가 운영하는 사이트의 접속 주소는 아래와 같습니다.
             </p>
             <Link href="/" className="indent-3">
-              <li className="list-disc">http://localhost:3000</li>
+              <li className="list-disc">https://real-estate-agent-land.vercel.app/</li>
             </Link>
             <p>
               ② "서비스"라 함은 평소 아날로그적이고 업무관리상에 비효율적인 부분이 있었던 부분들을

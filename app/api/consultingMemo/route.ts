@@ -73,11 +73,17 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const session = await getServerSession(authOptions);
-    const url = req.url.split("url=/consultingMemo/");
-    const memoId = url[1];
+    const { searchParams } = new URL(req.url);
+    const fullPath = searchParams.get("url");
+    const memoId = fullPath?.split("/consultingMemo/")[1];
+
 
     if (!session) {
       return new NextResponse("로그인이 필요한 서비스입니다.", { status: 401 });
+    }
+
+    if (!memoId) {
+      return new NextResponse("메모 주소가 올바르지 않습니다.", { status: 404 });
     }
 
     const docRef = doc(db, "consultingMemo", memoId);

@@ -33,9 +33,10 @@ export async function POST(req: Request) {
           total_amount: amount,
           vat_amount: "1000",
           tax_free_amount: "0",
-          approval_url: "http://localhost:3000/subscription/success",
-          fail_url: "http://localhost:3000/subscription/fail",
-          cancel_url: "http://localhost:3000/subscription/cancel",
+          approval_url: "https://real-estate-agent-land.vercel.app/subscription/success",
+          fail_url: "https://real-estate-agent-land.vercel.app/subscription/fail",
+          cancel_url: "https://real-estate-agent-land.vercel.app/subscription/cancel",
+
         },
         {
           headers: {
