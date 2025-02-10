@@ -11,8 +11,23 @@ interface INoteList {
   id: string;
 }
 
-export const useNoteList = (session: Session | null) => {
+interface IMemoList {
+  title: string;
+  content: string;
+  id: string;
+  createdAt: number;
+}
+
+interface IUseContentsList { 
+  session: Session | null;
+  href: string;
+  location: "note" | "memo";
+}
+
+
+export const useContentsList = ({ session, href, location }: IUseContentsList) => {
   const [note, setNote] = useState<INoteList[]>([]);
+  const [memo, setMemo] = useState<IMemoList[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
 
@@ -23,13 +38,17 @@ export const useNoteList = (session: Session | null) => {
     const getNoteList = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("/api/consultingNote/noteList");
+        const response = await axios.get(href);
 
         if (response.status === 200) {
-          setNote(response.data);
+          if (location === "note") {
+            setNote(response.data);
+          } else {
+            setMemo(response.data);
+          }
         }
       } catch (error) {
-        console.error("consultingNote noteTable GET에서 오류 발생", error);
+        console.error(`consulting${location} noteTable GET에서 오류 발생`, error);
         if (axios.isAxiosError(error)) {
           setError(error.response?.data);
         }
@@ -41,5 +60,5 @@ export const useNoteList = (session: Session | null) => {
     getNoteList();
   }, [session]);
 
-  return { note, error, isLoading };
+  return { note, memo, error, isLoading };
 };

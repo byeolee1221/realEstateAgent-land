@@ -5,7 +5,7 @@ import NoteTableList from "./NoteTableList";
 import CreateNoteButton from "./CreateNoteButton";
 import AlertSection from "./AlertSection";
 import { useSubscription } from "@/hooks/useSubscription";
-import { useNoteList } from "@/hooks/useNoteList";
+import { useContentsList } from "@/hooks/useContentsList";
 import { useFreeUseMessage } from "@/hooks/useFreeUseMessage";
 import { useEffect, useState } from "react";
 import { getCount } from "@/lib/utils";
@@ -16,7 +16,11 @@ const NoteTable = () => {
   const [freeUse, setFreeUse] = useState<number>();
 
   const { subscriptionStatus, endBenefit } = useSubscription(session);
-  const { note, error, isLoading } = useNoteList(session);
+  const { note, error, isLoading } = useContentsList({
+    session,
+    href: "/api/consultingNote/noteList",
+    location: "note",
+  });
   const { countZero, freeUseMsg } = useFreeUseMessage(freeUse, session);
 
   // 상담노트 무료사용횟수 조회

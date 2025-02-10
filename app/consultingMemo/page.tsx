@@ -1,36 +1,11 @@
-"use client";
-
 import MemoTable from "@/components/consultingMemo/MemoTable";
 import SubscriptionMessage from "@/lib/SubscriptionMessage";
-import { getCount, userPayment } from "@/lib/utils";
-import { useSession } from "next-auth/react";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
-interface ISubscribe {
-  status: string;
-  itemName: string;
-}
-
-const ConsultingMemo = () => {
-  const { data: session } = useSession();
-
-  const [freeUse, setFreeUse] = useState<number>();
-  const [subscribe, setSubscribe] = useState<ISubscribe>();
-
-  // 중개메모 무료사용횟수 조회
-  useEffect(() => {
-    if (session) {
-      getCount("중개메모", "/api/consultingMemo/memoCount", setFreeUse);
-    }
-  }, []);
-
-  // 결제 조회
-  useEffect(() => {
-    if (session) {
-      userPayment("중개메모", "/api/kakaoPay/userPayment", setSubscribe);
-    }
-  }, []);
+const ConsultingMemo = async () => {
+  const session = await getServerSession(authOptions);
 
   return (
     <div className="px-4 flex flex-col space-y-6 lg:px-0">
@@ -42,13 +17,13 @@ const ConsultingMemo = () => {
               <span className="font-semibold">{session.user?.name}</span>
               님의 중개메모 목록
             </h2>
-            <SubscriptionMessage subscribe={subscribe} />
+            <SubscriptionMessage />
           </div>
         ) : (
           <h2 className="text-lg font-semibold">중개메모 목록</h2>
         )}
       </div>
-      <MemoTable freeUse={freeUse} />
+      <MemoTable />
     </div>
   );
 };
