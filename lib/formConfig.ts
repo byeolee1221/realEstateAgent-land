@@ -33,3 +33,16 @@ export const NoteFormArr = [
     placeholder: "예) 2024-04-15",
   },
 ];
+
+export const MemoFormArr = [
+  {
+    id: "title",
+    type: "text",
+    title: "제목",
+  },
+  {
+    id: "content",
+    type: "text",
+    title: "내용",
+  },
+];

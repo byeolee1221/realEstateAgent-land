@@ -1,15 +1,17 @@
 "use client";
 
+import { MemoSchema } from "@/app/consultingMemo/write/constants";
 import { NoteSchema } from "@/app/consultingNote/write/constants";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const KakaoMap = () => {
+const KakaoMap = ({ type }: { type: "note" | "memo" }) => {
   const [map, setMap] = useState<any>(null);
 
-  const { register, watch } = useFormContext<z.infer<typeof NoteSchema>>();
+  const { register, watch } =
+    useFormContext<z.infer<typeof type extends "note" ? typeof NoteSchema : typeof MemoSchema>>();
 
   function displayMarker(place: any) {
     const infoWindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });

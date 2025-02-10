@@ -63,8 +63,7 @@ const ConsultingForm = () => {
           <FormInput
             key={item.id}
             {...item}
-            register={methods.register}
-            error={methods.formState.errors[item.id as keyof typeof methods.formState.errors]}
+            location="note"
           />
         ))}
         <div className="flex flex-col space-y-1">
@@ -81,7 +80,7 @@ const ConsultingForm = () => {
             <span className="error-text-start">{methods.formState.errors.content.message}</span>
           )}
         </div>
-        <KakaoMap />
+        <KakaoMap type="note" />
         <div className="flex items-center justify-end space-x-2">
           <button
             type="submit"
