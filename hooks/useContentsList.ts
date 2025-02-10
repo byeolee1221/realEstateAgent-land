@@ -48,7 +48,7 @@ export const useContentsList = ({ session, href, location }: IUseContentsList) =
           }
         }
       } catch (error) {
-        console.error(`consulting${location} noteTable GET에서 오류 발생`, error);
+        console.error(`consulting${location} contentsList GET에서 오류 발생`, error);
         if (axios.isAxiosError(error)) {
           setError(error.response?.data);
         }

@@ -4,12 +4,7 @@ import { useSession } from "next-auth/react";
 import { memo, useEffect, useState } from "react";
 import { getPaymentDate } from "./subscriptionUtils";
 import { userPayment } from "./utils";
-
-
-interface ISubscribe {
-  status: string;
-  itemName: string;
-}
+import { ISubscribe } from "@/types/subscribe";
 
 const SubscriptionMessage = () => {
   const { data: session } = useSession();

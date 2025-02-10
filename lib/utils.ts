@@ -1,4 +1,4 @@
-import { ISubscribe } from "@/app/consultingNote/page";
+import { ISubscribe } from "@/types/subscribe";
 import axios from "axios";
 import { type ClassValue, clsx } from "clsx";
 import { toast } from "sonner";

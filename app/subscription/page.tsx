@@ -13,11 +13,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
-
-interface ISubscribe {
-  status: string;
-  itemName: string;
-}
+import { ISubscribe } from "@/types/subscribe";
 
 const Subscription = () => {
   const { data: session } = useSession();
