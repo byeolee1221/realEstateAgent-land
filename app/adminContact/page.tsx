@@ -3,10 +3,7 @@ import { getContactData, getOpinionData } from "./action/admin";
 import Image from "next/image";
 
 const AdminContact = async () => {
-  const [doc, userOpinion] = await Promise.all([
-    getContactData(),
-    getOpinionData()
-  ]);
+  const data = await fetchData();
 
   return (
     <div className="px-4 flex flex-col space-y-6">
@@ -14,9 +11,28 @@ const AdminContact = async () => {
         <Image src="/memo.png" alt="메모" width={30} height={30} />
         <h2 className="text-lg font-semibold">접수된 문의사항</h2>
       </div>
-      <ContactTabs doc={doc} opinion={userOpinion} />
+      <ContactTabs doc={data?.doc} opinion={data?.userOpinion} />
     </div>
   );
 };
 
 export default AdminContact;
+
+const fetchData = async () => {
+  try {
+    const [doc, userOpinion] = await Promise.all([
+      getContactData(),
+      getOpinionData()
+    ]);
+
+    if (!doc || !userOpinion) { 
+      alert("데이터를 불러오는데 실패했습니다.");
+      return;
+    }
+
+    return { doc, userOpinion };
+  } catch (error) {
+    alert("데이터를 불러오는데 실패했습니다.");
+    return;
+  }
+}

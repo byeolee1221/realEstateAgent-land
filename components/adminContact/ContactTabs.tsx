@@ -5,8 +5,8 @@ import ShowContact from "./ShowContact";
 import ShowOpinion from "./ShowOpinion";
 
 interface IContactTabs {
-  doc: IDoc[];
-  opinion: IOpinion[];
+  doc: IDoc[] | undefined;
+  opinion: IOpinion[] | undefined;
 }
 
 const ContactTabs = ({ doc, opinion }: IContactTabs) => {
