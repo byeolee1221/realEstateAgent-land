@@ -1,9 +1,10 @@
+"use server";
+
 import { db } from "@/app/firebase";
 import { getDocs } from "firebase/firestore";
 import { authOptions } from "@/lib/auth";
 import { collection, query, where } from "firebase/firestore";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 import { formatDate } from "@/lib/utils";
 
 // 관리자 권한 확인
@@ -29,8 +30,6 @@ const checkAdminAuth = async () => {
   if (userId !== process.env.ADMIN_ID) {
     throw new Error("관리자만 접근할 수 있는 서비스입니다.");
   }
-
-  return true;
 }
 
 // 사용자 데이터
@@ -47,7 +46,7 @@ export const getUserManageData = async () => {
     return userQuerySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
-    }));
+    })); 
   } catch (error) {
     console.error("사용자 데이터를 불러오는데 실패했습니다.", error);
     throw new Error("사용자 데이터를 불러오는데 실패했습니다.");
