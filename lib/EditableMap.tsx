@@ -39,7 +39,7 @@ export const EditableMap = ({ type, location }: EditableMapProps) => {
           검색
         </button>
       </div>
-      <div id="map" className="w-full h-72 md:h-96 border" />;
+      <div id="map" className="w-full h-72 md:h-96 border" />
     </div>
   );
 };
