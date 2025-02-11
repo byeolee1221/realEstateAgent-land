@@ -23,7 +23,7 @@ const AdminContactError = ({
         </div>
         <button
           onClick={() => reset()}
-          className="rounded-md bg-orange-300 px-5 py-2 text-center text-2lg text-white transition-colors hover:bg-orange-500"
+          className="rounded-md bg-blue-300 px-5 py-2 text-center text-2lg text-white transition-colors hover:bg-blue-500"
         >
           새로고침
         </button>

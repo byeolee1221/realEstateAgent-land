@@ -7,13 +7,6 @@ const AdminContact = async () => {
     getContactData(),
     getOpinionData()
   ]);
-  
-  const getData = async () => {
-    try {
-    } catch (error) {
-      
-    }
-  }
 
   return (
     <div className="px-4 flex flex-col space-y-6">
