@@ -8,9 +8,8 @@ export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     const body = await req.json();
-    const postUrl = req.url.split("/");
-    const postId = postUrl[7];
-    const { currentUser, customerName, customerNumber, purposeUse, kind, transactionType, date, content, location } = body;
+
+    const { noteId, currentUser, customerName, customerNumber, purposeUse, kind, transactionType, date, content, location } = body;
     // console.log(postId);
 
     if (!session) {
@@ -22,7 +21,7 @@ export async function POST(req: Request) {
     }
 
     if (currentUser === session.user?.email) {
-      const editPost = await setDoc(doc(db, "consultingNote", postId), {
+      const editPost = await setDoc(doc(db, "consultingNote", noteId), {
         userName: session.user?.name,
         userEmail: session.user?.email,
         customerName,
@@ -39,7 +38,7 @@ export async function POST(req: Request) {
       return new NextResponse("본인의 상담노트만 조회할 수 있습니다.", { status: 401 });
     }
 
-    return NextResponse.json(postId, { status: 200 });
+    return NextResponse.json(noteId, { status: 200 });
   } catch (error) {
     console.error("consultiongNote noteEdit POST API에서 오류 발생", error);
     return new NextResponse("오류가 발생하여 잠시 후 다시 시도해주세요.", { status: 500 });
@@ -49,15 +48,19 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const session = await getServerSession(authOptions);
-    const postUrl = req.url.split("/");
-    const postId = postUrl[7];
+    const { searchParams } = new URL(req.url);
+    const noteId = searchParams.get("noteId");
     // console.log(postId);
 
     if (!session) {
       return new NextResponse("로그인이 필요한 서비스입니다.", { status: 401 });
     }
 
-    const docRef = doc(db, "consultingNote", postId);
+    if (!noteId) {
+      return new NextResponse("노트 ID가 필요합니다.", { status: 400 });
+    }
+
+    const docRef = doc(db, "consultingNote", noteId);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {

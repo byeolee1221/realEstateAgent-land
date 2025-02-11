@@ -18,6 +18,7 @@ const EditMemoForm = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const memoId = pathname.split("/")[2];
 
   const [memo, setMemo] = useState<IMemo>();
 
@@ -33,7 +34,8 @@ const EditMemoForm = () => {
 
   const onSubmit = async (values: z.infer<typeof MemoEditSchema>) => {
     try {
-      const response = await axios.post(`/api/consultingMemo/memoEdit?url=${pathname}`, {
+      const response = await axios.post(`/api/consultingMemo/memoEdit`, {
+        memoId,
         currentUser: session?.user?.email,
         title: values.title,
         content: values.content,
@@ -57,7 +59,11 @@ const EditMemoForm = () => {
   useEffect(() => {
     const getMemo = async () => {
       try {
-        const response = await axios.get(`/api/consultingMemo/memoEdit?url=${pathname}`);
+        const response = await axios.get(`/api/consultingMemo/memoEdit`, {
+          params: {
+            memoId,
+          },
+        });
 
         if (response.status === 200) {
           setMemo(response.data);

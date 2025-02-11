@@ -18,6 +18,7 @@ const EditForm = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const noteId = pathname.split("/")[2];
   const [note, setNote] = useState<INote>();
 
   const methods = useForm<z.infer<typeof NoteEditSchema>>({
@@ -66,7 +67,11 @@ const EditForm = () => {
   useEffect(() => {
     const getNote = async () => {
       try {
-        const response = await axios.get(`/api/consultingNote/noteEdit?url=${pathname}`);
+        const response = await axios.get(`/api/consultingNote/noteEdit`, {
+          params: {
+            noteId,
+          },
+        });
 
         if (response.status === 200) {
           setNote(response.data);
