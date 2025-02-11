@@ -1,3 +1,5 @@
+"use client";
+
 import axios from "axios";
 import { memo, useEffect, useState } from "react";
 import {
