@@ -20,19 +20,16 @@ export default AdminContact;
 
 const fetchData = async () => {
   try {
-    const [doc, userOpinion] = await Promise.all([
-      getContactData(),
-      getOpinionData()
-    ]);
+    const [doc, userOpinion] = await Promise.all([getContactData(), getOpinionData()]);
 
-    if (!doc || !userOpinion) { 
-      alert("데이터를 불러오는데 실패했습니다.");
-      return;
+    if (!doc || !userOpinion) {
+      console.error("데이터를 불러오는데 실패했습니다.");
+      return { doc: [], userOpinion: [] };
     }
 
     return { doc, userOpinion };
   } catch (error) {
-    alert("데이터를 불러오는데 실패했습니다.");
+    console.error("데이터를 불러오는데 실패했습니다.");
     return;
   }
-}
+};
