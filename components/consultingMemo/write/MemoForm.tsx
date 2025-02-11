@@ -56,7 +56,7 @@ const MemoForm = () => {
             location="memo"
           />
         ))}
-        <EditableMap />
+        <EditableMap type="memo" />
         <div className="flex items-center justify-end space-x-2">
           <button
             type="submit"

@@ -1,9 +1,15 @@
 import { useKakaomap } from "@/hooks/useKakaomap";
 import { useFormContext } from "react-hook-form";
 
-export const EditableMap = () => {
+interface EditableMapProps {
+  type: "note" | "memo";
+  location?: string;
+}
+
+export const EditableMap = ({ type, location }: EditableMapProps) => {
   const { register, watch } = useFormContext();
   const { searchLocation } = useKakaomap({
+    location: location,
     isEditable: true,
   });
 

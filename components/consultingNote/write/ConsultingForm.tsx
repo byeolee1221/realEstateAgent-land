@@ -80,7 +80,7 @@ const ConsultingForm = () => {
             <span className="error-text-start">{methods.formState.errors.content.message}</span>
           )}
         </div>
-        <EditableMap />
+        <EditableMap type="note" />
         <div className="flex items-center justify-end space-x-2">
           <button
             type="submit"
