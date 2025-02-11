@@ -1,5 +1,6 @@
 import { useKakaomap } from "@/hooks/useKakaomap";
 import { useFormContext } from "react-hook-form";
+import { cn } from "./utils";
 
 interface EditableMapProps {
   type: "note" | "memo";
@@ -29,7 +30,10 @@ export const EditableMap = ({ type, location }: EditableMapProps) => {
           id="locate"
           type="text"
           placeholder="장소 또는 주소 검색"
-          className="focus:outline-none focus:border-blue-500 bg-transparent w-[80%]"
+          className={cn(
+            "focus:outline-none  bg-transparent w-[80%]",
+            type === "note" ? "focus:border-blue-500" : "focus:border-green-500"
+          )}
         />
         <button onClick={onSearch} className="border p-1 shadow-sm rounded-sm">
           검색
