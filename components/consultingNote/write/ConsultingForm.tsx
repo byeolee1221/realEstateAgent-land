@@ -2,8 +2,8 @@
 
 import { NoteSchema } from "@/app/consultingNote/write/constants";
 import FormInput from "@/components/FormInput";
+import { EditableMap } from "@/lib/EditableMap";
 import { NoteFormArr } from "@/lib/formConfig";
-import KakaoMap from "@/lib/Kakaomap";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -80,7 +80,7 @@ const ConsultingForm = () => {
             <span className="error-text-start">{methods.formState.errors.content.message}</span>
           )}
         </div>
-        <KakaoMap type="note" />
+        <EditableMap />
         <div className="flex items-center justify-end space-x-2">
           <button
             type="submit"

@@ -9,7 +9,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { MemoFormArr } from "@/lib/formConfig";
 import FormInput from "@/components/FormInput";
-import KakaoMap from "@/lib/Kakaomap";
+import { EditableMap } from "@/lib/EditableMap";
 
 const MemoForm = () => {
   const router = useRouter();
@@ -56,7 +56,7 @@ const MemoForm = () => {
             location="memo"
           />
         ))}
-        <KakaoMap type="memo" />
+        <EditableMap />
         <div className="flex items-center justify-end space-x-2">
           <button
             type="submit"
