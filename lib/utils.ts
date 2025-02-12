@@ -4,7 +4,7 @@ import { type ClassValue, clsx } from "clsx";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { getTid } from "./subscriptionUtils";
-import { INote } from "@/app/consultingNote/[id]/page";
+import { INote } from "@/components/consultingNote/[id]/NoteItemList";
 import { IMemo } from "@/app/consultingMemo/[id]/page";
 
 export function cn(...inputs: ClassValue[]) {
