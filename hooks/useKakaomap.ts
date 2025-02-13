@@ -26,6 +26,11 @@ export const useKakaomap = ({ location, isEditable = false }: UseKakaomapProps) 
         };
 
         const createdMap = new window.kakao.maps.Map(container, options);
+
+        setTimeout(() => {
+          createdMap.relayout();
+        }, 100);
+
         setMap(createdMap);
 
         const mapTypeControl = new window.kakao.maps.MapTypeControl();
