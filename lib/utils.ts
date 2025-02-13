@@ -4,8 +4,6 @@ import { type ClassValue, clsx } from "clsx";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { getTid } from "./subscriptionUtils";
-import { INote } from "@/types/consultingNote";
-import { IMemo } from "@/app/consultingMemo/[id]/page";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -50,29 +48,6 @@ export const userPayment = async (
     }
   } catch (error) {
     console.error(`${title} userPayment POST에서 API 오류 발생`, error);
-    if (axios.isAxiosError(error)) {
-      return toast("오류 발생", {
-        description: error.response?.data,
-      });
-    } 
-  }
-};
-
-// 상담노트 또는 중개메모 상세데이터 가져오기
-type NoteOrMemo<T> = T extends "상담노트" ? INote : IMemo;
-
-export const getPost = async <T extends "상담노트" | "중개메모">(
-  title: T,
-  apiUrl: string,
-) => {
-  try {
-    const response = await axios.get(apiUrl);
-
-    if (response.status === 200) {
-      return response.data;
-    }
-  } catch (error) {
-    console.error(`${title} getPost GET에서 API 오류 발생`, error);
     if (axios.isAxiosError(error)) {
       return toast("오류 발생", {
         description: error.response?.data,
