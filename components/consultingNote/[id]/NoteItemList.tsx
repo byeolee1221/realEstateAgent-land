@@ -1,6 +1,5 @@
 "use client";
 
-import { useKakaomap } from "@/hooks/useKakaomap";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { ViewOnlyMap } from "@/lib/ViewOnlyMap";
@@ -19,8 +18,6 @@ const NoteItemList = ({ note, pathname }: NoteItemListProps) => {
   const { data: session } = useSession();
   const postId = pathname.split("/consultingNote/")[1];
   const router = useRouter();
-
-  useKakaomap({ location: "error" in note ? "" : note?.location || "", isEditable: false });
 
   const noteArr = [
     { id: 1, title: "고객명", contents: note?.customerName },

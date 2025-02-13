@@ -1,6 +1,5 @@
 "use client";
 
-import { useKakaomap } from "@/hooks/useKakaomap";
 import { useSession } from "next-auth/react";
 import { MemoResponse } from "@/types/consultingMemo";
 import { useEffect } from "react";
@@ -19,8 +18,6 @@ const MemoItemList = ({ memo, pathname }: MemoItemListProps) => {
   const { data: session } = useSession();
   const memoId = pathname.split("/consultingMemo/")[1];
   const router = useRouter();
-
-  useKakaomap({ location: "error" in memo ? "" : memo?.location, isEditable: false });
 
   const memoArr = [
     { id: 1, title: "제목", content: memo?.title },

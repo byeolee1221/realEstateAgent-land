@@ -41,6 +41,11 @@ export const useKakaomap = ({ location, isEditable = false }: UseKakaomapProps) 
     };
 
     kakaoMapScript.addEventListener("load", onKakaoApi);
+
+    return () => {
+      kakaoMapScript.removeEventListener("load", onKakaoApi);
+      document.head.removeChild(kakaoMapScript);
+    };
   }, []);
 
   // 마커 표시
