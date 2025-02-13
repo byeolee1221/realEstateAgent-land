@@ -1,3 +1,5 @@
+"use client";
+
 import { useKakaomap } from "@/hooks/useKakaomap";
 
 export const ViewOnlyMap = ({ location }: { location: string | undefined }) => {
