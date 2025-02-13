@@ -1,5 +1,3 @@
-"use client";
-
 import { useKakaomap } from "@/hooks/useKakaomap";
 import { useFormContext } from "react-hook-form";
 import { cn } from "./utils";
@@ -41,7 +39,7 @@ export const EditableMap = ({ type, location }: EditableMapProps) => {
           검색
         </button>
       </div>
-      <div id="map" className="w-full h-72 md:h-96 border" />
+      <div id="map" className="w-full h-72 md:h-96 border" style={{ width: "100%", height: "18rem" }} />
     </div>
   );
 };
