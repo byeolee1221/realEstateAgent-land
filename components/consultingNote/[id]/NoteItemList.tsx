@@ -1,43 +1,26 @@
 "use client";
 
 import { useKakaomap } from "@/hooks/useKakaomap";
-import { getPost } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
 import { ViewOnlyMap } from "@/lib/ViewOnlyMap";
 import Link from "next/link";
 import NoteDelete from "../NoteDelete";
+import { NoteResponse } from "@/types/consultingNote";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
-export interface INote {
-  userEmail: string;
-  customerName: string;
-  customerNumber: string;
-  purposeUse: string;
-  kind: string;
-  transactionType: string;
-  date: string;
-  content: string;
-  location: string;
-  createdAt: number;
-  id: string;
+interface NoteItemListProps {
+  note: NoteResponse;
+  pathname: string;
 }
 
-const NoteItemList = () => {
+const NoteItemList = ({ note, pathname }: NoteItemListProps) => {
   const { data: session } = useSession();
-  const pathname = usePathname();
-  const postUrl = pathname.split("/consultingNote/");
-  const postId = postUrl[1];
+  const postId = pathname.split("/consultingNote/")[1];
   const router = useRouter();
-  const [note, setNote] = useState<INote>();
 
-  useKakaomap({ location: note?.location, isEditable: false });
-
-  // 상담노트 불러오기
-  useEffect(() => {
-    getPost("상담노트", `/api/consultingNote?url=${pathname}`, setNote);
-  }, []);
+  useKakaomap({ location: "error" in note ? "" : note?.location || "", isEditable: false });
 
   const noteArr = [
     { id: 1, title: "고객명", contents: note?.customerName },
@@ -48,6 +31,13 @@ const NoteItemList = () => {
     { id: 6, title: "상담일자", contents: note?.date },
     { id: 7, title: "상담내용", contents: note?.content },
   ];
+
+  useEffect(() => {
+    if ("error" in note) {
+      toast("오류 발생", { description: note.error });
+    }
+  }, [note]);
+
   return (
     <>
       {noteArr.map((data) => (

@@ -4,7 +4,7 @@ import { type ClassValue, clsx } from "clsx";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { getTid } from "./subscriptionUtils";
-import { INote } from "@/components/consultingNote/[id]/NoteItemList";
+import { INote } from "@/types/consultingNote";
 import { IMemo } from "@/app/consultingMemo/[id]/page";
 
 export function cn(...inputs: ClassValue[]) {
@@ -64,13 +64,12 @@ type NoteOrMemo<T> = T extends "상담노트" ? INote : IMemo;
 export const getPost = async <T extends "상담노트" | "중개메모">(
   title: T,
   apiUrl: string,
-  setPost: (value: NoteOrMemo<T>) => void
 ) => {
   try {
     const response = await axios.get(apiUrl);
 
     if (response.status === 200) {
-      setPost(response.data);
+      return response.data;
     }
   } catch (error) {
     console.error(`${title} getPost GET에서 API 오류 발생`, error);

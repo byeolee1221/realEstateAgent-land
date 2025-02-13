@@ -74,36 +74,6 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
-  try {
-    const session = await getServerSession(authOptions);
-    const { searchParams } = new URL(req.url);
-    const fullPath = searchParams.get("url");
-    const noteId = fullPath?.split("/consultingNote/")[1];
-
-    if (!session) {
-      return new NextResponse("로그인이 필요한 서비스입니다.", { status: 401 });
-    }
-
-    if (!noteId) {
-      return new NextResponse("게시글 주소가 올바르지 않습니다.", { status: 404 });
-    }
-
-    const docRef = doc(db, "consultingNote", noteId);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      // console.log(docSnap.data());
-      return NextResponse.json({ ...docSnap.data(), id: docSnap.id }, { status: 200 });
-    } else {
-      return new NextResponse("게시글이 존재하지 않습니다.", { status: 404 });
-    }
-  } catch (error) {
-    console.error("consultiongNote GET API에서 오류 발생", error);
-    return new NextResponse("오류가 발생하였으니 새로고침해주세요.", { status: 500 });
-  }
-}
-
 export async function DELETE(req: Request) {
   try {
     const session = await getServerSession(authOptions);
