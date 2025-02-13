@@ -12,7 +12,7 @@ import { z } from "zod";
 import { EditableMap } from "@/lib/EditableMap";
 import FormInput from "@/components/FormInput";
 import { useEffect, useState } from "react";
-import { INote } from "@/components/consultingNote/[id]/NoteItemList";
+import { INote } from "@/types/consultingNote";
 
 const EditForm = () => {
   const { data: session } = useSession();

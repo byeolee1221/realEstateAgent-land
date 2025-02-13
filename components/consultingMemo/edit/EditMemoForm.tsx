@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { IMemo } from "@/app/consultingMemo/[id]/page";
+import { IMemo } from "@/types/consultingMemo";
 import FormInput from "@/components/FormInput";
 import { MemoFormArr } from "@/lib/formConfig";
 import { EditableMap } from "@/lib/EditableMap";
